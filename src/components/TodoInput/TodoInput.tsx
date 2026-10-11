@@ -2,6 +2,7 @@ import React from 'react';
 import { Plus, X, Clock, Calendar } from 'lucide-react';
 import type { CreateTodoPayload } from '../../types/todo';
 import { useTodoInput } from './useTodoInput';
+import { TimePicker24h } from '../TimePicker24h';
 import './TodoInput.css';
 
 interface TodoInputProps {
@@ -90,12 +91,10 @@ export const TodoInput: React.FC<TodoInputProps> = ({
             <label>
               <Clock size={13} /> Bắt đầu:
             </label>
-            <input
-              type="time"
-              className="time-input"
+            <TimePicker24h
               value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              required
+              onChange={setStartTime}
+              placeholder="20:00"
             />
           </div>
 
@@ -103,12 +102,10 @@ export const TodoInput: React.FC<TodoInputProps> = ({
             <label>
               <Clock size={13} /> Kết thúc:
             </label>
-            <input
-              type="time"
-              className="time-input"
+            <TimePicker24h
               value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              required
+              onChange={setEndTime}
+              placeholder="21:00"
             />
           </div>
 

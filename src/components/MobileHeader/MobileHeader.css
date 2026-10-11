@@ -1,0 +1,356 @@
+.mobile-app-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 12px 14px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  z-index: 500;
+  width: 100%;
+}
+
+/* =========================================
+   HÀNG 1: Brand Logo + Tabs Báo Cáo / Thống Kê
+   ========================================= */
+.mobile-header-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mobile-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobile-brand-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
+  flex-shrink: 0;
+}
+
+.mobile-brand-text h1 {
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.mobile-nav-tabs {
+  display: flex;
+  background: rgba(13, 17, 28, 0.8);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 2px;
+  gap: 2px;
+}
+
+.mobile-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobile-tab-btn.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #ffffff;
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
+}
+
+/* =========================================
+   HÀNG 2: Hàng Chip Vuốt Ngang Chọn Học Viên
+   ========================================= */
+.mobile-students-scroll-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+  width: 100%;
+}
+
+.mobile-students-scroll-row::-webkit-scrollbar {
+  display: none;
+}
+
+.mobile-student-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobile-student-chip .chip-icon {
+  flex-shrink: 0;
+}
+
+.mobile-student-chip .chip-name {
+  line-height: 1;
+}
+
+.mobile-student-chip .chip-count {
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  color: var(--text-main);
+  line-height: 1;
+}
+
+/* Active States */
+.mobile-student-chip.chip-truong.active {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: #60a5fa;
+  color: #93c5fd;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.35);
+}
+
+.mobile-student-chip.chip-truong.active .chip-count {
+  background: rgba(59, 130, 246, 0.4);
+  color: #ffffff;
+}
+
+.mobile-student-chip.chip-nguyet.active {
+  background: rgba(236, 72, 153, 0.2);
+  border-color: #f472b6;
+  color: #fbcfe8;
+  box-shadow: 0 0 10px rgba(236, 72, 153, 0.35);
+}
+
+.mobile-student-chip.chip-nguyet.active .chip-count {
+  background: rgba(236, 72, 153, 0.4);
+  color: #ffffff;
+}
+
+.mobile-student-chip.chip-all.active,
+.mobile-student-chip.chip-other.active {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+}
+
+.chip-avatar-letter {
+  width: 14px;
+  height: 14px;
+  font-size: 10px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Nút thêm học viên */
+.mobile-chip-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-subtle);
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobile-chip-add:hover {
+  color: var(--text-main);
+  border-color: var(--primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.mobile-inline-add-form {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(13, 17, 28, 0.9);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-full);
+  padding: 2px 6px;
+  flex-shrink: 0;
+}
+
+.mobile-inline-add-form input {
+  width: 80px;
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  color: #ffffff;
+  outline: none;
+  padding: 2px 4px;
+}
+
+.btn-mini-confirm,
+.btn-mini-dismiss {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-mini-confirm {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.btn-mini-dismiss {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+}
+
+/* =========================================
+   HÀNG 3: Lịch Ngày + Tìm Kiếm + Nút + Thêm
+   ========================================= */
+.mobile-header-bottom-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.mobile-date-wrapper {
+  flex-shrink: 0;
+}
+
+.mobile-date-wrapper .custom-datepicker-container {
+  width: auto;
+}
+
+.mobile-date-wrapper .datepicker-trigger-btn {
+  width: auto;
+  padding: 7px 11px;
+  font-size: 12px;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.mobile-date-wrapper .dp-date-text {
+  font-size: 12px;
+  max-width: 105px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mobile-date-wrapper .datepicker-dropdown-popup {
+  left: 0;
+  transform: none;
+  width: min(310px, calc(100vw - 28px));
+  max-width: calc(100vw - 28px);
+}
+
+.mobile-search-wrapper {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 7px 12px;
+  transition: all 0.2s ease;
+}
+
+.mobile-search-wrapper:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-glow);
+}
+
+.mobile-search-icon {
+  color: var(--text-subtle);
+  flex-shrink: 0;
+}
+
+.mobile-search-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  font-size: 12.5px;
+  color: var(--text-main);
+  outline: none;
+}
+
+.mobile-search-input::placeholder {
+  color: var(--text-subtle);
+}
+
+.mobile-clear-search {
+  color: var(--text-subtle);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 1px 3px;
+}
+
+.mobile-clear-search:hover {
+  color: var(--text-main);
+}
+
+.mobile-btn-add-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.4);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobile-btn-add-circle:hover {
+  transform: scale(1.06);
+}
+
+.mobile-btn-add-circle.active {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--text-muted);
+  box-shadow: none;
+}

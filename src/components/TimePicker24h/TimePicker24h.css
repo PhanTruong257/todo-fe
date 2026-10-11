@@ -1,0 +1,179 @@
+.time-picker-24h-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.time-input-24h-field {
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 700;
+  outline: none;
+  width: 58px;
+  padding: 2px 0;
+  cursor: text;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.5px;
+}
+
+.time-input-24h-field:focus {
+  color: #60a5fa;
+}
+
+.time-picker-toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+
+.time-picker-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+}
+
+/* Dropdown Popover */
+.time-picker-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: -10px;
+  width: 220px;
+  background: rgba(15, 20, 32, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  z-index: 99999;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: timePickerFadeIn 0.18s ease-out;
+}
+
+@keyframes timePickerFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Hàng thao tác nhanh (Bây giờ & Steppers) */
+.time-picker-quick-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.btn-set-now {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #93c5fd;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-set-now:hover {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: #60a5fa;
+  color: #ffffff;
+}
+
+.time-adjust-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+
+.btn-adjust-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 4px 2px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.btn-adjust-pill:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-main);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Danh sách mốc giờ 24h */
+.time-presets-scroll {
+  max-height: 160px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+  padding-right: 4px;
+}
+
+.time-presets-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.time-presets-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.time-presets-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.time-preset-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 8px;
+  text-align: center;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+  transition: all 0.15s ease;
+}
+
+.time-preset-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.time-preset-item.active {
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+}

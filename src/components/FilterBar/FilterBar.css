@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 0;
   flex-wrap: wrap;
 }
 
@@ -114,9 +114,33 @@
   .filter-bar-compact {
     flex-direction: column;
     align-items: stretch;
+    gap: 10px;
+  }
+
+  .search-box {
+    min-width: 0;
+    width: 100%;
+    padding: 8px 14px;
   }
 
   .filter-right-actions {
     justify-content: space-between;
+    width: 100%;
+  }
+
+  .btn-add-circle {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (max-width: 380px) {
+  .reports-count-badge {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+
+  .search-input {
+    font-size: 12px;
   }
 }

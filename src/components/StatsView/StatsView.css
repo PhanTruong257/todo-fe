@@ -1,72 +1,7 @@
 .stats-view-container {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-}
-
-/* 3 Thẻ tổng quan */
-.stats-summary-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-
-.stat-summary-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: 18px 20px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: var(--shadow-sm);
-  transition: all 0.25s ease;
-}
-
-.stat-summary-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.15);
-}
-
-.stat-icon-wrapper {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.stat-icon-wrapper.duration {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.25));
-  color: #a855f7;
-}
-
-.stat-icon-wrapper.sessions {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(14, 165, 233, 0.25));
-  color: #38bdf8;
-}
-
-.stat-icon-wrapper.avg {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(20, 184, 166, 0.25));
-  color: #34d399;
-}
-
-.stat-summary-label {
-  font-size: 12px;
-  color: var(--text-muted);
-  font-weight: 500;
-  display: block;
-  margin-bottom: 4px;
-}
-
-.stat-summary-val {
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--text-main);
-  letter-spacing: -0.5px;
+  gap: 20px;
 }
 
 /* Phần so sánh học viên */
@@ -106,71 +41,97 @@
   margin-top: 2px;
 }
 
-.students-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 18px;
+.students-analytics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
 }
 
-.student-analytics-card {
+.student-analytics-row {
   background: rgba(13, 17, 28, 0.6);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  transition: all 0.25s ease;
-}
-
-.student-analytics-card:hover {
-  transform: translateY(-2px);
-}
-
-.card-truong {
-  border-left: 4px solid #3b82f6;
-}
-
-.card-nguyet {
-  border-left: 4px solid #ec4899;
-}
-
-.card-header {
+  padding: 16px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 20px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.student-profile {
+.student-analytics-row:hover {
+  background: rgba(22, 28, 45, 0.75);
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.row-truong {
+  border-left: 4px solid #3b82f6;
+}
+.row-truong:hover {
+  box-shadow: 0 4px 22px rgba(59, 130, 246, 0.18);
+}
+
+.row-nguyet {
+  border-left: 4px solid #ec4899;
+}
+.row-nguyet:hover {
+  box-shadow: 0 4px 22px rgba(236, 72, 153, 0.18);
+}
+
+.row-other {
+  border-left: 4px solid #8b5cf6;
+}
+
+/* 1. Profile */
+.student-row-profile {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 160px;
+  flex-shrink: 0;
 }
 
 .avatar-badge {
   width: 42px;
   height: 42px;
-  border-radius: 50%;
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.06);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
 }
 
-.card-truong .avatar-badge {
+.row-truong .avatar-badge {
   background: rgba(59, 130, 246, 0.15);
   color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
-.card-nguyet .avatar-badge {
+.row-nguyet .avatar-badge {
   background: rgba(236, 72, 153, 0.15);
   color: #f472b6;
+  border: 1px solid rgba(236, 72, 153, 0.3);
 }
 
-.student-profile h4 {
-  font-size: 16px;
+.row-other .avatar-badge {
+  background: rgba(139, 92, 246, 0.15);
+  color: #a78bfa;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.profile-text h4 {
+  font-size: 15px;
   font-weight: 700;
   color: var(--text-main);
+  margin-bottom: 2px;
 }
 
 .student-role {
@@ -178,35 +139,22 @@
   color: var(--text-muted);
 }
 
-.btn-view-reports {
-  display: inline-flex;
+/* 2. Metrics */
+.student-row-metrics {
+  display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border-color);
-  color: var(--text-muted);
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  gap: 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 8px 18px;
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
 }
 
-.btn-view-reports:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: var(--text-main);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-/* Metrics Row */
-.metrics-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 12px;
-  border-radius: var(--radius-sm);
+.metric-divider {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .metric-box {
@@ -214,6 +162,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+  min-width: 72px;
 }
 
 .metric-label {
@@ -223,42 +172,53 @@
 }
 
 .metric-value {
-  font-size: 14px;
+  font-size: 13.5px;
   color: var(--text-main);
   font-weight: 700;
 }
 
-
-/* Recent Topics */
-.recent-topics {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.topics-label {
-  font-size: 12px;
-  color: var(--text-muted);
+/* 3. Topics */
+.student-row-topics {
+  flex: 1;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
+  min-width: 0;
+  padding: 0 6px;
+}
+
+.topics-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
   font-weight: 600;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.award-icon {
+  color: #fbbf24;
 }
 
 .topics-pills {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 6px;
+  flex-wrap: wrap;
+  max-height: 48px;
+  overflow: hidden;
 }
 
 .topic-pill {
   font-size: 12px;
   color: var(--text-main);
-  background: rgba(255, 255, 255, 0.04);
-  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4px 10px;
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(255, 255, 255, 0.05);
   white-space: nowrap;
+  max-width: 170px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -269,8 +229,96 @@
   font-style: italic;
 }
 
+/* 4. Action Button */
+.student-row-action {
+  flex-shrink: 0;
+}
+
+.btn-view-reports {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-view-reports:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-main);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateX(2px);
+}
+
+/* Responsive */
+@media (max-width: 950px) {
+  .student-analytics-row {
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 16px 14px;
+  }
+
+  .student-row-profile {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .student-row-action {
+    order: 2;
+  }
+
+  .student-row-metrics {
+    order: 3;
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  .student-row-topics {
+    order: 4;
+    width: 100%;
+    padding: 0;
+  }
+}
+
 @media (max-width: 768px) {
-  .stats-summary-grid {
-    grid-template-columns: 1fr;
+  .students-comparison-section {
+    padding: 16px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .student-analytics-row {
+    padding: 12px 10px;
+    gap: 12px;
+  }
+
+  .student-row-metrics {
+    padding: 8px 6px;
+    gap: 6px;
+  }
+
+  .metric-box {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .metric-label {
+    font-size: 10px;
+  }
+
+  .metric-value {
+    font-size: 12px;
+  }
+
+  .btn-view-reports {
+    padding: 6px 10px;
+    font-size: 11px;
   }
 }

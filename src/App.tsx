@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StudentSidebar } from './components/StudentSidebar/StudentSidebar';
 import { Header } from './components/Header/Header';
+import { MobileHeader } from './components/MobileHeader/MobileHeader';
 import { TodoInput } from './components/TodoInput/TodoInput';
 import { FilterBar } from './components/FilterBar/FilterBar';
 import { TodoList } from './components/TodoList/TodoList';
@@ -33,31 +34,51 @@ export const App: React.FC = () => {
 
   return (
     <div className="app-layout-wrapper">
-      {/* Phía bên trái: Sidebar tên & danh sách học sinh */}
-      <StudentSidebar
-        activeStudent={studentFilter}
-        onStudentChange={setStudentFilter}
-        students={students}
-        onAddStudent={addStudent}
-        stats={stats}
-      />
-
-      {/* Phía bên phải: Nội dung chính */}
-      <div className="app-main-content">
-        {/* Header với ô Ngày Tháng Pop-up & Tabs Báo Cáo / Thống Kê */}
-        <Header
+      {/* 1. Header tinh gọn 3 hàng chuẩn App trên Mobile (chỉ hiện khi <= 800px) */}
+      <div className="mobile-header-section">
+        <MobileHeader
+          activeStudent={studentFilter}
+          onStudentChange={setStudentFilter}
+          students={students}
+          onAddStudent={addStudent}
+          stats={stats}
           activeTab={activeTab}
           onTabChange={setActiveTab}
-          activeStudent={studentFilter}
           selectedDate={selectedDate}
           onSelectDate={setSelectedDate}
           todos={allTodos}
+          search={search}
+          onSearchChange={setSearch}
+          isAddOpen={isAddOpen}
+          onToggleAdd={() => setIsAddOpen((prev) => !prev)}
         />
+      </div>
 
-        {/* Tab 1: Báo Cáo Học Tập */}
-        {activeTab === 'reports' ? (
-          <main className="tab-content animate-fade-in">
-            {/* Thanh tìm kiếm & nút + duy nhất để thêm báo cáo */}
+      {/* 2. Sidebar học sinh bên trái trên Desktop (CỐ ĐỊNH bên trái) */}
+      <aside className="desktop-sidebar-section">
+        <StudentSidebar
+          activeStudent={studentFilter}
+          onStudentChange={setStudentFilter}
+          students={students}
+          onAddStudent={addStudent}
+          stats={stats}
+        />
+      </aside>
+
+      {/* 3. Phía bên phải: Nội dung chính */}
+      <div className="app-main-content">
+        {/* Cụm thanh điều hướng và công cụ CỐ ĐỊNH trên Desktop */}
+        <div className="desktop-header-sticky-container">
+          <Header
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            activeStudent={studentFilter}
+            selectedDate={selectedDate}
+            onSelectDate={setSelectedDate}
+            todos={allTodos}
+          />
+
+          {activeTab === 'reports' && (
             <FilterBar
               search={search}
               onSearchChange={setSearch}
@@ -65,6 +86,12 @@ export const App: React.FC = () => {
               isAddOpen={isAddOpen}
               onToggleAdd={() => setIsAddOpen((prev) => !prev)}
             />
+          )}
+        </div>
+
+        {/* Tab 1: Báo Cáo Học Tập */}
+        {activeTab === 'reports' ? (
+          <main className="tab-content animate-fade-in">
 
             {/* Form Thêm Buổi Học (chỉ mở ra khi bấm dấu +) */}
             {isAddOpen && (

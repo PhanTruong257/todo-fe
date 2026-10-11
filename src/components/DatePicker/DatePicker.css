@@ -277,9 +277,57 @@
 }
 
 @media (max-width: 640px) {
+  .custom-datepicker-container {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .datepicker-trigger-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 7px 12px;
+  }
+
   .datepicker-dropdown-popup {
-    left: 0;
-    transform: none;
-    width: 280px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(320px, calc(100vw - 24px));
+    padding: 14px 12px;
+  }
+
+  .month-header-title {
+    font-size: 13px;
+  }
+
+  .shortcut-btn {
+    font-size: 10.5px;
+    padding: 5px 6px;
+  }
+
+  .cal-day-cell {
+    height: 33px;
+    font-size: 12.5px;
+  }
+}
+
+@media (max-width: 360px) {
+  .datepicker-dropdown-popup {
+    width: calc(100vw - 16px);
+    padding: 12px 8px;
+    gap: 8px;
+  }
+
+  .popup-shortcuts-row {
+    gap: 4px;
+  }
+
+  .shortcut-btn {
+    font-size: 9.5px;
+    padding: 4px 3px;
+  }
+
+  .cal-day-cell {
+    height: 30px;
+    font-size: 11.5px;
   }
 }

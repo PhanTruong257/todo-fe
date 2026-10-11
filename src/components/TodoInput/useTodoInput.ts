@@ -1,5 +1,6 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import type { PriorityLevel, CreateTodoPayload } from '../../types/todo';
+import { getCurrentTime24h } from '../TimePicker24h';
 
 interface UseTodoInputProps {
   onAddTodo: (payload: CreateTodoPayload) => void;
@@ -8,10 +9,29 @@ interface UseTodoInputProps {
   defaultDate?: string | null;
 }
 
+export function getLocalTodayString(): string {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+export function getEndTimeFromStart(start: string, durationMinutes: number = 60): string {
+  if (!start) return '21:00';
+  const [h, m] = start.split(':').map(Number);
+  if (isNaN(h) || isNaN(m)) return '21:00';
+  const total = (h * 60 + m + durationMinutes) % (24 * 60);
+  const endH = String(Math.floor(total / 60)).padStart(2, '0');
+  const endM = String(total % 60).padStart(2, '0');
+  return `${endH}:${endM}`;
+}
+
 export function calculateDuration(start: string, end: string): string {
   if (!start || !end) return '';
   const [sh, sm] = start.split(':').map(Number);
   const [eh, em] = end.split(':').map(Number);
+  if (isNaN(sh) || isNaN(sm) || isNaN(eh) || isNaN(em)) return '';
   let totalMin = eh * 60 + em - (sh * 60 + sm);
   if (totalMin < 0) totalMin += 24 * 60; // ca học qua đêm
   const hours = Math.floor(totalMin / 60);
@@ -31,12 +51,34 @@ export function useTodoInput({
   const resolvedStudent =
     defaultStudent && defaultStudent !== 'all' ? defaultStudent : 'Trường';
   const [studentName, setStudentName] = useState(resolvedStudent);
-  const [date, setDate] = useState(() => defaultDate || new Date().toISOString().split('T')[0]);
-  const [startTime, setStartTime] = useState('19:30');
-  const [endTime, setEndTime] = useState('21:00');
+  const [date, setDate] = useState(() => defaultDate || getLocalTodayString());
+
+  // Gán thời điểm hiện tại khi mở form
+  const initialStartTime = getCurrentTime24h();
+  const initialEndTime = getEndTimeFromStart(initialStartTime, 60);
+
+  const [startTime, setStartTimeState] = useState(initialStartTime);
+  const [endTime, setEndTime] = useState(initialEndTime);
   const [title, setTitle] = useState('');
   const [lessonContent, setLessonContent] = useState('');
   const [priority, setPriority] = useState<PriorityLevel>('medium');
+
+  // Hàm set startTime thông minh: tự động đẩy endTime lên nếu endTime <= startTime mới
+  const setStartTime = useCallback((newStart: string) => {
+    setStartTimeState(newStart);
+    if (newStart) {
+      const [sh, sm] = newStart.split(':').map(Number);
+      const [eh, em] = (endTime || '').split(':').map(Number);
+      if (!isNaN(sh) && !isNaN(sm) && !isNaN(eh) && !isNaN(em)) {
+        const startTotal = sh * 60 + sm;
+        const endTotal = eh * 60 + em;
+        // Nếu giờ kết thúc trước hoặc bằng giờ bắt đầu, tự động cộng thêm 60 phút
+        if (endTotal <= startTotal) {
+          setEndTime(getEndTimeFromStart(newStart, 60));
+        }
+      }
+    }
+  }, [endTime]);
 
   // Luôn tự động cập nhật người học theo học viên đang chọn ở ngoài (sidebar/header)
   useEffect(() => {

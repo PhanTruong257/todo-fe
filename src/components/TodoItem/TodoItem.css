@@ -184,6 +184,18 @@
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  align-items: center;
+}
+
+.input-group-mini {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-input);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
 }
 
 .edit-actions {
@@ -211,3 +223,58 @@
   border-radius: var(--radius-sm);
   cursor: pointer;
 }
+
+@media (max-width: 640px) {
+  .report-card {
+    padding: 14px 12px;
+    gap: 10px;
+    border-radius: var(--radius-md);
+  }
+
+  .report-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .report-time-meta {
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 11px;
+  }
+
+  .report-title {
+    font-size: 15px;
+  }
+
+  .lesson-content-box {
+    padding: 10px 12px;
+  }
+
+  .lesson-content-box p {
+    font-size: 13px;
+  }
+
+  .action-btn {
+    padding: 8px;
+  }
+
+  .btn-sm-save,
+  .btn-sm-cancel {
+    flex: 1;
+    text-align: center;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 380px) {
+  .student-badge {
+    font-size: 11px;
+    padding: 3px 9px;
+  }
+
+  .report-title {
+    font-size: 14px;
+  }
+}
+

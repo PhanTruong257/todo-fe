@@ -3,6 +3,7 @@ import { Edit3, Trash2, Clock, Calendar, BookOpen } from 'lucide-react';
 import type { Todo, PriorityLevel } from '../../types/todo';
 import { useTodoItem } from './useTodoItem';
 import { calculateDuration } from '../TodoInput/useTodoInput';
+import { TimePicker24h } from '../TimePicker24h';
 import './TodoItem.css';
 
 interface TodoItemProps {
@@ -79,18 +80,22 @@ export const TodoItem: React.FC<TodoItemProps> = ({
               value={editDate}
               onChange={(e) => setEditDate(e.target.value)}
             />
-            <input
-              type="time"
-              className="time-input"
-              value={editStartTime}
-              onChange={(e) => setEditStartTime(e.target.value)}
-            />
-            <input
-              type="time"
-              className="time-input"
-              value={editEndTime}
-              onChange={(e) => setEditEndTime(e.target.value)}
-            />
+            <div className="input-group-mini">
+              <Clock size={12} />
+              <TimePicker24h
+                value={editStartTime}
+                onChange={setEditStartTime}
+                placeholder="20:00"
+              />
+            </div>
+            <div className="input-group-mini">
+              <Clock size={12} />
+              <TimePicker24h
+                value={editEndTime}
+                onChange={setEditEndTime}
+                placeholder="21:00"
+              />
+            </div>
           </div>
 
           <input

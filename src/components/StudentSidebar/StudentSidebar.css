@@ -1,19 +1,18 @@
 .student-sidebar {
-  width: 280px;
-  min-width: 280px;
+  width: 100%;
+  height: 100%;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 24px 18px;
+  padding: 22px 18px;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   box-shadow: var(--shadow-md);
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  height: fit-content;
-  position: sticky;
-  top: 24px;
+  justify-content: space-between;
+  gap: 20px;
+  box-sizing: border-box;
 }
 
 /* Brand */
@@ -86,6 +85,9 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  overflow-y: auto;
+  max-height: calc(100vh - 310px);
+  padding-right: 2px;
 }
 
 /* Item học sinh */
@@ -279,10 +281,41 @@
   color: var(--text-muted);
 }
 
-@media (max-width: 900px) {
-  .student-sidebar {
-    width: 100%;
-    min-width: 100%;
-    position: static;
-  }
+.sidebar-top-group {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
+
+.sidebar-footer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sidebar-sync-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.sync-live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+  display: inline-block;
+}
+
+.sidebar-version-tag {
+  font-size: 10px;
+  color: var(--text-subtle);
+  font-weight: 500;
+}
+
+

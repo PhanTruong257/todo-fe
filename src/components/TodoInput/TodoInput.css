@@ -1,107 +1,226 @@
-.add-todo-section {
+.add-report-section {
+  margin-bottom: 24px;
+}
+
+.report-form {
   background: var(--bg-card);
   backdrop-filter: blur(16px);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 22px;
-  margin-bottom: 28px;
-  box-shadow: var(--shadow-md);
-  transition: border-color 0.3s;
-}
-
-.add-todo-section:focus-within {
-  border-color: var(--border-highlight);
-}
-
-.add-input-main {
+  padding: 22px 24px;
   display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  transition: border-color 0.2s;
+}
+
+.report-form:focus-within {
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+.report-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 12px;
-  margin-bottom: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.input-primary {
-  flex: 1;
-  background: var(--bg-input);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 12px 18px;
-  font-size: 15px;
-  color: var(--text-main);
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.input-primary:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-light);
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--primary), #818cf8);
-  color: #fff;
-  font-weight: 600;
-  padding: 12px 22px;
-  border-radius: var(--radius-md);
+.section-title {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
-  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+  font-size: 15px;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.section-title svg {
+  color: #818cf8;
+}
+
+.student-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.selector-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.student-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.student-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
-  border: none;
   transition: all 0.2s;
 }
 
-.btn-primary:hover {
-  background: linear-gradient(135deg, var(--primary-hover), var(--primary));
-  transform: translateY(-1px);
-}
-
-.btn-primary:active {
-  transform: translateY(0);
-}
-
-.add-options-row {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.input-secondary {
-  flex: 1;
-  min-width: 200px;
-  background: var(--bg-input);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  padding: 9px 14px;
-  font-size: 13px;
-  color: var(--text-main);
-  outline: none;
-}
-
-.input-secondary:focus {
-  border-color: var(--primary);
-}
-
-.select-priority {
-  background: var(--bg-input);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  padding: 9px 14px;
-  font-size: 13px;
-  color: var(--text-main);
-  outline: none;
-  cursor: pointer;
-}
-
-.select-priority option {
-  background: #111827;
+.student-pill:hover {
+  background: rgba(255, 255, 255, 0.1);
   color: #fff;
 }
 
-@media (max-width: 640px) {
-  .add-input-main {
-    flex-direction: column;
-  }
+.student-pill.selected {
+  color: #fff;
+}
+
+.student-pill.pill-truong.selected {
+  background: linear-gradient(135deg, #4f46e5, #3b82f6);
+  border-color: #60a5fa;
+  box-shadow: 0 2px 10px rgba(79, 70, 229, 0.4);
+}
+
+.student-pill.pill-nguyet.selected {
+  background: linear-gradient(135deg, #ec4899, #f43f5e);
+  border-color: #f472b6;
+  box-shadow: 0 2px 10px rgba(236, 72, 153, 0.4);
+}
+
+.student-pill:not(.pill-truong):not(.pill-nguyet).selected {
+  background: linear-gradient(135deg, #0284c7, #06b6d4);
+  border-color: #38bdf8;
+  box-shadow: 0 2px 10px rgba(2, 132, 199, 0.4);
+}
+
+/* Hàng thời gian & ngày tháng */
+.time-date-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.input-group label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.time-input {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-color);
+  color: #f8fafc;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+  color-scheme: dark;
+}
+
+.time-input:focus {
+  border-color: #6366f1;
+}
+
+.duration-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: #a5b4fc;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  margin-top: 18px;
+}
+
+.duration-badge strong {
+  color: #fff;
+  font-size: 13px;
+}
+
+/* Form inputs */
+.form-group {
+  width: 100%;
+}
+
+.input-primary {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-primary:focus {
+  border-color: #6366f1;
+}
+
+.textarea-content {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  outline: none;
+  resize: vertical;
+  min-height: 70px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.textarea-content:focus {
+  border-color: #6366f1;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-submit-report {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+}
+
+.btn-submit-report:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
 }

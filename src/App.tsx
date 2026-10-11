@@ -11,14 +11,16 @@ export const App: React.FC = () => {
   const {
     todos,
     stats,
+    students,
+    studentFilter,
+    setStudentFilter,
+    addStudent,
     loading,
     isBackendConnected,
     search,
     setSearch,
     statusFilter,
     setStatusFilter,
-    priorityFilter,
-    setPriorityFilter,
     addTodo,
     toggleTodo,
     deleteTodo,
@@ -34,30 +36,36 @@ export const App: React.FC = () => {
         onRetryConnection={retryConnection}
       />
 
-      {/* Thẻ thống kê số lượng */}
+      {/* Thẻ thống kê số lượng học tập */}
       <StatsCards stats={stats} />
 
-      {/* Form thêm công việc */}
-      <TodoInput onAddTodo={addTodo} />
+      {/* Form thêm báo cáo buổi học */}
+      <TodoInput
+        onAddTodo={addTodo}
+        students={students}
+        activeStudentFilter={studentFilter}
+      />
 
-      {/* Thanh tìm kiếm & bộ lọc */}
+      {/* Thanh lọc theo từng người học & tìm kiếm */}
       <FilterBar
         search={search}
         onSearchChange={setSearch}
         statusFilter={statusFilter}
         onStatusFilterChange={setStatusFilter}
-        priorityFilter={priorityFilter}
-        onPriorityFilterChange={setPriorityFilter}
+        studentFilter={studentFilter}
+        onStudentFilterChange={setStudentFilter}
+        students={students}
+        onAddStudent={addStudent}
         stats={stats}
       />
 
-      {/* Danh sách công việc */}
+      {/* Danh sách báo cáo buổi học */}
       <TodoList
         todos={todos}
         loading={loading}
         search={search}
         statusFilter={statusFilter}
-        priorityFilter={priorityFilter}
+        studentFilter={studentFilter}
         onToggle={toggleTodo}
         onDelete={deleteTodo}
         onUpdate={updateTodo}
@@ -65,7 +73,7 @@ export const App: React.FC = () => {
 
       {/* Footer */}
       <footer className="app-footer">
-        <p>TaskFlow ToDo List • Kiến trúc Co-location Component (TSX + CSS + Hook chung folder)</p>
+        <p>English Study Tracker • Báo cáo học Tiếng Anh hàng ngày • Trường & Nguyệt</p>
       </footer>
     </div>
   );

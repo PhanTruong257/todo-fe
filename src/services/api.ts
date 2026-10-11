@@ -12,11 +12,12 @@ const client = axios.create({
 });
 
 export const api = {
-  // Lấy danh sách todo
+  // Lấy danh sách todo / study reports
   async getTodos(params?: {
     search?: string;
     status?: 'all' | 'active' | 'completed';
     priority?: string;
+    studentName?: string;
   }): Promise<Todo[]> {
     const response = await client.get<Todo[]>('/todos', { params });
     return response.data;
@@ -26,6 +27,16 @@ export const api = {
   async getStats(): Promise<TodoStats> {
     const response = await client.get<TodoStats>('/todos/stats');
     return response.data;
+  },
+
+  // Lấy danh sách người học
+  async getStudents(): Promise<string[]> {
+    try {
+      const response = await client.get<string[]>('/todos/students');
+      return response.data;
+    } catch {
+      return ['Trường', 'Nguyệt'];
+    }
   },
 
   // Tạo mới todo

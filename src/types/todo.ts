@@ -8,6 +8,12 @@ export interface Todo {
   priority: PriorityLevel;
   dueDate?: string;
   tags?: string[];
+  // Study report fields
+  studentName?: string;
+  date?: string;
+  startTime?: string;
+  endTime?: string;
+  lessonContent?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -18,6 +24,11 @@ export interface CreateTodoPayload {
   priority?: PriorityLevel;
   dueDate?: string;
   tags?: string[];
+  studentName?: string;
+  date?: string;
+  startTime?: string;
+  endTime?: string;
+  lessonContent?: string;
 }
 
 export interface UpdateTodoPayload {
@@ -27,6 +38,11 @@ export interface UpdateTodoPayload {
   priority?: PriorityLevel;
   dueDate?: string;
   tags?: string[];
+  studentName?: string;
+  date?: string;
+  startTime?: string;
+  endTime?: string;
+  lessonContent?: string;
 }
 
 export interface TodoStats {
@@ -34,4 +50,6 @@ export interface TodoStats {
   active: number;
   completed: number;
   highPriority: number;
+  studentStats?: Record<string, { total: number; completed: number }>;
+  students?: string[];
 }

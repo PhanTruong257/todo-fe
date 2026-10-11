@@ -5,38 +5,48 @@ import { api } from '../../services/api';
 const DEFAULT_MOCK_TODOS: Todo[] = [
   {
     id: 'mock-1',
-    title: 'Khởi chạy MongoDB Atlas (AWS Region Singapore)',
-    description: 'Cụm M0 512MB đã kết nối thành công qua MONGODB_URI trong backend/.env',
+    title: 'Luyện Phát Âm & Shadowing IELTS Speaking',
+    studentName: 'Trường',
+    date: new Date().toISOString().split('T')[0],
+    startTime: '19:30',
+    endTime: '21:00',
+    lessonContent: 'Luyện phát âm đuôi -ed, -s/es và shadowing 2 đoạn hội thoại BBC 6-Minute English. Thu âm và so sánh giọng mẫu.',
     isCompleted: true,
     priority: 'high',
-    dueDate: '2026-10-12',
-    tags: ['database', 'aws'],
+    tags: ['speaking', 'pronunciation'],
     createdAt: new Date().toISOString(),
   },
   {
     id: 'mock-2',
-    title: 'Kiểm thử NestJS REST API tại Swagger UI',
-    description: 'Truy cập http://localhost:4000/api/docs để xem và test các endpoint',
+    title: 'Học 30 Từ Vựng Topic Môi Trường (Cam 18)',
+    studentName: 'Nguyệt',
+    date: new Date().toISOString().split('T')[0],
+    startTime: '20:00',
+    endTime: '21:30',
+    lessonContent: 'Học thuộc và đặt 10 câu ví dụ với từ vựng chủ đề Environment trong đề Cam 18 Test 1. Làm quiz ôn tập Quizlet.',
     isCompleted: false,
     priority: 'medium',
-    dueDate: '2026-10-15',
-    tags: ['backend', 'api'],
+    tags: ['vocabulary', 'ielts'],
     createdAt: new Date().toISOString(),
   },
   {
     id: 'mock-3',
-    title: 'Triển khai Frontend & Backend lên Cloud',
-    description: 'Mỗi component đã được co-locate sạch sẽ (tsx, css, hook chung 1 folder)',
-    isCompleted: false,
-    priority: 'low',
-    dueDate: '2026-10-20',
-    tags: ['frontend', 'deployment'],
-    createdAt: new Date().toISOString(),
+    title: 'Luyện Nghe IELTS Listening Section 3',
+    studentName: 'Trường',
+    date: new Date(Date.now() - 86400000).toISOString().split('T')[0],
+    startTime: '20:30',
+    endTime: '21:45',
+    lessonContent: 'Nghe chép chính tả Section 3 đề Cam 17 Test 2. Phân tích bẫy distractors và học 15 collocations mới.',
+    isCompleted: true,
+    priority: 'medium',
+    tags: ['listening'],
+    createdAt: new Date(Date.now() - 86400000).toISOString(),
   },
 ];
 
 export function useTodos() {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [customStudents, setCustomStudents] = useState<string[]>(['Trường', 'Nguyệt']);
   const [loading, setLoading] = useState<boolean>(true);
   const [isBackendConnected, setIsBackendConnected] = useState<boolean>(false);
 
@@ -44,6 +54,7 @@ export function useTodos() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'completed'>('all');
   const [priorityFilter, setPriorityFilter] = useState<string>('all');
+  const [studentFilter, setStudentFilter] = useState<string>('all');
 
   const fetchTodos = async () => {
     setLoading(true);
@@ -51,9 +62,13 @@ export function useTodos() {
       const data = await api.getTodos();
       setTodos(data);
       setIsBackendConnected(true);
+
+      // Fetch distinct students from API
+      const apiStudents = await api.getStudents();
+      setCustomStudents((prev) => Array.from(new Set([...prev, ...apiStudents])));
     } catch {
       setIsBackendConnected(false);
-      const saved = localStorage.getItem('taskflow_mock_todos');
+      const saved = localStorage.getItem('taskflow_mock_reports');
       if (saved) {
         try {
           setTodos(JSON.parse(saved));
@@ -62,7 +77,7 @@ export function useTodos() {
         }
       } else {
         setTodos(DEFAULT_MOCK_TODOS);
-        localStorage.setItem('taskflow_mock_todos', JSON.stringify(DEFAULT_MOCK_TODOS));
+        localStorage.setItem('taskflow_mock_reports', JSON.stringify(DEFAULT_MOCK_TODOS));
       }
     } finally {
       setLoading(false);
@@ -76,22 +91,50 @@ export function useTodos() {
   const updateLocalMock = (updatedList: Todo[]) => {
     setTodos(updatedList);
     if (!isBackendConnected) {
-      localStorage.setItem('taskflow_mock_todos', JSON.stringify(updatedList));
+      localStorage.setItem('taskflow_mock_reports', JSON.stringify(updatedList));
+    }
+  };
+
+  // Danh sách tất cả người học (luôn có Trường & Nguyệt + các tên đã có)
+  const students = useMemo(() => {
+    const list = new Set(['Trường', 'Nguyệt', ...customStudents]);
+    todos.forEach((t) => {
+      if (t.studentName) list.add(t.studentName);
+    });
+    return Array.from(list);
+  }, [customStudents, todos]);
+
+  const addStudent = (name: string) => {
+    const trimmed = name.trim();
+    if (trimmed && !students.includes(trimmed)) {
+      setCustomStudents((prev) => [...prev, trimmed]);
+      setStudentFilter(trimmed);
     }
   };
 
   const addTodo = async (payload: CreateTodoPayload) => {
+    const student = payload.studentName || 'Trường';
+    if (!students.includes(student)) {
+      setCustomStudents((prev) => [...prev, student]);
+    }
+
     if (isBackendConnected) {
       try {
         const created = await api.createTodo(payload);
         setTodos((prev) => [created, ...prev]);
       } catch (err) {
-        console.error('Lỗi khi tạo công việc:', err);
+        console.error('Lỗi khi tạo báo cáo:', err);
       }
     } else {
       const newMock: Todo = {
         id: `mock-${Date.now()}`,
-        ...payload,
+        title: payload.title || `Buổi học của ${student}`,
+        studentName: student,
+        date: payload.date || new Date().toISOString().split('T')[0],
+        startTime: payload.startTime || '19:30',
+        endTime: payload.endTime || '21:00',
+        lessonContent: payload.lessonContent || payload.description || '',
+        description: payload.description || '',
         priority: payload.priority || 'medium',
         isCompleted: false,
         createdAt: new Date().toISOString(),
@@ -106,7 +149,7 @@ export function useTodos() {
         const updated = await api.toggleTodo(todo.id);
         setTodos((prev) => prev.map((t) => (t.id === todo.id ? updated : t)));
       } catch (err) {
-        console.error('Lỗi toggle todo:', err);
+        console.error('Lỗi toggle báo cáo:', err);
       }
     } else {
       const updated = todos.map((t) =>
@@ -122,7 +165,7 @@ export function useTodos() {
         await api.deleteTodo(id);
         setTodos((prev) => prev.filter((t) => t.id !== id));
       } catch (err) {
-        console.error('Lỗi xóa todo:', err);
+        console.error('Lỗi xóa báo cáo:', err);
       }
     } else {
       updateLocalMock(todos.filter((t) => t.id !== id));
@@ -131,14 +174,23 @@ export function useTodos() {
 
   const updateTodo = async (
     id: string,
-    updates: { title: string; description?: string; priority: PriorityLevel }
+    updates: {
+      title?: string;
+      studentName?: string;
+      date?: string;
+      startTime?: string;
+      endTime?: string;
+      lessonContent?: string;
+      description?: string;
+      priority?: PriorityLevel;
+    }
   ) => {
     if (isBackendConnected) {
       try {
         const updated = await api.updateTodo(id, updates as UpdateTodoPayload);
         setTodos((prev) => prev.map((t) => (t.id === id ? updated : t)));
       } catch (err) {
-        console.error('Lỗi cập nhật todo:', err);
+        console.error('Lỗi cập nhật báo cáo:', err);
       }
     } else {
       const updated = todos.map((t) =>
@@ -151,10 +203,15 @@ export function useTodos() {
   // Filtered List
   const filteredTodos = useMemo(() => {
     return todos.filter((todo) => {
+      const studentName = todo.studentName || 'Trường';
+      const matchStudent = studentFilter === 'all' || studentName === studentFilter;
+
       const matchSearch =
         search === '' ||
         todo.title.toLowerCase().includes(search.toLowerCase()) ||
-        (todo.description && todo.description.toLowerCase().includes(search.toLowerCase()));
+        (todo.lessonContent && todo.lessonContent.toLowerCase().includes(search.toLowerCase())) ||
+        (todo.description && todo.description.toLowerCase().includes(search.toLowerCase())) ||
+        studentName.toLowerCase().includes(search.toLowerCase());
 
       const matchStatus =
         statusFilter === 'all' ||
@@ -164,26 +221,43 @@ export function useTodos() {
       const matchPriority =
         priorityFilter === 'all' || todo.priority === priorityFilter;
 
-      return matchSearch && matchStatus && matchPriority;
+      return matchStudent && matchSearch && matchStatus && matchPriority;
     });
-  }, [todos, search, statusFilter, priorityFilter]);
+  }, [todos, search, statusFilter, priorityFilter, studentFilter]);
 
   // Dynamic stats
   const stats: TodoStats = useMemo(() => {
     const total = todos.length;
     const completed = todos.filter((t) => t.isCompleted).length;
     const highPriority = todos.filter((t) => t.priority === 'high' && !t.isCompleted).length;
+
+    const studentStats: Record<string, { total: number; completed: number }> = {};
+    students.forEach((name) => {
+      const studentReports = todos.filter((t) => (t.studentName || 'Trường') === name);
+      studentStats[name] = {
+        total: studentReports.length,
+        completed: studentReports.filter((t) => t.isCompleted).length,
+      };
+    });
+
     return {
       total,
       active: total - completed,
       completed,
       highPriority,
+      studentStats,
+      students,
     };
-  }, [todos]);
+  }, [todos, students]);
 
   return {
     todos: filteredTodos,
+    allTodos: todos,
     stats,
+    students,
+    studentFilter,
+    setStudentFilter,
+    addStudent,
     loading,
     isBackendConnected,
     search,

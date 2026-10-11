@@ -1,14 +1,27 @@
 import React from 'react';
-import { Circle, Check, Edit3, Trash2, Clock } from 'lucide-react';
+import { Circle, Check, Edit3, Trash2, Clock, Calendar, BookOpen } from 'lucide-react';
 import type { Todo, PriorityLevel } from '../../types/todo';
 import { useTodoItem } from './useTodoItem';
+import { calculateDuration } from '../TodoInput/useTodoInput';
 import './TodoItem.css';
 
 interface TodoItemProps {
   todo: Todo;
   onToggle: (todo: Todo) => void;
   onDelete: (id: string) => void;
-  onUpdate: (id: string, updates: { title: string; description?: string; priority: PriorityLevel }) => void;
+  onUpdate: (
+    id: string,
+    updates: {
+      title?: string;
+      studentName?: string;
+      date?: string;
+      startTime?: string;
+      endTime?: string;
+      lessonContent?: string;
+      description?: string;
+      priority?: PriorityLevel;
+    }
+  ) => void;
 }
 
 export const TodoItem: React.FC<TodoItemProps> = ({
@@ -21,104 +34,152 @@ export const TodoItem: React.FC<TodoItemProps> = ({
     isEditing,
     editTitle,
     setEditTitle,
-    editDescription,
-    setEditDescription,
-    editPriority,
-    setEditPriority,
+    editStudentName,
+    setEditStudentName,
+    editDate,
+    setEditDate,
+    editStartTime,
+    setEditStartTime,
+    editEndTime,
+    setEditEndTime,
+    editContent,
+    setEditContent,
     handleStartEdit,
     handleSave,
     handleCancel,
   } = useTodoItem({ todo, onUpdate });
 
+  const student = todo.studentName || 'Trường';
+  const isTruong = student === 'Trường';
+  const isNguyet = student === 'Nguyệt';
+  const icon = isTruong ? '👨‍🎓' : isNguyet ? '👩‍🎓' : '👤';
+  const duration = todo.startTime && todo.endTime ? calculateDuration(todo.startTime, todo.endTime) : '';
+
   return (
-    <div className={`todo-item ${todo.isCompleted ? 'completed' : ''}`}>
+    <div className={`report-card ${todo.isCompleted ? 'completed' : ''} ${isTruong ? 'border-truong' : isNguyet ? 'border-nguyet' : ''}`}>
       {!isEditing && (
         <button
-          className={`todo-checkbox ${todo.isCompleted ? 'checked' : ''}`}
+          className={`report-checkbox ${todo.isCompleted ? 'checked' : ''}`}
           onClick={() => onToggle(todo)}
-          title={todo.isCompleted ? 'Đánh dấu chưa xong' : 'Đánh dấu đã xong'}
+          title={todo.isCompleted ? 'Đánh dấu chưa xong' : 'Đánh dấu đã hoàn thành'}
         >
-          {todo.isCompleted ? <Check size={14} /> : <Circle size={14} />}
+          {todo.isCompleted ? <Check size={15} /> : <Circle size={15} />}
         </button>
       )}
 
       {isEditing ? (
-        <div className="edit-form">
+        <div className="report-edit-form">
+          <div className="edit-row">
+            <input
+              type="text"
+              className="input-primary"
+              placeholder="Tên người học"
+              value={editStudentName}
+              onChange={(e) => setEditStudentName(e.target.value)}
+              style={{ width: '140px' }}
+            />
+            <input
+              type="date"
+              className="time-input"
+              value={editDate}
+              onChange={(e) => setEditDate(e.target.value)}
+            />
+            <input
+              type="time"
+              className="time-input"
+              value={editStartTime}
+              onChange={(e) => setEditStartTime(e.target.value)}
+            />
+            <input
+              type="time"
+              className="time-input"
+              value={editEndTime}
+              onChange={(e) => setEditEndTime(e.target.value)}
+            />
+          </div>
+
           <input
             type="text"
             className="input-primary"
+            placeholder="Chủ đề buổi học"
             value={editTitle}
             onChange={(e) => setEditTitle(e.target.value)}
-            autoFocus
           />
-          <input
-            type="text"
-            className="input-secondary"
-            placeholder="Mô tả bổ sung"
-            value={editDescription}
-            onChange={(e) => setEditDescription(e.target.value)}
+
+          <textarea
+            className="textarea-content"
+            rows={2}
+            placeholder="Nội dung đã học..."
+            value={editContent}
+            onChange={(e) => setEditContent(e.target.value)}
           />
-          <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-            <select
-              className="select-priority"
-              value={editPriority}
-              onChange={(e) => setEditPriority(e.target.value as PriorityLevel)}
-            >
-              <option value="low">Thấp</option>
-              <option value="medium">Bình thường</option>
-              <option value="high">Cao</option>
-            </select>
-            <div className="edit-actions">
-              <button className="btn-sm-save" onClick={handleSave}>
-                Lưu
-              </button>
-              <button className="btn-sm-cancel" onClick={handleCancel}>
-                Hủy
-              </button>
-            </div>
+
+          <div className="edit-actions">
+            <button className="btn-sm-save" onClick={handleSave}>
+              Lưu thay đổi
+            </button>
+            <button className="btn-sm-cancel" onClick={handleCancel}>
+              Hủy
+            </button>
           </div>
         </div>
       ) : (
-        <>
-          <div className="todo-content">
-            <div className="todo-title">{todo.title}</div>
-            {todo.description && (
-              <div className="todo-description">{todo.description}</div>
-            )}
-            <div className="todo-meta">
-              <span className={`priority-badge ${todo.priority}`}>
-                {todo.priority === 'high'
-                  ? 'Ưu tiên cao'
-                  : todo.priority === 'medium'
-                  ? 'Bình thường'
-                  : 'Ưu tiên thấp'}
-              </span>
-              {todo.dueDate && (
-                <span className="todo-date">
-                  <Clock size={12} />
-                  Hạn: {todo.dueDate}
+        <div className="report-content">
+          {/* Header thẻ: Tên người học + Thời gian học */}
+          <div className="report-header-row">
+            <span className={`student-badge ${isTruong ? 'badge-truong' : isNguyet ? 'badge-nguyet' : 'badge-other'}`}>
+              {icon} {student}
+            </span>
+
+            <div className="report-time-meta">
+              {todo.date && (
+                <span className="meta-item">
+                  <Calendar size={13} />
+                  {todo.date}
+                </span>
+              )}
+              {todo.startTime && todo.endTime && (
+                <span className="meta-item time">
+                  <Clock size={13} />
+                  {todo.startTime} - {todo.endTime}
+                  {duration && <strong className="duration-pill">({duration})</strong>}
                 </span>
               )}
             </div>
           </div>
 
-          <div className="todo-actions">
+          {/* Tiêu đề buổi học */}
+          <div className="report-title">
+            <BookOpen size={16} />
+            <span>{todo.title}</span>
+          </div>
+
+          {/* Chi tiết nội dung học */}
+          {(todo.lessonContent || todo.description) && (
+            <div className="lesson-content-box">
+              <span className="box-label">Hôm nay đã học:</span>
+              <p>{todo.lessonContent || todo.description}</p>
+            </div>
+          )}
+
+          {/* Footer thẻ: Nút bấm Sửa/Xóa */}
+          <div className="report-card-actions">
             <button
               className="action-btn"
               onClick={handleStartEdit}
-              title="Chỉnh sửa"
+              title="Chỉnh sửa báo cáo"
             >
               <Edit3 size={15} />
             </button>
             <button
               className="action-btn delete"
               onClick={() => onDelete(todo.id)}
-              title="Xóa công việc"
+              title="Xóa báo cáo"
             >
               <Trash2 size={15} />
             </button>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

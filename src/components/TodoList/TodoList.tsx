@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle2, RefreshCw } from 'lucide-react';
+import { BookOpen, RefreshCw } from 'lucide-react';
 import type { Todo, PriorityLevel } from '../../types/todo';
 import { TodoItem } from '../TodoItem/TodoItem';
 import './TodoList.css';
@@ -9,10 +9,22 @@ interface TodoListProps {
   loading: boolean;
   search: string;
   statusFilter: 'all' | 'active' | 'completed';
-  priorityFilter: string;
+  studentFilter?: string;
   onToggle: (todo: Todo) => void;
   onDelete: (id: string) => void;
-  onUpdate: (id: string, updates: { title: string; description?: string; priority: PriorityLevel }) => void;
+  onUpdate: (
+    id: string,
+    updates: {
+      title?: string;
+      studentName?: string;
+      date?: string;
+      startTime?: string;
+      endTime?: string;
+      lessonContent?: string;
+      description?: string;
+      priority?: PriorityLevel;
+    }
+  ) => void;
 }
 
 export const TodoList: React.FC<TodoListProps> = ({
@@ -20,7 +32,7 @@ export const TodoList: React.FC<TodoListProps> = ({
   loading,
   search,
   statusFilter,
-  priorityFilter,
+  studentFilter = 'all',
   onToggle,
   onDelete,
   onUpdate,
@@ -29,7 +41,7 @@ export const TodoList: React.FC<TodoListProps> = ({
     return (
       <div className="empty-state">
         <RefreshCw className="loading-spinner" size={32} />
-        <p>Đang tải danh sách công việc...</p>
+        <p>Đang tải danh sách báo cáo học tập...</p>
       </div>
     );
   }
@@ -38,13 +50,13 @@ export const TodoList: React.FC<TodoListProps> = ({
     return (
       <div className="empty-state">
         <div className="empty-state-icon">
-          <CheckCircle2 size={32} />
+          <BookOpen size={32} />
         </div>
-        <h3>Không có công việc nào</h3>
+        <h3>Chưa có báo cáo buổi học nào</h3>
         <p>
-          {search || statusFilter !== 'all' || priorityFilter !== 'all'
-            ? 'Không tìm thấy kết quả nào phù hợp với bộ lọc hiện tại.'
-            : 'Tuyệt vời! Bạn không có công việc tồn đọng. Hãy thêm nhiệm vụ mới để bắt đầu.'}
+          {search || statusFilter !== 'all' || studentFilter !== 'all'
+            ? 'Không tìm thấy buổi học nào phù hợp với bộ lọc hiện tại.'
+            : 'Hãy thêm báo cáo buổi học tiếng Anh đầu tiên cho Trường hoặc Nguyệt ở khung bên trên!'}
         </p>
       </div>
     );

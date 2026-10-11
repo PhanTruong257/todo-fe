@@ -19,8 +19,8 @@ export const Header: React.FC<HeaderProps> = ({
             <ListTodo size={28} />
           </div>
           <div className="brand-text">
-            <h1>TaskFlow</h1>
-            <p>Quản lý công việc thông minh • React TS + NestJS + MongoDB</p>
+            <h1>English Study Tracker</h1>
+            <p>Báo cáo học Tiếng Anh hàng ngày • Trường & Nguyệt</p>
           </div>
         </div>
 

@@ -131,6 +131,19 @@
   line-height: 1;
 }
 
+.chip-streak-pill {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: var(--radius-full);
+  background: rgba(249, 115, 22, 0.22);
+  border: 1px solid rgba(249, 115, 22, 0.4);
+  color: #fb923c;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
 /* Active States */
 .mobile-student-chip.chip-truong.active {
   background: rgba(59, 130, 246, 0.2);
@@ -327,6 +340,27 @@
 
 .mobile-clear-search:hover {
   color: var(--text-main);
+}
+
+.mobile-btn-timer-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  color: #a5b4fc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.mobile-btn-timer-circle.active {
+  background: #6366f1;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.5);
 }
 
 .mobile-btn-add-circle {

@@ -5,6 +5,8 @@ import {
   Heart,
   ArrowRight,
   Award,
+  BarChart3,
+  Flame,
 } from 'lucide-react';
 import type { Todo, TodoStats } from '../../types/todo';
 import { useStatsView } from './useStatsView';
@@ -25,11 +27,70 @@ export const StatsView: React.FC<StatsViewProps> = ({
   onSelectStudent,
   onGoToReports,
 }) => {
-  const { studentsAnalytics } = useStatsView({ todos, stats, students });
+  const {
+    studentsAnalytics,
+    weeklyActivity,
+    formattedWeekTotalDuration,
+  } = useStatsView({ todos, stats, students });
 
   return (
     <div className="stats-view-container animate-fade-in">
-      {/* Bảng theo dõi tiến độ từng học viên */}
+      {/* 1. Biểu đồ hoạt động 7 ngày trong tuần */}
+      <div className="weekly-activity-section">
+        <div className="section-header">
+          <div className="section-title-group">
+            <BarChart3 size={20} className="title-icon" />
+            <h3>Hoạt Động Học Tập Trong Tuần</h3>
+            <span className="week-total-pill">
+              Tổng tuần: {formattedWeekTotalDuration}
+            </span>
+          </div>
+          <p className="section-sub">
+            Thời lượng học từng ngày từ Thứ 2 đến Chủ Nhật tuần này
+          </p>
+        </div>
+
+        <div className="weekly-bars-container">
+          {weeklyActivity.map((day) => {
+            // Chuẩn hóa chiều cao cột (tối đa 180 phút = 100%)
+            const percent = Math.min(100, Math.round((day.totalMinutes / 180) * 100));
+            const hasActivity = day.totalMinutes > 0;
+
+            return (
+              <div
+                key={day.dateStr}
+                className={`day-bar-column ${day.isToday ? 'is-today' : ''} ${
+                  hasActivity ? 'has-data' : ''
+                }`}
+                title={`${day.dayLabel}: ${day.formattedDuration} (${day.sessionCount} buổi)`}
+              >
+                <div className="bar-track">
+                  {hasActivity ? (
+                    <div
+                      className="bar-fill"
+                      style={{ height: `${Math.max(14, percent)}%` }}
+                    >
+                      <span className="bar-duration-tooltip">
+                        {day.formattedDuration}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="bar-empty-dot" />
+                  )}
+                </div>
+
+                <div className="day-info-bottom">
+                  <span className="day-name">{day.dayShort}</span>
+                  <span className="day-date">{day.dateStr.split('-').slice(1).reverse().join('/')}</span>
+                  {day.isToday && <span className="today-badge">Nay</span>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 2. Bảng theo dõi tiến độ từng học viên */}
       <div className="students-comparison-section">
         <div className="section-header">
           <div className="section-title-group">
@@ -37,7 +98,7 @@ export const StatsView: React.FC<StatsViewProps> = ({
             <h3>Báo Cáo Học Tập Từng Học Viên</h3>
           </div>
           <p className="section-sub">
-            Thống kê thời lượng và các chủ đề tiếng Anh đã học
+            Thống kê thời lượng, chuỗi ngày học và các chủ đề tiếng Anh đã học
           </p>
         </div>
 
@@ -66,7 +127,7 @@ export const StatsView: React.FC<StatsViewProps> = ({
                   </div>
                 </div>
 
-                {/* 2. Metrics: 3 chỉ số ngang */}
+                {/* 2. Metrics: 4 chỉ số ngang kèm chuỗi học 🔥 */}
                 <div className="student-row-metrics">
                   <div className="metric-box">
                     <span className="metric-label">Tổng thời gian</span>
@@ -74,13 +135,27 @@ export const StatsView: React.FC<StatsViewProps> = ({
                   </div>
                   <div className="metric-divider" />
                   <div className="metric-box">
-                    <span className="metric-label">Số buổi học</span>
+                    <span className="metric-label">Số buổi</span>
                     <strong className="metric-value">{student.totalSessions} buổi</strong>
                   </div>
                   <div className="metric-divider" />
                   <div className="metric-box">
-                    <span className="metric-label">Trung bình/buổi</span>
+                    <span className="metric-label">TB / buổi</span>
                     <strong className="metric-value">{student.avgDuration}</strong>
+                  </div>
+                  <div className="metric-divider" />
+                  <div className="metric-box metric-streak-box">
+                    <span className="metric-label">Chuỗi học</span>
+                    <strong className="metric-value streak-val">
+                      {student.streak > 0 ? (
+                        <>
+                          <Flame size={13} className="flame-icon-metric" />
+                          <span>{student.streak} ngày</span>
+                        </>
+                      ) : (
+                        <span className="text-muted-streak">0 ngày</span>
+                      )}
+                    </strong>
                   </div>
                 </div>
 

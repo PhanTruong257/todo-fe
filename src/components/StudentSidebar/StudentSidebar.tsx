@@ -7,7 +7,8 @@ import {
   UserPlus,
   Check,
 } from 'lucide-react';
-import type { TodoStats } from '../../types/todo';
+import type { Todo, TodoStats } from '../../types/todo';
+import { calculateStreak } from '../../utils/streak';
 import './StudentSidebar.css';
 
 interface StudentSidebarProps {
@@ -16,6 +17,7 @@ interface StudentSidebarProps {
   students: string[];
   onAddStudent: (name: string) => void;
   stats: TodoStats;
+  todos?: Todo[];
 }
 
 export const StudentSidebar: React.FC<StudentSidebarProps> = ({
@@ -24,6 +26,7 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
   students,
   onAddStudent,
   stats,
+  todos,
 }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [newName, setNewName] = useState('');
@@ -64,6 +67,7 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
               const isNguyet = student === 'Nguyệt';
               const isSelected = activeStudent === student;
               const count = stats.studentStats?.[student]?.total || 0;
+              const streak = todos ? calculateStreak(todos, student).currentStreak : 0;
 
               return (
                 <button
@@ -89,26 +93,51 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
                     <span className="student-stats-sub">{count} buổi học</span>
                   </div>
 
-                  <div className="student-badge-pill">{count}</div>
+                  <div className="student-badges-group">
+                    {streak > 0 && (
+                      <span
+                        className="student-streak-pill"
+                        title={`Chuỗi học liên tục ${streak} ngày`}
+                      >
+                        🔥 {streak}
+                      </span>
+                    )}
+                    <span className="student-badge-pill">{count}</span>
+                  </div>
                 </button>
               );
             })}
 
             {/* Lựa chọn xem Tất cả */}
-            <button
-              type="button"
-              className={`student-nav-item item-all ${activeStudent === 'all' ? 'active' : ''}`}
-              onClick={() => onStudentChange('all')}
-            >
-              <div className="student-avatar-wrap">
-                <Users size={18} />
-              </div>
-              <div className="student-meta">
-                <span className="student-name">Tất Cả Học Viên</span>
-                <span className="student-stats-sub">Tổng {stats.total} buổi học</span>
-              </div>
-              <div className="student-badge-pill">{stats.total}</div>
-            </button>
+            {(() => {
+              const allStreak = todos ? calculateStreak(todos).currentStreak : 0;
+              return (
+                <button
+                  type="button"
+                  className={`student-nav-item item-all ${activeStudent === 'all' ? 'active' : ''}`}
+                  onClick={() => onStudentChange('all')}
+                >
+                  <div className="student-avatar-wrap">
+                    <Users size={18} />
+                  </div>
+                  <div className="student-meta">
+                    <span className="student-name">Tất Cả Học Viên</span>
+                    <span className="student-stats-sub">Tổng {stats.total} buổi học</span>
+                  </div>
+                  <div className="student-badges-group">
+                    {allStreak > 0 && (
+                      <span
+                        className="student-streak-pill"
+                        title={`Chuỗi học chung liên tục ${allStreak} ngày`}
+                      >
+                        🔥 {allStreak}
+                      </span>
+                    )}
+                    <span className="student-badge-pill">{stats.total}</span>
+                  </div>
+                </button>
+              );
+            })()}
           </nav>
 
           {/* Nút hoặc Form Thêm học viên mới */}
@@ -154,7 +183,7 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
           <span className="sync-live-dot" />
           <span>Hệ thống đồng bộ trực tiếp</span>
         </div>
-        <span className="sidebar-version-tag">TaskFlow Study • v1.0.4</span>
+        <span className="sidebar-version-tag">TaskFlow Study • v1.0.5</span>
       </div>
     </aside>
   );

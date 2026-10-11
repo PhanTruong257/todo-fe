@@ -1,0 +1,19 @@
+{
+  "name": "TaskFlow Study - Nhật Ký Học Tiếng Anh",
+  "short_name": "TaskFlow Study",
+  "description": "Ứng dụng ghi chép nhật ký và theo dõi tiến độ học tiếng Anh hàng ngày cho Trường & Nguyệt",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090d16",
+  "theme_color": "#0d111c",
+  "orientation": "portrait-primary",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

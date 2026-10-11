@@ -10,9 +10,11 @@ import {
   X,
   Check,
   UserPlus,
+  Timer,
 } from 'lucide-react';
 import type { Todo, TodoStats } from '../../types/todo';
 import { DatePicker } from '../DatePicker/DatePicker';
+import { calculateStreak } from '../../utils/streak';
 import './MobileHeader.css';
 
 interface MobileHeaderProps {
@@ -30,6 +32,8 @@ interface MobileHeaderProps {
   onSearchChange: (search: string) => void;
   isAddOpen: boolean;
   onToggleAdd: () => void;
+  isTimerOpen?: boolean;
+  onToggleTimer?: () => void;
 }
 
 export const MobileHeader: React.FC<MobileHeaderProps> = ({
@@ -47,6 +51,8 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
   onSearchChange,
   isAddOpen,
   onToggleAdd,
+  isTimerOpen,
+  onToggleTimer,
 }) => {
   const [isAddingStudent, setIsAddingStudent] = useState(false);
   const [newStudentName, setNewStudentName] = useState('');
@@ -96,17 +102,27 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
       {/* HÀNG 2: Hàng Chip Vuốt Ngang Chọn Học Viên (Tất cả / Trường / Nguyệt / +) */}
       <div className="mobile-students-scroll-row">
         {/* Chip: Tất cả */}
-        <button
-          type="button"
-          className={`mobile-student-chip chip-all ${
-            activeStudent === 'all' ? 'active' : ''
-          }`}
-          onClick={() => onStudentChange('all')}
-        >
-          <Users size={14} className="chip-icon" />
-          <span className="chip-name">Tất cả</span>
-          <span className="chip-count">{stats.total}</span>
-        </button>
+        {(() => {
+          const allStreak = todos ? calculateStreak(todos).currentStreak : 0;
+          return (
+            <button
+              type="button"
+              className={`mobile-student-chip chip-all ${
+                activeStudent === 'all' ? 'active' : ''
+              }`}
+              onClick={() => onStudentChange('all')}
+            >
+              <Users size={14} className="chip-icon" />
+              <span className="chip-name">Tất cả</span>
+              {allStreak > 0 && (
+                <span className="chip-streak-pill" title={`Chuỗi học: ${allStreak} ngày`}>
+                  🔥{allStreak}
+                </span>
+              )}
+              <span className="chip-count">{stats.total}</span>
+            </button>
+          );
+        })()}
 
         {/* Các chip từng học viên */}
         {students.map((student) => {
@@ -114,6 +130,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
           const isNguyet = student === 'Nguyệt';
           const isSelected = activeStudent === student;
           const count = stats.studentStats?.[student]?.total || 0;
+          const streak = todos ? calculateStreak(todos, student).currentStreak : 0;
 
           return (
             <button
@@ -124,18 +141,23 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
               } ${isSelected ? 'active' : ''}`}
               onClick={() => onStudentChange(student)}
             >
-              {isTruong ? (
-                <UserCheck size={14} className="chip-icon" />
-              ) : isNguyet ? (
-                <Heart size={14} className="chip-icon" />
-              ) : (
-                <span className="chip-avatar-letter">{student.charAt(0)}</span>
-              )}
-              <span className="chip-name">{student}</span>
-              <span className="chip-count">{count}</span>
-            </button>
-          );
-        })}
+                  {isTruong ? (
+                    <UserCheck size={14} className="chip-icon" />
+                  ) : isNguyet ? (
+                    <Heart size={14} className="chip-icon" />
+                  ) : (
+                    <span className="chip-avatar-letter">{student.charAt(0)}</span>
+                  )}
+                  <span className="chip-name">{student}</span>
+                  {streak > 0 && (
+                    <span className="chip-streak-pill" title={`Chuỗi học: ${streak} ngày`}>
+                      🔥{streak}
+                    </span>
+                  )}
+                  <span className="chip-count">{count}</span>
+                </button>
+              );
+            })}
 
         {/* Nút hoặc Form thêm nhanh học viên */}
         {!isAddingStudent ? (
@@ -208,6 +230,18 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
               </button>
             )}
           </div>
+
+          {/* Nút Bấm Giờ Học */}
+          {onToggleTimer && (
+            <button
+              type="button"
+              className={`mobile-btn-timer-circle ${isTimerOpen ? 'active' : ''}`}
+              onClick={onToggleTimer}
+              title="Đồng hồ bấm giờ học trực tiếp"
+            >
+              <Timer size={16} />
+            </button>
+          )}
 
           {/* Nút + Thêm Buổi Học */}
           <button

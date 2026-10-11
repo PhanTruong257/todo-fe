@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Plus, X, BookOpen } from 'lucide-react';
+import { Search, Plus, X, BookOpen, Timer } from 'lucide-react';
 import './FilterBar.css';
 
 interface FilterBarProps {
@@ -8,6 +8,8 @@ interface FilterBarProps {
   totalCount: number;
   isAddOpen: boolean;
   onToggleAdd: () => void;
+  isTimerOpen?: boolean;
+  onToggleTimer?: () => void;
 }
 
 export const FilterBar: React.FC<FilterBarProps> = ({
@@ -16,6 +18,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   totalCount,
   isAddOpen,
   onToggleAdd,
+  isTimerOpen,
+  onToggleTimer,
 }) => {
   return (
     <div className="filter-bar-compact">
@@ -42,6 +46,19 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       </div>
 
       <div className="filter-right-actions">
+        {/* Nút bấm giờ học */}
+        {onToggleTimer && (
+          <button
+            type="button"
+            className={`btn-timer-pill ${isTimerOpen ? 'active' : ''}`}
+            onClick={onToggleTimer}
+            title="Đồng hồ bấm giờ học trực tiếp"
+          >
+            <Timer size={14} />
+            <span>Bấm giờ</span>
+          </button>
+        )}
+
         {/* Số lượng báo cáo */}
         <div className="reports-count-badge" title="Tổng số buổi học trong danh sách">
           <BookOpen size={13} />

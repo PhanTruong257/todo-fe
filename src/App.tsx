@@ -6,11 +6,20 @@ import { TodoInput } from './components/TodoInput/TodoInput';
 import { FilterBar } from './components/FilterBar/FilterBar';
 import { TodoList } from './components/TodoList/TodoList';
 import { StatsView } from './components/StatsView/StatsView';
+import { StudyTimer } from './components/StudyTimer/StudyTimer';
+import type { StudyTimerSession } from './components/StudyTimer/useStudyTimer';
 import { useTodos } from './components/TodoList/useTodos';
 import './App.css';
 
 export const App: React.FC = () => {
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isTimerOpen, setIsTimerOpen] = useState(false);
+  const [timerPreset, setTimerPreset] = useState<{
+    startTime?: string;
+    endTime?: string;
+    studentName?: string;
+    date?: string;
+  } | null>(null);
 
   const {
     todos,
@@ -51,6 +60,8 @@ export const App: React.FC = () => {
           onSearchChange={setSearch}
           isAddOpen={isAddOpen}
           onToggleAdd={() => setIsAddOpen((prev) => !prev)}
+          isTimerOpen={isTimerOpen}
+          onToggleTimer={() => setIsTimerOpen((prev) => !prev)}
         />
       </div>
 
@@ -62,6 +73,7 @@ export const App: React.FC = () => {
           students={students}
           onAddStudent={addStudent}
           stats={stats}
+          todos={allTodos}
         />
       </aside>
 
@@ -85,6 +97,8 @@ export const App: React.FC = () => {
               totalCount={todos.length}
               isAddOpen={isAddOpen}
               onToggleAdd={() => setIsAddOpen((prev) => !prev)}
+              isTimerOpen={isTimerOpen}
+              onToggleTimer={() => setIsTimerOpen((prev) => !prev)}
             />
           )}
         </div>
@@ -92,18 +106,42 @@ export const App: React.FC = () => {
         {/* Tab 1: Báo Cáo Học Tập */}
         {activeTab === 'reports' ? (
           <main className="tab-content animate-fade-in">
+            {/* Đồng Hồ Bấm Giờ Học Trực Tiếp */}
+            {isTimerOpen && (
+              <StudyTimer
+                currentStudent={studentFilter}
+                students={students}
+                onFinishSession={(session: StudyTimerSession) => {
+                  setTimerPreset({
+                    startTime: session.startTime,
+                    endTime: session.endTime,
+                    studentName: session.studentName,
+                    date: session.date,
+                  });
+                  setIsTimerOpen(false);
+                  setIsAddOpen(true);
+                }}
+                onClose={() => setIsTimerOpen(false)}
+              />
+            )}
 
-            {/* Form Thêm Buổi Học (chỉ mở ra khi bấm dấu +) */}
+            {/* Form Thêm Buổi Học (mở ra khi bấm dấu + hoặc khi kết thúc bấm giờ) */}
             {isAddOpen && (
               <TodoInput
                 onAddTodo={(payload) => {
                   addTodo(payload);
                   setIsAddOpen(false);
+                  setTimerPreset(null);
                 }}
-                onClose={() => setIsAddOpen(false)}
+                onClose={() => {
+                  setIsAddOpen(false);
+                  setTimerPreset(null);
+                }}
                 students={students}
-                activeStudentFilter={studentFilter}
-                selectedDate={selectedDate}
+                activeStudentFilter={timerPreset?.studentName || studentFilter}
+                selectedDate={timerPreset?.date || selectedDate}
+                initialStartTime={timerPreset?.startTime}
+                initialEndTime={timerPreset?.endTime}
               />
             )}
 

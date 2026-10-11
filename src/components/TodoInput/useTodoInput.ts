@@ -7,6 +7,8 @@ interface UseTodoInputProps {
   onClose?: () => void;
   defaultStudent?: string;
   defaultDate?: string | null;
+  initialStartTime?: string;
+  initialEndTime?: string;
 }
 
 export function getLocalTodayString(): string {
@@ -46,6 +48,8 @@ export function useTodoInput({
   onClose,
   defaultStudent = 'Trường',
   defaultDate,
+  initialStartTime,
+  initialEndTime,
 }: UseTodoInputProps) {
   const [isOpen, setIsOpen] = useState(false);
   const resolvedStudent =
@@ -53,12 +57,12 @@ export function useTodoInput({
   const [studentName, setStudentName] = useState(resolvedStudent);
   const [date, setDate] = useState(() => defaultDate || getLocalTodayString());
 
-  // Gán thời điểm hiện tại khi mở form
-  const initialStartTime = getCurrentTime24h();
-  const initialEndTime = getEndTimeFromStart(initialStartTime, 60);
+  // Gán thời điểm hiện tại hoặc nhận từ đồng hồ bấm giờ
+  const defaultStart = initialStartTime || getCurrentTime24h();
+  const defaultEnd = initialEndTime || getEndTimeFromStart(defaultStart, 60);
 
-  const [startTime, setStartTimeState] = useState(initialStartTime);
-  const [endTime, setEndTime] = useState(initialEndTime);
+  const [startTime, setStartTimeState] = useState(defaultStart);
+  const [endTime, setEndTime] = useState(defaultEnd);
   const [title, setTitle] = useState('');
   const [lessonContent, setLessonContent] = useState('');
   const [priority, setPriority] = useState<PriorityLevel>('medium');

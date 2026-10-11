@@ -11,6 +11,8 @@ interface TodoInputProps {
   students?: string[];
   activeStudentFilter?: string;
   selectedDate?: string | null;
+  initialStartTime?: string;
+  initialEndTime?: string;
 }
 
 export const TodoInput: React.FC<TodoInputProps> = ({
@@ -18,6 +20,8 @@ export const TodoInput: React.FC<TodoInputProps> = ({
   onClose,
   activeStudentFilter = 'Trường',
   selectedDate,
+  initialStartTime,
+  initialEndTime,
 }) => {
   const {
     studentName,
@@ -39,6 +43,8 @@ export const TodoInput: React.FC<TodoInputProps> = ({
     onClose,
     defaultStudent: activeStudentFilter,
     defaultDate: selectedDate,
+    initialStartTime,
+    initialEndTime,
   });
 
   const isTruong = studentName === 'Trường';
@@ -115,6 +121,42 @@ export const TodoInput: React.FC<TodoInputProps> = ({
               <strong>{duration}</strong>
             </div>
           )}
+        </div>
+
+        {/* Hàng gợi ý nhanh kỹ năng học */}
+        <div className="quick-skills-group">
+          <span className="quick-skills-label">⚡ Chọn nhanh kỹ năng:</span>
+          <div className="quick-skills-pills">
+            {[
+              '🗣️ Speaking Part 1/2',
+              '✍️ Writing Task 2',
+              '🎧 Listening Cam',
+              '📖 Reading Cam',
+              '📚 30 Từ Vựng Mới',
+              '🧩 Ngữ Pháp',
+              '🎯 Luyện Phát Âm',
+              '📝 Luyện Đề Mock',
+            ].map((skill) => {
+              const isSelected = title.includes(skill);
+              return (
+                <button
+                  key={skill}
+                  type="button"
+                  className={`skill-tag-pill ${isSelected ? 'selected' : ''}`}
+                  onClick={() => {
+                    if (!title.trim()) {
+                      setTitle(skill);
+                    } else if (!title.includes(skill)) {
+                      setTitle(`${title} • ${skill}`);
+                    }
+                  }}
+                  title={`Thêm ${skill} vào chủ đề`}
+                >
+                  {skill}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Tiêu đề / Chủ đề buổi học */}

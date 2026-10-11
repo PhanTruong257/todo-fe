@@ -4,7 +4,161 @@
   gap: 20px;
 }
 
-/* Phần so sánh học viên */
+/* 1. Biểu đồ hoạt động tuần */
+.weekly-activity-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 22px 24px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-md);
+}
+
+.week-total-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: #a5b4fc;
+  margin-left: auto;
+}
+
+.weekly-bars-container {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+  margin-top: 18px;
+  padding: 18px 8px 12px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.day-bar-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.day-bar-column:hover .bar-fill {
+  filter: brightness(1.2);
+}
+
+.day-bar-column.is-today .day-name {
+  color: #60a5fa;
+  font-weight: 800;
+}
+
+.bar-track {
+  width: 100%;
+  max-width: 42px;
+  height: 140px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  position: relative;
+  overflow: visible;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.is-today .bar-track {
+  border-color: rgba(96, 165, 250, 0.4);
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.bar-fill {
+  width: 100%;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #818cf8, #4f46e5);
+  transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.35);
+}
+
+.is-today .bar-fill {
+  background: linear-gradient(180deg, #60a5fa, #2563eb);
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.5);
+}
+
+.bar-duration-tooltip {
+  position: absolute;
+  top: -24px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #e2e8f0;
+  white-space: nowrap;
+  background: rgba(15, 23, 42, 0.9);
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+}
+
+.bar-empty-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  margin-bottom: 8px;
+}
+
+.day-info-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.day-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.day-date {
+  font-size: 10px;
+  color: var(--text-subtle);
+}
+
+.today-badge {
+  font-size: 9px;
+  font-weight: 800;
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.15);
+  padding: 1px 5px;
+  border-radius: 4px;
+  margin-top: 2px;
+}
+
+.flame-icon-metric {
+  color: #f97316;
+  filter: drop-shadow(0 0 4px rgba(249, 115, 22, 0.5));
+}
+
+.streak-val {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #fdba74 !important;
+}
+
+.text-muted-streak {
+  color: var(--text-subtle);
+  font-weight: 500;
+}
+
+/* 2. Phần so sánh học viên */
 .students-comparison-section {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -288,12 +442,54 @@
 }
 
 @media (max-width: 768px) {
-  .students-comparison-section {
+  .students-comparison-section,
+  .weekly-activity-section {
     padding: 16px 14px;
+  }
+
+  .weekly-bars-container {
+    gap: 6px;
+    padding: 14px 4px 8px;
+  }
+
+  .bar-track {
+    height: 105px;
+  }
+
+  .day-name {
+    font-size: 11px;
+  }
+
+  .day-date {
+    font-size: 9px;
   }
 }
 
 @media (max-width: 480px) {
+  .weekly-bars-container {
+    gap: 3px;
+    padding: 10px 2px 6px;
+  }
+
+  .bar-track {
+    height: 85px;
+    border-radius: 5px;
+  }
+
+  .bar-duration-tooltip {
+    font-size: 8.5px;
+    padding: 0 3px;
+    top: -18px;
+  }
+
+  .day-name {
+    font-size: 10px;
+  }
+
+  .day-date {
+    font-size: 8.5px;
+  }
+
   .student-analytics-row {
     padding: 12px 10px;
     gap: 12px;

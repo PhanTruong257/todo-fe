@@ -50,11 +50,19 @@ export function useTodos() {
   const [loading, setLoading] = useState<boolean>(true);
   const [isBackendConnected, setIsBackendConnected] = useState<boolean>(false);
 
+  // Navigation tab ('reports' | 'stats')
+  const [activeTab, setActiveTab] = useState<'reports' | 'stats'>('reports');
+
+  // Selected date filter (default is today YYYY-MM-DD, null means all dates)
+  const [selectedDate, setSelectedDate] = useState<string | null>(
+    new Date().toISOString().split('T')[0]
+  );
+
   // Filters
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'completed'>('all');
   const [priorityFilter, setPriorityFilter] = useState<string>('all');
-  const [studentFilter, setStudentFilter] = useState<string>('all');
+  const [studentFilter, setStudentFilter] = useState<string>('Trường');
 
   const fetchTodos = async () => {
     setLoading(true);
@@ -206,6 +214,9 @@ export function useTodos() {
       const studentName = todo.studentName || 'Trường';
       const matchStudent = studentFilter === 'all' || studentName === studentFilter;
 
+      // Filter theo ngày nếu có chọn ngày cụ thể
+      const matchDate = !selectedDate || todo.date === selectedDate;
+
       const matchSearch =
         search === '' ||
         todo.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -221,9 +232,9 @@ export function useTodos() {
       const matchPriority =
         priorityFilter === 'all' || todo.priority === priorityFilter;
 
-      return matchStudent && matchSearch && matchStatus && matchPriority;
+      return matchStudent && matchDate && matchSearch && matchStatus && matchPriority;
     });
-  }, [todos, search, statusFilter, priorityFilter, studentFilter]);
+  }, [todos, search, statusFilter, priorityFilter, studentFilter, selectedDate]);
 
   // Dynamic stats
   const stats: TodoStats = useMemo(() => {
@@ -257,6 +268,10 @@ export function useTodos() {
     students,
     studentFilter,
     setStudentFilter,
+    activeTab,
+    setActiveTab,
+    selectedDate,
+    setSelectedDate,
     addStudent,
     loading,
     isBackendConnected,

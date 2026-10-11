@@ -26,38 +26,6 @@
   border-left: 4px solid #ec4899;
 }
 
-.report-card.completed {
-  opacity: 0.75;
-  background: rgba(15, 23, 42, 0.4);
-}
-
-.report-checkbox {
-  background: transparent;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: transparent;
-  transition: all 0.2s;
-  flex-shrink: 0;
-  margin-top: 4px;
-}
-
-.report-checkbox:hover {
-  border-color: #34d399;
-  color: rgba(52, 211, 153, 0.5);
-}
-
-.report-checkbox.checked {
-  background: #10b981;
-  border-color: #10b981;
-  color: #fff;
-}
-
 .report-content {
   flex: 1;
   display: flex;

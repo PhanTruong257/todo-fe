@@ -1,5 +1,5 @@
 import React from 'react';
-import { Circle, Check, Edit3, Trash2, Clock, Calendar, BookOpen } from 'lucide-react';
+import { Edit3, Trash2, Clock, Calendar, BookOpen } from 'lucide-react';
 import type { Todo, PriorityLevel } from '../../types/todo';
 import { useTodoItem } from './useTodoItem';
 import { calculateDuration } from '../TodoInput/useTodoInput';
@@ -7,7 +7,6 @@ import './TodoItem.css';
 
 interface TodoItemProps {
   todo: Todo;
-  onToggle: (todo: Todo) => void;
   onDelete: (id: string) => void;
   onUpdate: (
     id: string,
@@ -26,7 +25,6 @@ interface TodoItemProps {
 
 export const TodoItem: React.FC<TodoItemProps> = ({
   todo,
-  onToggle,
   onDelete,
   onUpdate,
 }) => {
@@ -53,20 +51,17 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   const isTruong = student === 'Trường';
   const isNguyet = student === 'Nguyệt';
   const icon = isTruong ? '👨‍🎓' : isNguyet ? '👩‍🎓' : '👤';
-  const duration = todo.startTime && todo.endTime ? calculateDuration(todo.startTime, todo.endTime) : '';
+  const duration =
+    todo.startTime && todo.endTime
+      ? calculateDuration(todo.startTime, todo.endTime)
+      : '';
 
   return (
-    <div className={`report-card ${todo.isCompleted ? 'completed' : ''} ${isTruong ? 'border-truong' : isNguyet ? 'border-nguyet' : ''}`}>
-      {!isEditing && (
-        <button
-          className={`report-checkbox ${todo.isCompleted ? 'checked' : ''}`}
-          onClick={() => onToggle(todo)}
-          title={todo.isCompleted ? 'Đánh dấu chưa xong' : 'Đánh dấu đã hoàn thành'}
-        >
-          {todo.isCompleted ? <Check size={15} /> : <Circle size={15} />}
-        </button>
-      )}
-
+    <div
+      className={`report-card ${
+        isTruong ? 'border-truong' : isNguyet ? 'border-nguyet' : ''
+      }`}
+    >
       {isEditing ? (
         <div className="report-edit-form">
           <div className="edit-row">
@@ -127,7 +122,15 @@ export const TodoItem: React.FC<TodoItemProps> = ({
         <div className="report-content">
           {/* Header thẻ: Tên người học + Thời gian học */}
           <div className="report-header-row">
-            <span className={`student-badge ${isTruong ? 'badge-truong' : isNguyet ? 'badge-nguyet' : 'badge-other'}`}>
+            <span
+              className={`student-badge ${
+                isTruong
+                  ? 'badge-truong'
+                  : isNguyet
+                  ? 'badge-nguyet'
+                  : 'badge-other'
+              }`}
+            >
               {icon} {student}
             </span>
 
@@ -142,7 +145,9 @@ export const TodoItem: React.FC<TodoItemProps> = ({
                 <span className="meta-item time">
                   <Clock size={13} />
                   {todo.startTime} - {todo.endTime}
-                  {duration && <strong className="duration-pill">({duration})</strong>}
+                  {duration && (
+                    <strong className="duration-pill">({duration})</strong>
+                  )}
                 </span>
               )}
             </div>
@@ -157,7 +162,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
           {/* Chi tiết nội dung học */}
           {(todo.lessonContent || todo.description) && (
             <div className="lesson-content-box">
-              <span className="box-label">Hôm nay đã học:</span>
+              <span className="box-label">Nội dung buổi học:</span>
               <p>{todo.lessonContent || todo.description}</p>
             </div>
           )}

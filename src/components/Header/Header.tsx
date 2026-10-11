@@ -1,60 +1,90 @@
 import React from 'react';
-import { ListTodo, Cloud, Server, AlertCircle, RefreshCw } from 'lucide-react';
+import {
+  BookOpen,
+  BarChart3,
+  UserCheck,
+  Heart,
+  Users,
+} from 'lucide-react';
+import type { Todo } from '../../types/todo';
+import { DatePicker } from '../DatePicker/DatePicker';
 import './Header.css';
 
 interface HeaderProps {
-  isBackendConnected: boolean;
-  onRetryConnection: () => void;
+  activeTab: 'reports' | 'stats';
+  onTabChange: (tab: 'reports' | 'stats') => void;
+  activeStudent: string;
+  selectedDate: string | null;
+  onSelectDate: (date: string | null) => void;
+  todos?: Todo[];
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  isBackendConnected,
-  onRetryConnection,
+  activeTab,
+  onTabChange,
+  activeStudent,
+  selectedDate,
+  onSelectDate,
+  todos = [],
 }) => {
+  const isTruong = activeStudent === 'Trường';
+  const isNguyet = activeStudent === 'Nguyệt';
+  const isAll = activeStudent === 'all';
+
   return (
-    <>
-      <header className="app-header">
-        <div className="brand">
-          <div className="logo-badge">
-            <ListTodo size={28} />
-          </div>
-          <div className="brand-text">
-            <h1>English Study Tracker</h1>
-            <p>Báo cáo học Tiếng Anh hàng ngày • Trường & Nguyệt</p>
-          </div>
+    <header className="app-top-header">
+      {/* 1. Ngữ cảnh học viên đang chọn */}
+      <div className="header-context-info">
+        <div
+          className={`context-avatar ${
+            isTruong ? 'avatar-truong' : isNguyet ? 'avatar-nguyet' : 'avatar-all'
+          }`}
+        >
+          {isTruong ? (
+            <UserCheck size={18} />
+          ) : isNguyet ? (
+            <Heart size={18} />
+          ) : (
+            <Users size={18} />
+          )}
         </div>
+        <div>
+          <span className="context-sublabel">Đang xem:</span>
+          <h2 className="context-student-title">
+            {isAll ? 'Tất Cả Học Viên' : activeStudent}
+          </h2>
+        </div>
+      </div>
 
-        <div className="tech-badges">
-          <span className="badge-pill badge-aws">
-            <Cloud size={13} /> AWS Ready
-          </span>
-          <span
-            className={`badge-pill ${
-              isBackendConnected ? 'badge-connected' : 'badge-disconnected'
-            }`}
-          >
-            <Server size={13} />
-            {isBackendConnected ? 'Backend Connected' : 'Local Preview'}
-          </span>
-        </div>
-      </header>
+      {/* 2. Ô Chọn Ngày Pop-up Tùy Biến (Click bất kỳ đâu cũng mở, UI cực đẹp) */}
+      <DatePicker
+        selectedDate={selectedDate}
+        onSelectDate={onSelectDate}
+        todos={todos}
+        activeStudent={activeStudent}
+      />
 
-      {!isBackendConnected && (
-        <div className="connection-banner">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <AlertCircle size={20} color="#f59e0b" />
-            <span>
-              <strong>Chế độ xem trước (Local Preview)</strong>: Chưa kết nối tới Backend NestJS tại{' '}
-              <code>http://localhost:4000</code>. Dữ liệu đang được lưu tạm trên trình duyệt.
-            </span>
-          </div>
-          <button onClick={onRetryConnection} title="Bấm để thử kết nối lại NestJS">
-            <RefreshCw size={13} />
-            Kết nối lại
-          </button>
-        </div>
-      )}
-    </>
+      {/* 3. Tabs Chức Năng: Báo Cáo & Thống Kê */}
+      <nav className="header-nav-tabs">
+        <button
+          type="button"
+          className={`nav-tab-btn ${activeTab === 'reports' ? 'active' : ''}`}
+          onClick={() => onTabChange('reports')}
+        >
+          <BookOpen size={15} />
+          <span>Báo Cáo</span>
+        </button>
+
+        <button
+          type="button"
+          className={`nav-tab-btn ${activeTab === 'stats' ? 'active' : ''}`}
+          onClick={() => onTabChange('stats')}
+        >
+          <BarChart3 size={15} />
+          <span>Thống Kê</span>
+        </button>
+      </nav>
+    </header>
   );
 };
 

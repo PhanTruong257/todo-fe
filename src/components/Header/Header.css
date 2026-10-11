@@ -1,113 +1,112 @@
-.app-header {
+.app-top-header {
+  position: relative;
+  z-index: 500;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
-  flex-wrap: wrap;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  margin-bottom: 20px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-md);
   gap: 16px;
+  flex-wrap: wrap;
 }
 
-.brand {
+/* 1. Ngữ cảnh học viên */
+.header-context-info {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 
-.logo-badge {
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
-  border-radius: 14px;
+.context-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+  flex-shrink: 0;
 }
 
-.brand-text h1 {
-  font-size: 26px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  background: linear-gradient(to right, #ffffff, #cbd5e1);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.avatar-truong {
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
 }
 
-.brand-text p {
-  font-size: 13px;
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.avatar-nguyet {
+  background: linear-gradient(135deg, #ec4899, #f43f5e);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
 }
 
-.tech-badges {
-  display: flex;
-  gap: 8px;
-  align-items: center;
+.avatar-all {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
 }
 
-.badge-pill {
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
+.context-sublabel {
   font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: var(--text-subtle);
+  font-weight: 500;
+  display: block;
+}
+
+.context-student-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+
+/* 3. Navigation Tabs: Báo Cáo & Thống Kê */
+.header-nav-tabs {
+  display: flex;
+  background: rgba(13, 17, 28, 0.7);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  gap: 3px;
+}
+
+.nav-tab-btn {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-}
-
-.badge-connected {
-  background: rgba(16, 185, 129, 0.15);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.3);
-}
-
-.badge-disconnected {
-  background: rgba(245, 158, 11, 0.15);
-  color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.3);
-}
-
-.badge-aws {
-  background: rgba(249, 115, 22, 0.15);
-  color: #fb923c;
-  border: 1px solid rgba(249, 115, 22, 0.3);
-}
-
-/* Offline notice banner */
-.connection-banner {
-  background: rgba(245, 158, 11, 0.1);
-  border: 1px solid rgba(245, 158, 11, 0.25);
-  padding: 12px 18px;
-  border-radius: var(--radius-md);
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 7px;
+  padding: 7px 16px;
+  border-radius: var(--radius-full);
   font-size: 13px;
-  color: #fde68a;
-}
-
-.connection-banner button {
-  background: #f59e0b;
-  color: #000;
   font-weight: 600;
-  padding: 6px 14px;
-  border-radius: var(--radius-sm);
-  font-size: 12px;
+  color: var(--text-muted);
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  border: none;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.connection-banner button:hover {
-  background: #fbbf24;
+.nav-tab-btn:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-tab-btn.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+}
+
+@media (max-width: 800px) {
+  .app-top-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .header-nav-tabs {
+    justify-content: center;
+  }
 }

@@ -50,7 +50,7 @@ html, body {
   scrollbar-gutter: stable;
 }
 
-@media (min-width: 901px) {
+@media (min-width: 1025px) {
   html, body {
     height: 100%;
     overflow: hidden;

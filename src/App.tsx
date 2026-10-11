@@ -43,7 +43,7 @@ export const App: React.FC = () => {
 
   return (
     <div className="app-layout-wrapper">
-      {/* 1. Header tinh gọn 3 hàng chuẩn App trên Mobile (chỉ hiện khi <= 800px) */}
+      {/* 1. Header tinh gọn 3 hàng chuẩn App trên Mobile & Tablet (chỉ hiện khi <= 1024px) */}
       <div className="mobile-header-section">
         <MobileHeader
           activeStudent={studentFilter}

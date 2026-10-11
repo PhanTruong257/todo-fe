@@ -127,7 +127,7 @@
   display: none;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .desktop-top-header-section {
     display: none !important;
   }
@@ -142,6 +142,10 @@
   }
 
   .desktop-sidebar-section {
+    display: none !important;
+  }
+
+  .content-filter-sticky {
     display: none !important;
   }
 

@@ -72,8 +72,8 @@
   transform: scaleX(1.15);
 }
 
-/* Desktop layout: Centered Modal Dialog */
-@media (min-width: 801px) {
+/* Desktop layout: Centered Modal Dialog (Chỉ kích hoạt trên PC/Laptop > 1024px) */
+@media (min-width: 1025px) {
   .bottom-sheet-backdrop {
     align-items: center;
     padding: 20px;

@@ -82,7 +82,7 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .todo-list-scroll-wrap {
     max-height: calc(100vh - 200px);
     max-height: calc(100dvh - 200px);

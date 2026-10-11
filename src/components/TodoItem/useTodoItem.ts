@@ -41,7 +41,7 @@ export function useTodoItem({ todo, onUpdate }: UseTodoItemProps) {
 
   const handleSave = () => {
     onUpdate(todo.id, {
-      title: editTitle.trim() || `Buổi học của ${editStudentName}`,
+      title: editTitle.trim() || `Nhật ký học của ${editStudentName}`,
       studentName: editStudentName,
       date: editDate || undefined,
       startTime: editStartTime || undefined,

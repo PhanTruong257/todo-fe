@@ -2,21 +2,91 @@
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
-  min-height: 100vh;
-  padding: 24px 24px 32px;
+  height: 100vh;
+  height: 100dvh;
+  padding: 16px 24px;
   display: flex;
-  gap: 24px;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 16px;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
+/* 1. Header Luôn Ở Trên TOP Trên Desktop */
+.desktop-top-header-section {
+  display: block;
+  width: 100%;
+  flex-shrink: 0;
+  z-index: 500;
+}
+
+/* 2. Khối Thân: Chiều cao chuẩn, chứa Sidebar bên trái và Content bên phải */
+.app-body-container {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+  min-height: 0; /* Bắt buộc để flex child scroll độc lập không tràn màn hình */
+  width: 100%;
+  overflow: hidden;
+  align-items: stretch;
+}
+
+/* 3. Bên Trái: Sidebar Thành Viên (Cố định, vừa khít chiều cao) */
+.desktop-sidebar-section {
+  display: flex;
+  flex-direction: column;
+  width: 270px;
+  min-width: 270px;
+  flex-shrink: 0;
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  z-index: 100;
+}
+
+/* 4. Bên Phải: Content (Vùng Cuộn Duy Nhất, Không Bao Giờ Vượt Quá Chiều Cao) */
 .app-main-content {
   flex: 1;
   min-width: 0;
-  width: 100%;
-  min-height: calc(100vh - 56px);
+  height: 100%;
+  max-height: 100%;
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding-right: 6px;
+  box-sizing: border-box;
+}
+
+/* Thanh cuộn kính mờ tùy chỉnh cho toàn bộ vùng bên phải */
+.app-main-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.app-main-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 4px;
+}
+
+.app-main-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.app-main-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.6);
+}
+
+/* Thanh công cụ tìm kiếm ghim ở đỉnh content khi cuộn */
+.content-filter-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding-bottom: 12px;
+  background: linear-gradient(180deg, #0a0e17 80%, rgba(10, 14, 23, 0) 100%);
 }
 
 .tab-content {
@@ -48,7 +118,7 @@
   color: var(--text-subtle);
   border-top: 1px solid var(--border-color);
   padding-top: 16px;
-  padding-bottom: 8px;
+  padding-bottom: 12px;
   line-height: 1.6;
 }
 
@@ -57,29 +127,11 @@
   display: none;
 }
 
-/* THANH CỐ ĐỊNH 1: Sidebar học sinh bên trái trên Desktop */
-.desktop-sidebar-section {
-  display: block;
-  width: 280px;
-  min-width: 280px;
-  flex-shrink: 0;
-  position: sticky;
-  top: 24px;
-  height: calc(100vh - 56px);
-  align-self: flex-start;
-  z-index: 100;
-}
-
-/* THANH CỐ ĐỊNH 2: Cụm Header & FilterBar trên Desktop */
-.desktop-header-sticky-container {
-  display: block;
-  position: sticky;
-  top: 24px;
-  z-index: 500;
-  margin-bottom: 16px;
-}
-
 @media (max-width: 900px) {
+  .desktop-top-header-section {
+    display: none !important;
+  }
+
   .mobile-header-section {
     display: block;
     width: 100%;
@@ -93,14 +145,27 @@
     display: none !important;
   }
 
-  .desktop-header-sticky-container {
-    display: none !important;
-  }
-
   .app-layout-wrapper {
+    height: auto;
+    max-height: none;
+    overflow: visible;
     flex-direction: column;
     padding: 10px 10px 60px;
     gap: 10px;
+  }
+
+  .app-body-container {
+    display: block;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .app-main-content {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
   }
 }
 

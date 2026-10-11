@@ -60,9 +60,9 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         )}
 
         {/* Số lượng báo cáo */}
-        <div className="reports-count-badge" title="Tổng số buổi học trong danh sách">
+        <div className="reports-count-badge" title="Tổng số nhật ký trong danh sách">
           <BookOpen size={13} />
-          <span>{totalCount} buổi học</span>
+          <span>{totalCount} nhật ký</span>
         </div>
 
         {/* Nút + tối giản duy nhất để thêm báo cáo */}
@@ -70,7 +70,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           type="button"
           className={`btn-add-circle ${isAddOpen ? 'active' : ''}`}
           onClick={onToggleAdd}
-          title={isAddOpen ? 'Đóng form thêm' : 'Thêm báo cáo buổi học mới'}
+          title={isAddOpen ? 'Đóng bảng thêm' : 'Thêm nhật ký học mới'}
         >
           {isAddOpen ? <X size={18} /> : <Plus size={18} />}
         </button>

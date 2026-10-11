@@ -1,13 +1,15 @@
 import { useState, useEffect, useMemo } from 'react';
 import type { Todo, CreateTodoPayload, UpdateTodoPayload, TodoStats, PriorityLevel } from '../../types/todo';
 import { api } from '../../services/api';
+import { matchesSearch } from '../../utils/text';
+import { getTodayLocalISO, getYesterdayLocalISO } from '../../utils/date';
 
 const DEFAULT_MOCK_TODOS: Todo[] = [
   {
     id: 'mock-1',
     title: 'Luyện Phát Âm & Shadowing IELTS Speaking',
     studentName: 'Trường',
-    date: new Date().toISOString().split('T')[0],
+    date: getTodayLocalISO(),
     startTime: '19:30',
     endTime: '21:00',
     lessonContent: 'Luyện phát âm đuôi -ed, -s/es và shadowing 2 đoạn hội thoại BBC 6-Minute English. Thu âm và so sánh giọng mẫu.',
@@ -20,7 +22,7 @@ const DEFAULT_MOCK_TODOS: Todo[] = [
     id: 'mock-2',
     title: 'Học 30 Từ Vựng Topic Môi Trường (Cam 18)',
     studentName: 'Nguyệt',
-    date: new Date().toISOString().split('T')[0],
+    date: getTodayLocalISO(),
     startTime: '20:00',
     endTime: '21:30',
     lessonContent: 'Học thuộc và đặt 10 câu ví dụ với từ vựng chủ đề Environment trong đề Cam 18 Test 1. Làm quiz ôn tập Quizlet.',
@@ -33,7 +35,7 @@ const DEFAULT_MOCK_TODOS: Todo[] = [
     id: 'mock-3',
     title: 'Luyện Nghe IELTS Listening Section 3',
     studentName: 'Trường',
-    date: new Date(Date.now() - 86400000).toISOString().split('T')[0],
+    date: getYesterdayLocalISO(),
     startTime: '20:30',
     endTime: '21:45',
     lessonContent: 'Nghe chép chính tả Section 3 đề Cam 17 Test 2. Phân tích bẫy distractors và học 15 collocations mới.',
@@ -53,10 +55,8 @@ export function useTodos() {
   // Navigation tab ('reports' | 'stats')
   const [activeTab, setActiveTab] = useState<'reports' | 'stats'>('reports');
 
-  // Selected date filter (default is today YYYY-MM-DD, null means all dates)
-  const [selectedDate, setSelectedDate] = useState<string | null>(
-    new Date().toISOString().split('T')[0]
-  );
+  // Selected date filter (mặc định luôn luôn là ngày hôm nay theo giờ địa phương)
+  const [selectedDate, setSelectedDate] = useState<string | null>(getTodayLocalISO());
 
   // Filters
   const [search, setSearch] = useState('');
@@ -136,9 +136,9 @@ export function useTodos() {
     } else {
       const newMock: Todo = {
         id: `mock-${Date.now()}`,
-        title: payload.title || `Buổi học của ${student}`,
+        title: payload.title || `Nhật ký học của ${student}`,
         studentName: student,
-        date: payload.date || new Date().toISOString().split('T')[0],
+        date: payload.date || getTodayLocalISO(),
         startTime: payload.startTime || '19:30',
         endTime: payload.endTime || '21:00',
         lessonContent: payload.lessonContent || payload.description || '',
@@ -218,11 +218,11 @@ export function useTodos() {
       const matchDate = !selectedDate || todo.date === selectedDate;
 
       const matchSearch =
-        search === '' ||
-        todo.title.toLowerCase().includes(search.toLowerCase()) ||
-        (todo.lessonContent && todo.lessonContent.toLowerCase().includes(search.toLowerCase())) ||
-        (todo.description && todo.description.toLowerCase().includes(search.toLowerCase())) ||
-        studentName.toLowerCase().includes(search.toLowerCase());
+        !search.trim() ||
+        matchesSearch(todo.title, search) ||
+        (Boolean(todo.lessonContent) && matchesSearch(todo.lessonContent!, search)) ||
+        (Boolean(todo.description) && matchesSearch(todo.description!, search)) ||
+        matchesSearch(studentName, search);
 
       const matchStatus =
         statusFilter === 'all' ||

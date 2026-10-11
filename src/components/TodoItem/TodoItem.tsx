@@ -51,7 +51,6 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   const student = todo.studentName || 'Trường';
   const isTruong = student === 'Trường';
   const isNguyet = student === 'Nguyệt';
-  const icon = isTruong ? '👨‍🎓' : isNguyet ? '👩‍🎓' : '👤';
   const duration =
     todo.startTime && todo.endTime
       ? calculateDuration(todo.startTime, todo.endTime)
@@ -69,7 +68,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
             <input
               type="text"
               className="input-primary"
-              placeholder="Tên người học"
+              placeholder="Tên thành viên"
               value={editStudentName}
               onChange={(e) => setEditStudentName(e.target.value)}
               style={{ width: '140px' }}
@@ -101,7 +100,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
           <input
             type="text"
             className="input-primary"
-            placeholder="Chủ đề buổi học"
+            placeholder="Chủ đề học"
             value={editTitle}
             onChange={(e) => setEditTitle(e.target.value)}
           />
@@ -125,70 +124,60 @@ export const TodoItem: React.FC<TodoItemProps> = ({
         </div>
       ) : (
         <div className="report-content">
-          {/* Header thẻ: Tên người học + Thời gian học */}
-          <div className="report-header-row">
-            <span
-              className={`student-badge ${
-                isTruong
-                  ? 'badge-truong'
-                  : isNguyet
-                  ? 'badge-nguyet'
-                  : 'badge-other'
-              }`}
-            >
-              {icon} {student}
-            </span>
+          {/* Hàng chính: Tiêu đề + Thời gian + Nút hành động */}
+          <div className="report-main-row">
+            <div className="report-left-group">
+              <div className="report-title">
+                <BookOpen size={15} />
+                <span>{todo.title}</span>
+              </div>
+            </div>
 
-            <div className="report-time-meta">
-              {todo.date && (
-                <span className="meta-item">
-                  <Calendar size={13} />
-                  {todo.date}
-                </span>
-              )}
-              {todo.startTime && todo.endTime && (
-                <span className="meta-item time">
-                  <Clock size={13} />
-                  {todo.startTime} - {todo.endTime}
-                  {duration && (
-                    <strong className="duration-pill">({duration})</strong>
-                  )}
-                </span>
-              )}
+            <div className="report-right-group">
+              <div className="report-time-meta">
+                {todo.date && (
+                  <span className="meta-item">
+                    <Calendar size={12} />
+                    {todo.date}
+                  </span>
+                )}
+                {todo.startTime && todo.endTime && (
+                  <span className="meta-item time">
+                    <Clock size={12} />
+                    {todo.startTime} - {todo.endTime}
+                    {duration && (
+                      <strong className="duration-pill">({duration})</strong>
+                    )}
+                  </span>
+                )}
+              </div>
+
+              {/* Nút bấm Sửa/Xóa tích hợp thẳng ở góc phải */}
+              <div className="report-card-actions">
+                <button
+                  className="action-btn"
+                  onClick={handleStartEdit}
+                  title="Chỉnh sửa nhật ký"
+                >
+                  <Edit3 size={14} />
+                </button>
+                <button
+                  className="action-btn delete"
+                  onClick={() => onDelete(todo.id)}
+                  title="Xóa nhật ký"
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* Tiêu đề buổi học */}
-          <div className="report-title">
-            <BookOpen size={16} />
-            <span>{todo.title}</span>
-          </div>
-
-          {/* Chi tiết nội dung học */}
+          {/* Chi tiết nội dung học (chỉ hiển thị trực tiếp chữ ghi chép) */}
           {(todo.lessonContent || todo.description) && (
-            <div className="lesson-content-box">
-              <span className="box-label">Nội dung buổi học:</span>
-              <p>{todo.lessonContent || todo.description}</p>
-            </div>
+            <p className="lesson-content-inline">
+              {todo.lessonContent || todo.description}
+            </p>
           )}
-
-          {/* Footer thẻ: Nút bấm Sửa/Xóa */}
-          <div className="report-card-actions">
-            <button
-              className="action-btn"
-              onClick={handleStartEdit}
-              title="Chỉnh sửa báo cáo"
-            >
-              <Edit3 size={15} />
-            </button>
-            <button
-              className="action-btn delete"
-              onClick={() => onDelete(todo.id)}
-              title="Xóa báo cáo"
-            >
-              <Trash2 size={15} />
-            </button>
-          </div>
         </div>
       )}
     </div>

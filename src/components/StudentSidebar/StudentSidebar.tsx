@@ -18,6 +18,7 @@ interface StudentSidebarProps {
   onAddStudent: (name: string) => void;
   stats: TodoStats;
   todos?: Todo[];
+  hideBrand?: boolean;
 }
 
 export const StudentSidebar: React.FC<StudentSidebarProps> = ({
@@ -27,6 +28,7 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
   onAddStudent,
   stats,
   todos,
+  hideBrand = false,
 }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [newName, setNewName] = useState('');
@@ -43,21 +45,23 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
   return (
     <aside className="student-sidebar">
       <div className="sidebar-top-group">
-        {/* Brand Header của Sidebar */}
-        <div className="sidebar-brand">
-          <div className="brand-logo-icon">
-            <BookOpen size={22} />
+        {/* Brand Header của Sidebar (chỉ hiện khi không ẩn) */}
+        {!hideBrand && (
+          <div className="sidebar-brand">
+            <div className="brand-logo-icon">
+              <BookOpen size={22} />
+            </div>
+            <div className="brand-titles">
+              <h2>English Tracker</h2>
+              <span className="brand-sub">Nhật ký học mỗi ngày</span>
+            </div>
           </div>
-          <div className="brand-titles">
-            <h2>English Tracker</h2>
-            <span className="brand-sub">Nhật ký học mỗi ngày</span>
-          </div>
-        </div>
+        )}
 
-        {/* Danh sách học sinh */}
+        {/* Danh sách thành viên */}
         <div className="sidebar-section">
           <div className="section-label-row">
-            <span className="sidebar-label">DANH SÁCH HỌC VIÊN</span>
+            <span className="sidebar-label">THÀNH VIÊN</span>
             <span className="students-total-count">{students.length} người</span>
           </div>
 
@@ -73,9 +77,8 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
                 <button
                   key={student}
                   type="button"
-                  className={`student-nav-item ${isSelected ? 'active' : ''} ${
-                    isTruong ? 'item-truong' : isNguyet ? 'item-nguyet' : 'item-other'
-                  }`}
+                  className={`student-nav-item ${isSelected ? 'active' : ''} ${isTruong ? 'item-truong' : isNguyet ? 'item-nguyet' : 'item-other'
+                    }`}
                   onClick={() => onStudentChange(student)}
                 >
                   <div className="student-avatar-wrap">
@@ -90,7 +93,7 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
 
                   <div className="student-meta">
                     <span className="student-name">{student}</span>
-                    <span className="student-stats-sub">{count} buổi học</span>
+                    <span className="student-stats-sub">{count} nhật ký</span>
                   </div>
 
                   <div className="student-badges-group">
@@ -121,8 +124,8 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
                     <Users size={18} />
                   </div>
                   <div className="student-meta">
-                    <span className="student-name">Tất Cả Học Viên</span>
-                    <span className="student-stats-sub">Tổng {stats.total} buổi học</span>
+                    <span className="student-name">Tất Cả</span>
+                    <span className="student-stats-sub">Tổng {stats.total} nhật ký</span>
                   </div>
                   <div className="student-badges-group">
                     {allStreak > 0 && (
@@ -140,7 +143,7 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
             })()}
           </nav>
 
-          {/* Nút hoặc Form Thêm học viên mới */}
+          {/* Nút hoặc Form Thêm thành viên mới */}
           {!isAdding ? (
             <button
               type="button"
@@ -148,13 +151,13 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
               onClick={() => setIsAdding(true)}
             >
               <UserPlus size={15} />
-              <span>Thêm Học Viên Mới</span>
+              <span>Thêm Thành Viên</span>
             </button>
           ) : (
             <form className="add-student-sidebar-form" onSubmit={handleAddSubmit}>
               <input
                 type="text"
-                placeholder="Nhập tên học viên..."
+                placeholder="Nhập tên..."
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
                 autoFocus
@@ -183,7 +186,6 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
           <span className="sync-live-dot" />
           <span>Hệ thống đồng bộ trực tiếp</span>
         </div>
-        <span className="sidebar-version-tag">TaskFlow Study • v1.0.5</span>
       </div>
     </aside>
   );

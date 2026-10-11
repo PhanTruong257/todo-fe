@@ -86,7 +86,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
             onClick={() => onTabChange('reports')}
           >
             <BookOpen size={13} />
-            <span>Báo Cáo</span>
+            <span>Nhật Ký</span>
           </button>
           <button
             type="button"
@@ -165,7 +165,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
             type="button"
             className="mobile-chip-add"
             onClick={() => setIsAddingStudent(true)}
-            title="Thêm học viên mới"
+            title="Thêm thành viên mới"
           >
             <UserPlus size={13} />
             <span>Thêm</span>
@@ -216,7 +216,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
             <input
               type="text"
               className="mobile-search-input"
-              placeholder="Tìm bài học..."
+              placeholder="Tìm nhật ký..."
               value={search}
               onChange={(e) => onSearchChange(e.target.value)}
             />
@@ -248,7 +248,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
             type="button"
             className={`mobile-btn-add-circle ${isAddOpen ? 'active' : ''}`}
             onClick={onToggleAdd}
-            title={isAddOpen ? 'Đóng' : 'Thêm báo cáo mới'}
+            title={isAddOpen ? 'Đóng' : 'Thêm nhật ký mới'}
           >
             {isAddOpen ? <X size={18} /> : <Plus size={18} />}
           </button>

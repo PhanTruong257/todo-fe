@@ -47,6 +47,14 @@
 html, body {
   overflow-x: hidden;
   width: 100%;
+  scrollbar-gutter: stable;
+}
+
+@media (min-width: 901px) {
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
 }
 
 body {

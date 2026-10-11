@@ -33,26 +33,40 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="app-top-header">
-      {/* 1. Ngữ cảnh học viên đang chọn */}
-      <div className="header-context-info">
-        <div
-          className={`context-avatar ${
-            isTruong ? 'avatar-truong' : isNguyet ? 'avatar-nguyet' : 'avatar-all'
-          }`}
-        >
-          {isTruong ? (
-            <UserCheck size={18} />
-          ) : isNguyet ? (
-            <Heart size={18} />
-          ) : (
-            <Users size={18} />
-          )}
+      {/* 1. Brand Logo & Ngữ cảnh thành viên */}
+      <div className="header-left-cluster">
+        <div className="header-brand-group">
+          <div className="header-brand-logo">
+            <BookOpen size={20} />
+          </div>
+          <div className="header-brand-titles">
+            <h2>English Tracker</h2>
+            <span className="header-brand-sub">Nhật ký học mỗi ngày</span>
+          </div>
         </div>
-        <div>
-          <span className="context-sublabel">Đang xem:</span>
-          <h2 className="context-student-title">
-            {isAll ? 'Tất Cả Học Viên' : activeStudent}
-          </h2>
+
+        <div className="header-divider-v" />
+
+        <div className="header-context-info">
+          <div
+            className={`context-avatar ${
+              isTruong ? 'avatar-truong' : isNguyet ? 'avatar-nguyet' : 'avatar-all'
+            }`}
+          >
+            {isTruong ? (
+              <UserCheck size={18} />
+            ) : isNguyet ? (
+              <Heart size={18} />
+            ) : (
+              <Users size={18} />
+            )}
+          </div>
+          <div>
+            <span className="context-sublabel">Đang xem:</span>
+            <h2 className="context-student-title">
+              {isAll ? 'Tất Cả' : activeStudent}
+            </h2>
+          </div>
         </div>
       </div>
 
@@ -64,7 +78,7 @@ export const Header: React.FC<HeaderProps> = ({
         activeStudent={activeStudent}
       />
 
-      {/* 3. Tabs Chức Năng: Báo Cáo & Thống Kê */}
+      {/* 3. Tabs Chức Năng: Nhật Ký & Thống Kê */}
       <nav className="header-nav-tabs">
         <button
           type="button"
@@ -72,7 +86,7 @@ export const Header: React.FC<HeaderProps> = ({
           onClick={() => onTabChange('reports')}
         >
           <BookOpen size={15} />
-          <span>Báo Cáo</span>
+          <span>Nhật Ký</span>
         </button>
 
         <button

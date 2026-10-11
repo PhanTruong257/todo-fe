@@ -271,20 +271,35 @@
   width: auto;
 }
 
+.mobile-date-wrapper .datepicker-control-group {
+  gap: 4px;
+}
+
+.mobile-date-wrapper .dp-nav-day-btn {
+  width: 28px;
+  height: 28px;
+}
+
 .mobile-date-wrapper .datepicker-trigger-btn {
   width: auto;
-  padding: 7px 11px;
+  height: 28px;
+  padding: 0 8px;
   font-size: 12px;
-  gap: 6px;
+  gap: 5px;
   background: rgba(255, 255, 255, 0.05);
 }
 
 .mobile-date-wrapper .dp-date-text {
   font-size: 12px;
-  max-width: 105px;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+}
+
+.mobile-date-wrapper .dp-date-full {
+  display: none;
+}
+
+.mobile-date-wrapper .dp-date-short {
+  display: inline;
 }
 
 .mobile-date-wrapper .datepicker-dropdown-popup {

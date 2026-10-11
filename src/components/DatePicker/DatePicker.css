@@ -4,12 +4,49 @@
   z-index: 501;
 }
 
-/* 1. Nút bấm chính trên Header */
+/* 1. Cụm điều khiển ngày trên Header */
+.datepicker-control-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Nút chuyển ngày trước (-) và ngày sau (+) */
+.dp-nav-day-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.dp-nav-day-btn:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.5);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.35);
+  transform: translateY(-1px);
+}
+
+.dp-nav-day-btn:active {
+  transform: translateY(0) scale(0.94);
+}
+
+/* Nút bấm chính mở popup lịch */
 .datepicker-trigger-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
+  padding: 0 16px;
+  height: 34px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-full);
@@ -17,6 +54,7 @@
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   color: var(--text-main);
   user-select: none;
+  box-sizing: border-box;
 }
 
 .datepicker-trigger-btn:hover,
@@ -25,6 +63,14 @@
   border-color: #818cf8;
   box-shadow: 0 0 16px rgba(99, 102, 241, 0.3);
   transform: translateY(-1px);
+}
+
+.dp-date-short {
+  display: none;
+}
+
+.dp-date-full {
+  display: inline;
 }
 
 .dp-cal-icon {

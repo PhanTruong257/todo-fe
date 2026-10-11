@@ -98,11 +98,35 @@ export function useTodoInput({
     }
   }, [defaultDate]);
 
+  const quickDurationPresets = [15, 30, 45, 60, 90];
+
+  const currentDurationMinutes = useMemo(() => {
+    if (!startTime || !endTime) return null;
+    const [sh, sm] = startTime.split(':').map(Number);
+    const [eh, em] = endTime.split(':').map(Number);
+    if (isNaN(sh) || isNaN(sm) || isNaN(eh) || isNaN(em)) return null;
+    let total = eh * 60 + em - (sh * 60 + sm);
+    if (total < 0) total += 24 * 60;
+    return total;
+  }, [startTime, endTime]);
+
+  const setQuickDuration = useCallback(
+    (minutes: number) => {
+      const currentStart = startTime || getCurrentTime24h();
+      if (!startTime) {
+        setStartTimeState(currentStart);
+      }
+      const newEnd = getEndTimeFromStart(currentStart, minutes);
+      setEndTime(newEnd);
+    },
+    [startTime]
+  );
+
   const duration = useMemo(() => calculateDuration(startTime, endTime), [startTime, endTime]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const finalTitle = title.trim() || `Buổi học Tiếng Anh (${studentName})`;
+    const finalTitle = title.trim() || `Nhật ký học Tiếng Anh (${studentName})`;
 
     onAddTodo({
       title: finalTitle,
@@ -146,6 +170,9 @@ export function useTodoInput({
     priority,
     setPriority,
     duration,
+    quickDurationPresets,
+    currentDurationMinutes,
+    setQuickDuration,
     handleSubmit,
     handleCancel,
   };

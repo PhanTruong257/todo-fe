@@ -19,7 +19,7 @@ export const StatsCards: React.FC<StatsCardsProps> = ({ stats }) => {
         </div>
         <div className="stat-info">
           <div className="stat-value">{truongStats.total}</div>
-          <div className="stat-label">Buổi học của <strong>Trường</strong> ({truongStats.completed} xong)</div>
+          <div className="stat-label">Nhật ký của <strong>Trường</strong></div>
         </div>
       </div>
 
@@ -29,7 +29,7 @@ export const StatsCards: React.FC<StatsCardsProps> = ({ stats }) => {
         </div>
         <div className="stat-info">
           <div className="stat-value">{nguyetStats.total}</div>
-          <div className="stat-label">Buổi học của <strong>Nguyệt</strong> ({nguyetStats.completed} xong)</div>
+          <div className="stat-label">Nhật ký của <strong>Nguyệt</strong></div>
         </div>
       </div>
 
@@ -39,7 +39,7 @@ export const StatsCards: React.FC<StatsCardsProps> = ({ stats }) => {
         </div>
         <div className="stat-info">
           <div className="stat-value">{stats.total}</div>
-          <div className="stat-label">Tổng số buổi học</div>
+          <div className="stat-label">Tổng số nhật ký</div>
         </div>
       </div>
 

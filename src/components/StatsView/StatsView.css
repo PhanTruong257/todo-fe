@@ -9,21 +9,23 @@
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 22px 24px;
+  padding: 20px 24px;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   box-shadow: var(--shadow-md);
+  box-sizing: border-box;
 }
 
 .week-total-pill {
   font-size: 11px;
   font-weight: 700;
-  padding: 3px 10px;
+  padding: 4px 10px;
   border-radius: var(--radius-full);
   background: rgba(99, 102, 241, 0.15);
   border: 1px solid rgba(99, 102, 241, 0.3);
   color: #a5b4fc;
-  margin-left: auto;
+  white-space: nowrap;
+  line-height: 1.2;
 }
 
 .weekly-bars-container {
@@ -158,41 +160,125 @@
   font-weight: 500;
 }
 
-/* 2. Phần so sánh học viên */
+/* 2. Phần so sánh thành viên */
 .students-comparison-section {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 24px;
+  padding: 20px 24px;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   box-shadow: var(--shadow-md);
+  box-sizing: border-box;
+}
+
+.weekly-activity-section.is-collapsed,
+.students-comparison-section.is-collapsed {
+  padding: 20px 24px; /* Chiều cao padding CỐ ĐỊNH HOÀN TOÀN */
+}
+
+.weekly-activity-section.is-collapsed:hover,
+.students-comparison-section.is-collapsed:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(22, 28, 45, 0.85);
 }
 
 .section-header {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  user-select: none;
+  width: 100%;
+}
+
+.weekly-activity-section:not(.is-collapsed) .section-header,
+.students-comparison-section:not(.is-collapsed) .section-header {
   margin-bottom: 20px;
 }
 
-.section-title-group {
+.weekly-activity-section.is-collapsed .section-header,
+.students-comparison-section.is-collapsed .section-header {
+  margin-bottom: 0;
+}
+
+/* Hàng 1 cố định trên cùng: Tiêu đề trái & Nhóm badge + nút phải */
+.section-header-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 32px;
+  gap: 12px;
+}
+
+.section-title-left {
   display: flex;
   align-items: center;
   gap: 8px;
   color: var(--text-main);
+  min-width: 0;
+}
+
+.section-title-left h3 {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
 }
 
 .title-icon {
   color: #818cf8;
+  flex-shrink: 0;
 }
 
-.section-title-group h3 {
-  font-size: 17px;
-  font-weight: 700;
+.section-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  height: 32px;
+}
+
+/* Nút thu gọn / mở rộng section (-) và (+) - Cố định kích thước & vị trí */
+.btn-toggle-section {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.btn-toggle-section:hover {
+  background: rgba(99, 102, 241, 0.25);
+  border-color: rgba(99, 102, 241, 0.5);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.35);
 }
 
 .section-sub {
-  font-size: 13px;
+  font-size: 12.5px;
   color: var(--text-muted);
-  margin-top: 2px;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.students-count-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #60a5fa;
+  margin-left: auto;
 }
 
 .students-analytics-list {
@@ -360,8 +446,6 @@
   align-items: center;
   gap: 6px;
   flex-wrap: wrap;
-  max-height: 48px;
-  overflow: hidden;
 }
 
 .topic-pill {
@@ -372,7 +456,7 @@
   padding: 4px 10px;
   border-radius: var(--radius-sm);
   white-space: nowrap;
-  max-width: 170px;
+  max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -411,8 +495,8 @@
   transform: translateX(2px);
 }
 
-/* Responsive */
-@media (max-width: 950px) {
+/* Responsive: Tự động gom dòng khi bề ngang dưới 1200px tránh chèn ép layout */
+@media (max-width: 1200px) {
   .student-analytics-row {
     flex-wrap: wrap;
     gap: 14px;

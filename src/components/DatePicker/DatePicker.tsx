@@ -7,6 +7,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import type { Todo } from '../../types/todo';
+import { getYesterdayLocalISO } from '../../utils/date';
 import { useDatePicker } from './useDatePicker';
 import './DatePicker.css';
 
@@ -33,6 +34,21 @@ function formatDateDisplay(dateStr: string | null): string {
   }
 }
 
+// Format hiển thị ngắn gọn trên thiết bị nhỏ (ví dụ: "CN, 11/10")
+function formatDateShort(dateStr: string | null): string {
+  if (!dateStr) return 'Tất cả';
+
+  try {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const dateObj = new Date(y, m - 1, d);
+    const dayNames = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+    const dayName = dayNames[dateObj.getDay()];
+    return `${dayName}, ${String(d).padStart(2, '0')}/${String(m).padStart(2, '0')}`;
+  } catch {
+    return dateStr;
+  }
+}
+
 export const DatePicker: React.FC<DatePickerProps> = ({
   selectedDate,
   onSelectDate,
@@ -47,6 +63,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     monthTitle,
     prevMonth,
     nextMonth,
+    prevDay,
+    nextDay,
     goToToday,
     selectDateAndClose,
   } = useDatePicker({
@@ -60,22 +78,46 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
   return (
     <div className="custom-datepicker-container" ref={containerRef}>
-      {/* 1. Nút bấm chính trên Header (Click bất kỳ đâu đều mở/đóng popup) */}
-      <button
-        type="button"
-        className={`datepicker-trigger-btn ${isOpen ? 'active' : ''}`}
-        onClick={() => setIsOpen(!isOpen)}
-        title="Bấm để mở lịch chọn ngày"
-      >
-        <CalendarIcon size={16} className="dp-cal-icon" />
-        <span className="dp-date-text">
-          {formatDateDisplay(selectedDate)}
-        </span>
-        <ChevronDown
-          size={14}
-          className={`dp-chevron-icon ${isOpen ? 'rotate' : ''}`}
-        />
-      </button>
+      {/* 1. Nhóm nút điều khiển: Ngày trước (-) | Xem lịch | Ngày sau (+) */}
+      <div className="datepicker-control-group">
+        <button
+          type="button"
+          className="dp-nav-day-btn prev-day-btn"
+          onClick={prevDay}
+          title="Ngày trước"
+          aria-label="Ngày trước"
+        >
+          <ChevronLeft size={16} />
+        </button>
+
+        <button
+          type="button"
+          className={`datepicker-trigger-btn ${isOpen ? 'active' : ''}`}
+          onClick={() => setIsOpen(!isOpen)}
+          title="Bấm để mở lịch chọn ngày"
+          aria-label="Bấm để mở lịch chọn ngày"
+        >
+          <CalendarIcon size={15} className="dp-cal-icon" />
+          <span className="dp-date-text">
+            <span className="dp-date-full">{formatDateDisplay(selectedDate)}</span>
+            <span className="dp-date-short">{formatDateShort(selectedDate)}</span>
+          </span>
+          <ChevronDown
+            size={14}
+            className={`dp-chevron-icon ${isOpen ? 'rotate' : ''}`}
+          />
+        </button>
+
+        <button
+          type="button"
+          className="dp-nav-day-btn next-day-btn"
+          onClick={nextDay}
+          title="Ngày sau"
+          aria-label="Ngày sau"
+        >
+          <ChevronRight size={16} />
+        </button>
+      </div>
 
       {/* 2. Pop-up Lịch Đẹp Mắt Hiện Ra Khi Bấm */}
       {isOpen && (
@@ -115,11 +157,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
             <button
               type="button"
               className="shortcut-btn"
-              onClick={() => {
-                const yest = new Date(Date.now() - 86400000);
-                const yestStr = `${yest.getFullYear()}-${String(yest.getMonth() + 1).padStart(2, '0')}-${String(yest.getDate()).padStart(2, '0')}`;
-                selectDateAndClose(yestStr);
-              }}
+              onClick={() => selectDateAndClose(getYesterdayLocalISO())}
             >
               Hôm qua
             </button>
@@ -165,7 +203,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
           {/* Chân popup giải thích ký hiệu */}
           <div className="popup-footer-legend">
             <span className="legend-item">
-              <span className="legend-dot" /> Có buổi học
+              <span className="legend-dot" /> Có nhật ký học
             </span>
             {selectedDate && (
               <button

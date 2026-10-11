@@ -1,3 +1,7 @@
+/* ==========================================================================
+   Study Timer Container & Layout
+   ========================================================================== */
+
 .study-timer-container {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -6,88 +10,84 @@
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   box-shadow: var(--shadow-md);
-  margin-bottom: 16px;
+  margin-bottom: 18px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 12px;
   transition: all 0.25s ease;
   position: relative;
   overflow: hidden;
 }
 
 .study-timer-container.is-active {
-  border-color: rgba(99, 102, 241, 0.4);
-  box-shadow: 0 4px 24px rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.45);
+  box-shadow: 0 4px 26px rgba(99, 102, 241, 0.22);
 }
 
-.timer-left-meta {
+.study-timer-container.is-completed {
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 4px 30px rgba(16, 185, 129, 0.25);
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(13, 17, 28, 0.7) 100%);
+}
+
+/* ==========================================================================
+   Hàng Trên: Chế độ & Học viên & Nút Chuông
+   ========================================================================== */
+
+.timer-top-row {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
-.timer-icon-wrap {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: rgba(99, 102, 241, 0.15);
-  border: 1px solid rgba(99, 102, 241, 0.3);
+.timer-mode-switcher {
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: #818cf8;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 3px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.is-active .timer-icon-wrap {
-  background: rgba(16, 185, 129, 0.15);
-  border-color: rgba(16, 185, 129, 0.4);
-  color: #34d399;
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+.btn-mode-tab {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
 }
 
-.timer-titles h4 {
-  font-size: 14px;
-  font-weight: 700;
+.btn-mode-tab:hover {
   color: var(--text-main);
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
-.timer-live-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 8px #10b981;
-  display: inline-block;
-  animation: pulseDot 1.5s infinite;
-}
-
-@keyframes pulseDot {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.4;
-    transform: scale(0.85);
-  }
+.btn-mode-tab.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
 }
 
 .timer-student-select {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-top: 4px;
 }
 
 .btn-timer-student {
   font-size: 11px;
   font-weight: 600;
-  padding: 2px 8px;
+  padding: 3px 9px;
   border-radius: var(--radius-full);
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid transparent;
@@ -114,42 +114,223 @@
   color: #fbcfe8;
 }
 
-/* Đồng hồ số to ở giữa */
+.timer-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-timer-icon-action {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-timer-icon-action:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--text-main);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   Mốc Thời Gian Đếm Ngược (Presets)
+   ========================================================================== */
+
+.countdown-presets-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.025);
+  border-radius: var(--radius-md);
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.presets-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #a5b4fc;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.presets-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.btn-preset-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-preset-pill:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-main);
+}
+
+.btn-preset-pill.selected {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.35));
+  border-color: #818cf8;
+  color: #c7d2fe;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+}
+
+.btn-preset-pill:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   Banner Hết Giờ (Ting!)
+   ========================================================================== */
+
+.countdown-completed-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  border-radius: var(--radius-md);
+  color: #6ee7b7;
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.completed-icon {
+  color: #34d399;
+  flex-shrink: 0;
+}
+
+.animate-bounce-subtle {
+  animation: bounceSubtle 1.2s ease infinite;
+}
+
+@keyframes bounceSubtle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+/* ==========================================================================
+   Đồng Hồ Số & Thanh Tiến Độ
+   ========================================================================== */
+
+.timer-center-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+
 .timer-clock-display {
   display: flex;
-  align-items: baseline;
-  gap: 4px;
+  align-items: center;
+  gap: 8px;
   font-variant-numeric: tabular-nums;
   font-family: 'Plus Jakarta Sans', monospace;
 }
 
+.timer-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+  display: inline-block;
+  animation: pulseDot 1.4s infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+}
+
 .clock-digits {
-  font-size: 26px;
+  font-size: 34px;
   font-weight: 800;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   color: #ffffff;
-  text-shadow: 0 0 16px rgba(255, 255, 255, 0.2);
+  text-shadow: 0 0 18px rgba(255, 255, 255, 0.2);
 }
 
 .is-active .clock-digits {
-  color: #34d399;
-  text-shadow: 0 0 20px rgba(52, 211, 153, 0.4);
+  color: #818cf8;
+  text-shadow: 0 0 24px rgba(129, 140, 248, 0.4);
 }
 
-/* Nút điều khiển */
+.is-completed .clock-digits {
+  color: #34d399;
+  text-shadow: 0 0 24px rgba(52, 211, 153, 0.5);
+}
+
+.timer-progress-bar-wrap {
+  width: 100%;
+  max-width: 320px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.timer-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #10b981);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* ==========================================================================
+   Hàng Nút Điều Khiển
+   ========================================================================== */
+
 .timer-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .btn-timer-ctrl {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 14px;
+  padding: 8px 16px;
   border-radius: var(--radius-md);
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 700;
   cursor: pointer;
   border: none;
@@ -193,7 +374,7 @@
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--text-muted);
-  padding: 8px 10px;
+  padding: 8px 12px;
 }
 
 .btn-timer-reset:hover {
@@ -203,31 +384,28 @@
 
 @media (max-width: 680px) {
   .study-timer-container {
+    padding: 14px 12px;
+  }
+
+  .timer-top-row {
     flex-direction: column;
     align-items: stretch;
-    padding: 14px;
-    gap: 12px;
+    gap: 10px;
   }
 
-  .timer-left-meta {
-    justify-content: space-between;
-  }
-
-  .timer-clock-display {
-    justify-content: center;
+  .timer-top-actions {
+    position: absolute;
+    top: 12px;
+    right: 12px;
   }
 
   .clock-digits {
     font-size: 30px;
   }
 
-  .timer-actions {
-    justify-content: center;
-  }
-
   .btn-timer-ctrl {
     flex: 1;
     justify-content: center;
-    padding: 10px 12px;
+    padding: 9px 12px;
   }
 }

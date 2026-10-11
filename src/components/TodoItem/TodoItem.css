@@ -1,56 +1,75 @@
+/* ==========================================================================
+   Report Card Component (Sleek Compact Style)
+   ========================================================================== */
+
 .report-card {
   background: var(--bg-card);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: 18px 20px;
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  transition: all 0.2s;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  margin-bottom: 12px;
+  align-items: stretch;
+  gap: 12px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+  margin-bottom: 0;
 }
 
 .report-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
 }
 
 .report-card.border-truong {
-  border-left: 4px solid #6366f1;
+  border-left: 3.5px solid #6366f1;
 }
 
 .report-card.border-nguyet {
-  border-left: 4px solid #ec4899;
+  border-left: 3.5px solid #ec4899;
 }
 
 .report-content {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
+  justify-content: center;
 }
 
-/* Header hàng đầu */
-.report-header-row {
+/* ==========================================================================
+   Hàng chính: Gộp ngang cực kỳ gọn gàng
+   ========================================================================== */
+
+.report-main-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+}
+
+.report-left-group {
+  display: flex;
+  align-items: center;
   gap: 10px;
+  min-width: 0;
+  flex: 1;
 }
 
 .student-badge {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
-  padding: 4px 12px;
+  padding: 2.5px 9px;
   border-radius: var(--radius-full);
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  letter-spacing: 0.3px;
+  gap: 4px;
+  letter-spacing: 0.2px;
+  flex-shrink: 0;
 }
 
 .badge-truong {
@@ -71,11 +90,39 @@
   border: 1px solid rgba(125, 211, 252, 0.4);
 }
 
-.report-time-meta {
+.report-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #f8fafc;
+  min-width: 0;
+}
+
+.report-title span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.report-title svg {
+  color: #818cf8;
+  flex-shrink: 0;
+}
+
+.report-right-group {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.report-time-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11.5px;
   color: var(--text-muted);
 }
 
@@ -94,59 +141,11 @@
   font-weight: 600;
 }
 
-/* Tiêu đề */
-.report-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 16px;
-  font-weight: 700;
-  color: #f8fafc;
-}
-
-.report-card.completed .report-title span {
-  text-decoration: line-through;
-  color: var(--text-muted);
-}
-
-.report-title svg {
-  color: #818cf8;
-  flex-shrink: 0;
-}
-
-/* Hộp nội dung bài học */
-.lesson-content-box {
-  background: rgba(15, 23, 42, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-md);
-  padding: 12px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.box-label {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: #94a3b8;
-  letter-spacing: 0.5px;
-}
-
-.lesson-content-box p {
-  font-size: 14px;
-  color: #e2e8f0;
-  line-height: 1.5;
-  white-space: pre-wrap;
-  margin: 0;
-}
-
-/* Nút bấm hành động */
+/* Nút bấm hành động Sửa / Xóa */
 .report-card-actions {
   display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 4px;
+  align-items: center;
+  gap: 4px;
 }
 
 .action-btn {
@@ -154,17 +153,17 @@
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 6px;
+  padding: 5px;
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
 .action-btn:hover {
   background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  color: #ffffff;
 }
 
 .action-btn.delete:hover {
@@ -172,17 +171,36 @@
   color: #f87171;
 }
 
-/* Form chỉnh sửa */
+/* ==========================================================================
+   Hộp nội dung ghi chép thêm (tối giản trực tiếp chữ)
+   ========================================================================== */
+
+.lesson-content-inline {
+  font-size: 12.5px;
+  color: #94a3b8;
+  padding: 3px 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+  border-left: 2px solid rgba(255, 255, 255, 0.15);
+  margin: 1px 0 0 0;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+/* ==========================================================================
+   Form chỉnh sửa inline
+   ========================================================================== */
+
 .report-edit-form {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .edit-row {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
   align-items: center;
 }
@@ -192,7 +210,7 @@
   align-items: center;
   gap: 6px;
   background: var(--bg-input);
-  padding: 6px 10px;
+  padding: 5px 8px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-color);
   color: var(--text-muted);
@@ -200,81 +218,100 @@
 
 .edit-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   justify-content: flex-end;
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .btn-sm-save {
   background: #6366f1;
   color: #fff;
   border: none;
-  padding: 8px 18px;
+  padding: 7px 16px;
   border-radius: var(--radius-sm);
   font-weight: 600;
+  font-size: 12px;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-sm-save:hover {
+  background: #4f46e5;
 }
 
 .btn-sm-cancel {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
   border: none;
-  padding: 8px 16px;
+  padding: 7px 14px;
   border-radius: var(--radius-sm);
+  font-size: 12px;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-@media (max-width: 640px) {
+.btn-sm-cancel:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   Mobile Responsive
+   ========================================================================== */
+
+@media (max-width: 680px) {
   .report-card {
-    padding: 14px 12px;
-    gap: 10px;
-    border-radius: var(--radius-md);
+    padding: 10px 12px;
   }
 
-  .report-header-row {
+  .report-main-row {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 7px;
+  }
+
+  .report-left-group {
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .report-title {
+    font-size: 13.5px;
+  }
+
+  .report-right-group {
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 5px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.06);
     gap: 8px;
   }
 
   .report-time-meta {
-    flex-wrap: wrap;
-    gap: 8px;
     font-size: 11px;
-  }
-
-  .report-title {
-    font-size: 15px;
-  }
-
-  .lesson-content-box {
-    padding: 10px 12px;
-  }
-
-  .lesson-content-box p {
-    font-size: 13px;
+    flex-wrap: wrap;
+    gap: 7px;
   }
 
   .action-btn {
-    padding: 8px;
+    padding: 6px;
   }
 
   .btn-sm-save,
   .btn-sm-cancel {
     flex: 1;
     text-align: center;
-    padding: 8px 12px;
+    padding: 8px 10px;
   }
 }
 
 @media (max-width: 380px) {
   .student-badge {
-    font-size: 11px;
-    padding: 3px 9px;
+    font-size: 10px;
+    padding: 2px 7px;
   }
 
   .report-title {
-    font-size: 14px;
+    font-size: 13px;
   }
 }
-

@@ -4,19 +4,68 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 20px;
+  padding: 10px 20px;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  margin-bottom: 12px;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   box-shadow: var(--shadow-md);
   gap: 16px;
-  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* 1. Ngữ cảnh học viên */
+/* Cụm Trái: Brand Logo + Ngữ cảnh thành viên */
+.header-left-cluster {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-brand-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+  flex-shrink: 0;
+}
+
+.header-brand-titles h2 {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  background: linear-gradient(to right, #ffffff, #e2e8f0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.2;
+}
+
+.header-brand-sub {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  font-weight: 500;
+  display: block;
+}
+
+.header-divider-v {
+  width: 1px;
+  height: 26px;
+  background: var(--border-color);
+}
+
+/* 1. Ngữ cảnh thành viên */
 .header-context-info {
   display: flex;
   align-items: center;

@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import type { Todo } from '../../types/todo';
+import { shiftDateLocalISO, getTodayLocalISO } from '../../utils/date';
 
 export interface CalendarDay {
   dateStr: string; // 'YYYY-MM-DD'
@@ -41,13 +42,13 @@ export function useDatePicker({
     return new Date();
   });
 
-  // Khi selectedDate thay đổi từ ngoài, cập nhật lại viewDate nếu đang đóng
+  // Khi selectedDate thay đổi từ ngoài, cập nhật lại viewDate
   useEffect(() => {
-    if (selectedDate && !isOpen) {
+    if (selectedDate) {
       const [y, m, d] = selectedDate.split('-').map(Number);
       setViewDate(new Date(y, m - 1, d));
     }
-  }, [selectedDate, isOpen]);
+  }, [selectedDate]);
 
   // Click outside listener để tự động đóng popup
   useEffect(() => {
@@ -76,11 +77,24 @@ export function useDatePicker({
     setViewDate((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
   };
 
+  // Chuyển sang ngày trước (-1 ngày)
+  const prevDay = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    const nextDate = shiftDateLocalISO(selectedDate, -1);
+    onSelectDate(nextDate);
+  };
+
+  // Chuyển sang ngày sau (+1 ngày)
+  const nextDay = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    const nextDate = shiftDateLocalISO(selectedDate, 1);
+    onSelectDate(nextDate);
+  };
+
   const goToToday = () => {
     const today = new Date();
     setViewDate(new Date(today.getFullYear(), today.getMonth(), 1));
-    const todayStr = formatISO(today.getFullYear(), today.getMonth() + 1, today.getDate());
-    onSelectDate(todayStr);
+    onSelectDate(getTodayLocalISO());
     setIsOpen(false);
   };
 
@@ -93,9 +107,7 @@ export function useDatePicker({
   const days: CalendarDay[] = useMemo(() => {
     const year = viewDate.getFullYear();
     const month = viewDate.getMonth(); // 0-11
-
-    const today = new Date();
-    const todayStr = formatISO(today.getFullYear(), today.getMonth() + 1, today.getDate());
+    const todayStr = getTodayLocalISO();
 
     // Tập hợp các ngày có báo cáo của học sinh
     const reportDates = new Set<string>();
@@ -180,6 +192,8 @@ export function useDatePicker({
     monthTitle,
     prevMonth,
     nextMonth,
+    prevDay,
+    nextDay,
     goToToday,
     selectDateAndClose,
   };

@@ -52,7 +52,7 @@ export const CalendarStrip: React.FC<CalendarStripProps> = ({
             <CalendarIcon size={18} />
           </div>
           <div className="calendar-title-info">
-            <h3>Lịch Báo Cáo Học Tập</h3>
+            <h3>Lịch Nhật Ký Học Tập</h3>
             <span className="week-range-text">{weekRangeLabel}</span>
           </div>
         </div>
@@ -102,7 +102,7 @@ export const CalendarStrip: React.FC<CalendarStripProps> = ({
             type="button"
             className={`cal-btn all-dates-btn ${isAllDatesSelected ? 'active' : ''}`}
             onClick={() => onSelectDate(null)}
-            title="Xem tất cả lịch sử báo cáo"
+            title="Xem tất cả nhật ký"
           >
             Tất cả ngày
           </button>
@@ -129,12 +129,12 @@ export const CalendarStrip: React.FC<CalendarStripProps> = ({
 
               {/* Tag hoặc chấm báo cáo */}
               {day.hasReport ? (
-                <div className="day-report-badge" title={`${day.reportCount} buổi học`}>
+                <div className="day-report-badge" title={`${day.reportCount} nhật ký`}>
                   <CheckCircle2 size={11} />
                   <span>
                     {day.totalDurationMinutes > 0
                       ? formatMinutes(day.totalDurationMinutes)
-                      : `${day.reportCount} buổi`}
+                      : `${day.reportCount} nhật ký`}
                   </span>
                 </div>
               ) : (

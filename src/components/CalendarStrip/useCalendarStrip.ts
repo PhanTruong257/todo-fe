@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import type { Todo } from '../../types/todo';
 
 export interface DayInfo {
@@ -58,6 +58,15 @@ export function useCalendarStrip({
 }: UseCalendarStripProps) {
   // Tuần bắt đầu đang xem
   const [weekStart, setWeekStart] = useState<Date>(() => getMonday(new Date()));
+
+  // Đồng bộ weekStart khi selectedDate từ bên ngoài thay đổi
+  useEffect(() => {
+    if (selectedDate) {
+      const [y, m, d] = selectedDate.split('-').map(Number);
+      const chosen = new Date(y, m - 1, d);
+      setWeekStart(getMonday(chosen));
+    }
+  }, [selectedDate]);
 
   // Đi tới tuần trước
   const prevWeek = () => {

@@ -39,13 +39,13 @@ export const TodoList: React.FC<TodoListProps> = ({
     return (
       <div className="empty-state">
         <RefreshCw className="loading-spinner" size={32} />
-        <p>Đang tải danh sách báo cáo học tập...</p>
+        <p>Đang tải danh sách nhật ký học tập...</p>
       </div>
     );
   }
 
   if (todos.length === 0) {
-    const studentLabel = studentFilter === 'all' ? 'học viên' : studentFilter;
+    const studentLabel = studentFilter === 'all' ? '' : `${studentFilter} `;
 
     return (
       <div className="empty-state">
@@ -54,30 +54,32 @@ export const TodoList: React.FC<TodoListProps> = ({
         </div>
         <h3>
           {selectedDate
-            ? `Chưa có buổi học ngày ${selectedDate}`
-            : 'Chưa có báo cáo buổi học nào'}
+            ? `Chưa có nhật ký học ngày ${selectedDate}`
+            : 'Chưa có nhật ký học nào'}
         </h3>
         <p>
           {selectedDate
-            ? `Học viên ${studentLabel} chưa có ghi chép buổi học nào vào ngày này. Hãy bấm dấu "+" ở trên để ghi chép nội dung bài học!`
+            ? `${studentLabel}chưa có nhật ký học nào vào ngày này. Hãy bấm dấu "+" để thêm nhật ký mới!`
             : search || studentFilter !== 'all'
-            ? 'Không tìm thấy buổi học nào phù hợp với tìm kiếm.'
-            : 'Hãy thêm báo cáo buổi học tiếng Anh đầu tiên bằng cách bấm dấu "+" ở trên!'}
+            ? 'Không tìm thấy nhật ký học nào phù hợp.'
+            : 'Hãy thêm nhật ký học tiếng Anh đầu tiên bằng cách bấm dấu "+" ở trên!'}
         </p>
       </div>
     );
   }
 
   return (
-    <div className="todo-list">
-      {todos.map((todo) => (
-        <TodoItem
-          key={todo.id}
-          todo={todo}
-          onDelete={onDelete}
-          onUpdate={onUpdate}
-        />
-      ))}
+    <div className="todo-list-scroll-wrap">
+      <div className="todo-list">
+        {todos.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            onDelete={onDelete}
+            onUpdate={onUpdate}
+          />
+        ))}
+      </div>
     </div>
   );
 };

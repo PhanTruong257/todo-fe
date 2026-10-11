@@ -8,6 +8,7 @@ import './TodoItem.css';
 
 interface TodoItemProps {
   todo: Todo;
+  showStudentBadge?: boolean;
   onDelete: (id: string) => void;
   onUpdate: (
     id: string,
@@ -26,6 +27,7 @@ interface TodoItemProps {
 
 export const TodoItem: React.FC<TodoItemProps> = ({
   todo,
+  showStudentBadge = false,
   onDelete,
   onUpdate,
 }) => {
@@ -127,6 +129,19 @@ export const TodoItem: React.FC<TodoItemProps> = ({
           {/* Hàng chính: Tiêu đề + Thời gian + Nút hành động */}
           <div className="report-main-row">
             <div className="report-left-group">
+              {showStudentBadge && (
+                <span
+                  className={`student-badge ${
+                    isTruong
+                      ? 'badge-truong'
+                      : isNguyet
+                      ? 'badge-nguyet'
+                      : 'badge-other'
+                  }`}
+                >
+                  {student}
+                </span>
+              )}
               <div className="report-title">
                 <BookOpen size={15} />
                 <span>{todo.title}</span>

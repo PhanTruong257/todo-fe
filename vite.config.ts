@@ -7,6 +7,10 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
+    build: {
+      target: ['es2020', 'safari14', 'ios14'],
+      cssTarget: ['safari14', 'ios14'],
+    },
     server: {
       port: 5173,
       proxy: {

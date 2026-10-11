@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StudentSidebar } from './components/StudentSidebar/StudentSidebar';
 import { Header } from './components/Header/Header';
 import { MobileHeader } from './components/MobileHeader/MobileHeader';
@@ -11,7 +11,31 @@ import type { StudyTimerSession } from './components/StudyTimer/useStudyTimer';
 import { useTodos } from './components/TodoList/useTodos';
 import './App.css';
 
+const useIsMobile = (breakpoint = 1024) => {
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth <= breakpoint;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= breakpoint);
+    };
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    };
+  }, [breakpoint]);
+
+  return isMobile;
+};
+
 export const App: React.FC = () => {
+  const isMobile = useIsMobile(1024);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isTimerOpen, setIsTimerOpen] = useState(false);
   const [timerPreset, setTimerPreset] = useState<{
@@ -42,59 +66,63 @@ export const App: React.FC = () => {
   } = useTodos();
 
   return (
-    <div className="app-layout-wrapper">
-      {/* 1. Header tinh gọn 3 hàng chuẩn App trên Mobile & Tablet (chỉ hiện khi <= 1024px) */}
-      <div className="mobile-header-section">
-        <MobileHeader
-          activeStudent={studentFilter}
-          onStudentChange={setStudentFilter}
-          students={students}
-          onAddStudent={addStudent}
-          stats={stats}
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          selectedDate={selectedDate}
-          onSelectDate={setSelectedDate}
-          todos={allTodos}
-          search={search}
-          onSearchChange={setSearch}
-          isAddOpen={isAddOpen}
-          onToggleAdd={() => setIsAddOpen((prev) => !prev)}
-          isTimerOpen={isTimerOpen}
-          onToggleTimer={() => setIsTimerOpen((prev) => !prev)}
-        />
-      </div>
-
-      {/* 2. Header Luôn Ở Trên TOP Trên Desktop */}
-      <div className="desktop-top-header-section">
-        <Header
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          activeStudent={studentFilter}
-          selectedDate={selectedDate}
-          onSelectDate={setSelectedDate}
-          todos={allTodos}
-        />
-      </div>
-
-      {/* 3. KHỐI THÂN: Cố định theo chiều cao màn hình (Chứa Sidebar bên trái & Content bên phải) */}
-      <div className="app-body-container">
-        {/* Bên trái: Sidebar thành viên */}
-        <aside className="desktop-sidebar-section">
-          <StudentSidebar
+    <div className={`app-layout-wrapper ${isMobile ? 'is-mobile-view' : 'is-desktop-view'}`}>
+      {/* 1. Header tinh gọn 3 hàng chuẩn App trên Mobile & Tablet (<= 1024px) */}
+      {isMobile ? (
+        <div className="mobile-header-section">
+          <MobileHeader
             activeStudent={studentFilter}
             onStudentChange={setStudentFilter}
             students={students}
             onAddStudent={addStudent}
             stats={stats}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            selectedDate={selectedDate}
+            onSelectDate={setSelectedDate}
             todos={allTodos}
-            hideBrand={true}
+            search={search}
+            onSearchChange={setSearch}
+            isAddOpen={isAddOpen}
+            onToggleAdd={() => setIsAddOpen((prev) => !prev)}
+            isTimerOpen={isTimerOpen}
+            onToggleTimer={() => setIsTimerOpen((prev) => !prev)}
           />
-        </aside>
+        </div>
+      ) : (
+        /* 2. Header Luôn Ở Trên TOP Trên Desktop (> 1024px) */
+        <div className="desktop-top-header-section">
+          <Header
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            activeStudent={studentFilter}
+            selectedDate={selectedDate}
+            onSelectDate={setSelectedDate}
+            todos={allTodos}
+          />
+        </div>
+      )}
 
-        {/* Bên phải: Content (Toàn bộ cuộn chỉ nằm trong đây, không bao giờ vượt quá chiều cao) */}
+      {/* 3. KHỐI THÂN */}
+      <div className="app-body-container">
+        {/* Bên trái: Sidebar thành viên chỉ hiển thị trên Desktop */}
+        {!isMobile && (
+          <aside className="desktop-sidebar-section">
+            <StudentSidebar
+              activeStudent={studentFilter}
+              onStudentChange={setStudentFilter}
+              students={students}
+              onAddStudent={addStudent}
+              stats={stats}
+              todos={allTodos}
+              hideBrand={true}
+            />
+          </aside>
+        )}
+
+        {/* Bên phải: Content */}
         <div className="app-main-content">
-          {activeTab === 'reports' && (
+          {!isMobile && activeTab === 'reports' && (
             <div className="content-filter-sticky">
               <FilterBar
                 search={search}

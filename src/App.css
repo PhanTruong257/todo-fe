@@ -127,6 +127,52 @@
   display: none;
 }
 
+/* Kích hoạt layout Mobile khi có class is-mobile-view (do React useIsMobile kích hoạt) */
+.app-layout-wrapper.is-mobile-view .desktop-top-header-section {
+  display: none !important;
+}
+
+.app-layout-wrapper.is-mobile-view .mobile-header-section {
+  display: block;
+  width: 100%;
+  position: sticky;
+  top: 10px;
+  z-index: 500;
+  margin-bottom: 12px;
+}
+
+.app-layout-wrapper.is-mobile-view .desktop-sidebar-section {
+  display: none !important;
+}
+
+.app-layout-wrapper.is-mobile-view .content-filter-sticky {
+  display: none !important;
+}
+
+.app-layout-wrapper.is-mobile-view {
+  height: auto;
+  max-height: none;
+  overflow: visible;
+  flex-direction: column;
+  padding: 10px 10px 60px;
+  gap: 10px;
+}
+
+.app-layout-wrapper.is-mobile-view .app-body-container {
+  display: block;
+  height: auto;
+  max-height: none;
+  overflow: visible;
+}
+
+.app-layout-wrapper.is-mobile-view .app-main-content {
+  height: auto;
+  max-height: none;
+  overflow: visible;
+  padding-right: 0;
+}
+
+/* Fallback bằng CSS Media Query <= 1024px */
 @media (max-width: 1024px) {
   .desktop-top-header-section {
     display: none !important;
@@ -185,3 +231,4 @@
     font-size: 10px;
   }
 }
+

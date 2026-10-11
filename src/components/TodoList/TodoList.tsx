@@ -75,6 +75,7 @@ export const TodoList: React.FC<TodoListProps> = ({
           <TodoItem
             key={todo.id}
             todo={todo}
+            showStudentBadge={studentFilter === 'all'}
             onDelete={onDelete}
             onUpdate={onUpdate}
           />

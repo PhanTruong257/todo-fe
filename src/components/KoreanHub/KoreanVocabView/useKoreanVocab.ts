@@ -1,16 +1,17 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import {
   KOREAN_VOCAB_LIST,
   KOREAN_TOPICS,
   speakKorean,
 } from '../../../constants/koreanData';
-import type { KoreanVocabWord } from '../../../types/korean';
+import type { KoreanVocabWord, ReviewLog } from '../../../types/korean';
 
 const STORAGE_KEY = 'korean_vocab_cards';
 const ROMAN_KEY = 'korean_hide_romanization';
+const LOGS_STORAGE_KEY = 'korean_review_logs';
 const DAILY_GOAL_TARGET = 10;
 
-export type StudyMode = 'ko-to-vi' | 'vi-to-ko' | 'listen-to-ko';
+export type StudyMode = 'ko-to-vi' | 'vi-to-ko' | 'listen-to-ko' | 'type-in';
 
 export interface QuizOption {
   id: string;
@@ -19,7 +20,7 @@ export interface QuizOption {
 }
 
 /**
- * Thuật toán SuperMemo-2 (SM-2) chuẩn
+ * Thuật toán SuperMemo-2 (SM-2 / Anki Variant)
  */
 function calculateSM2(
   currentRep: number,
@@ -67,12 +68,30 @@ export function useKoreanVocab() {
         try {
           const parsed = JSON.parse(saved);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            // Đồng bộ thêm actualPronunciation từ seed nếu thiếu
-            return parsed.map((item: KoreanVocabWord) => {
-              const seedMatch = KOREAN_VOCAB_LIST.find((s) => s.id === item.id);
+            const existingMap = new Map<string, KoreanVocabWord>(
+              parsed.map((item: KoreanVocabWord) => [item.id, item])
+            );
+            return KOREAN_VOCAB_LIST.map((seed) => {
+              const existing = existingMap.get(seed.id);
+              if (existing) {
+                return {
+                  ...seed,
+                  repetition: existing.repetition ?? 0,
+                  intervalDays: existing.intervalDays ?? 0,
+                  easeFactor: existing.easeFactor ?? 2.5,
+                  nextReviewDate: existing.nextReviewDate,
+                  status: existing.status ?? 'new',
+                  leechCount: existing.leechCount ?? 0,
+                };
+              }
               return {
-                ...item,
-                actualPronunciation: item.actualPronunciation || seedMatch?.actualPronunciation,
+                ...seed,
+                repetition: 0,
+                intervalDays: 0,
+                easeFactor: 2.5,
+                status: 'new' as const,
+                nextReviewDate: new Date().toISOString().split('T')[0],
+                leechCount: 0,
               };
             });
           }
@@ -88,6 +107,7 @@ export function useKoreanVocab() {
       easeFactor: 2.5,
       status: 'new' as const,
       nextReviewDate: new Date().toISOString().split('T')[0],
+      leechCount: 0,
     }));
   });
 
@@ -95,10 +115,10 @@ export function useKoreanVocab() {
   const [selectedTopic, setSelectedTopic] = useState('all');
   const [search, setSearch] = useState('');
 
-  // Chế độ ôn tập: Hàn -> Việt, Việt -> Hàn, Nghe -> Hàn
+  // Chế độ ôn tập
   const [studyMode, setStudyMode] = useState<StudyMode>('ko-to-vi');
 
-  // Toggle ẩn phiên âm Latin (Romanization)
+  // Toggle ẩn phiên âm Latin
   const [hideRomanization, setHideRomanization] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem(ROMAN_KEY) === 'true';
@@ -116,7 +136,7 @@ export function useKoreanVocab() {
     });
   }, []);
 
-  // Mục tiêu học hàng ngày (Daily Goal - 10 thẻ/ngày)
+  // Mục tiêu học hàng ngày
   const todayStr = useMemo(() => new Date().toISOString().split('T')[0], []);
   const [dailyReviewedCount, setDailyReviewedCount] = useState<number>(() => {
     if (typeof window !== 'undefined') {
@@ -126,7 +146,8 @@ export function useKoreanVocab() {
     return 0;
   });
 
-  // Study State
+  // Hàng đợi học trong cùng phiên (In-session Queue with Learning Steps)
+  const [sessionQueue, setSessionQueue] = useState<KoreanVocabWord[]>([]);
   const [studyIndex, setStudyIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [studyCompleted, setStudyCompleted] = useState(false);
@@ -135,34 +156,51 @@ export function useKoreanVocab() {
   const [selectedQuizOption, setSelectedQuizOption] = useState<string | null>(null);
   const [quizStatus, setQuizStatus] = useState<'idle' | 'correct' | 'wrong'>('idle');
 
+  // Type-In Recall State
+  const [typeInAnswer, setTypeInAnswer] = useState<string>('');
+  const [typeInChecked, setTypeInChecked] = useState<boolean>(false);
+  const [isTypeInCorrect, setIsTypeInCorrect] = useState<boolean>(false);
+
+  // Thời gian bắt đầu xem thẻ để đo responseMs
+  const cardStartTimeRef = useRef<number>(Date.now());
+
   // Lưu cards vào localStorage khi thay đổi
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
   }, [cards]);
 
-  // Danh sách các từ cần ôn hôm nay theo chủ đề đã chọn
-  const dueQueue = useMemo(() => {
+  // Khởi tạo hàng đợi hôm nay khi đổi chủ đề hoặc bắt đầu
+  useEffect(() => {
     const due = cards.filter((c) => {
       const matchTopic = selectedTopic === 'all' || c.topic === selectedTopic;
       const isDue = !c.nextReviewDate || c.nextReviewDate <= todayStr;
       return matchTopic && isDue;
     });
-    return due.slice(0, 15); // Mỗi lượt học tối đa 15 từ
-  }, [cards, selectedTopic, todayStr]);
+    const batch = due.slice(0, 15);
+    setSessionQueue(batch);
+    setStudyIndex(0);
+    setIsFlipped(false);
+    setSelectedQuizOption(null);
+    setQuizStatus('idle');
+    setStudyCompleted(batch.length === 0);
+  }, [selectedTopic, todayStr, cards.length]);
 
   const currentCard = useMemo(() => {
-    if (dueQueue.length === 0) return null;
-    return dueQueue[studyIndex] || null;
-  }, [dueQueue, studyIndex]);
+    if (sessionQueue.length === 0) return null;
+    return sessionQueue[studyIndex] || null;
+  }, [sessionQueue, studyIndex]);
 
-  // Sinh 4 đáp án trắc nghiệm khách quan (1 đúng + 3 gây nhiễu) cho thẻ hiện tại
+  // Đặt lại thời gian xem thẻ
+  useEffect(() => {
+    cardStartTimeRef.current = Date.now();
+  }, [currentCard]);
+
+  // Sinh 4 đáp án trắc nghiệm khách quan
   const quizOptions = useMemo<QuizOption[]>(() => {
     if (!currentCard) return [];
 
     const otherCards = cards.filter((c) => c.id !== currentCard.id);
-    // Shuffle ngẫu nhiên lấy 3 distractors
     const shuffledOthers = [...otherCards].sort(() => Math.random() - 0.5).slice(0, 3);
-
     const isKoPrompt = studyMode === 'ko-to-vi';
 
     const correctOpt: QuizOption = {
@@ -180,14 +218,17 @@ export function useKoreanVocab() {
     return [correctOpt, ...wrongOpts].sort(() => Math.random() - 0.5);
   }, [currentCard, cards, studyMode]);
 
-  // Khi chuyển thẻ hoặc chuyển chế độ -> reset quiz
+  // Reset quiz/flip khi đổi studyIndex hoặc mode
   useEffect(() => {
     setSelectedQuizOption(null);
     setQuizStatus('idle');
     setIsFlipped(false);
+    setTypeInAnswer('');
+    setTypeInChecked(false);
+    setIsTypeInCorrect(false);
   }, [studyIndex, studyMode, selectedTopic]);
 
-  // Khi vào thẻ ở chế độ nghe, tự động phát âm thanh sau 300ms
+  // Tự động phát âm ở chế độ nghe
   useEffect(() => {
     if (studyMode === 'listen-to-ko' && currentCard && !isFlipped && quizStatus === 'idle') {
       const timer = setTimeout(() => {
@@ -201,30 +242,102 @@ export function useKoreanVocab() {
     setIsFlipped((prev) => !prev);
   }, []);
 
-  // Xử lý chọn đáp án trắc nghiệm khách quan
+  // Hàm ghi log lượt ôn
+  const logReview = useCallback(
+    (cardId: string, correct: boolean, rating: 'again' | 'hard' | 'good' | 'easy') => {
+      if (typeof window === 'undefined') return;
+      try {
+        const responseMs = Date.now() - cardStartTimeRef.current;
+        const newLog: ReviewLog = {
+          id: `log-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+          cardId,
+          timestamp: new Date().toISOString(),
+          mode: studyMode,
+          correct,
+          rating,
+          responseMs,
+        };
+        const raw = localStorage.getItem(LOGS_STORAGE_KEY);
+        const existingLogs: ReviewLog[] = raw ? JSON.parse(raw) : [];
+        existingLogs.push(newLog);
+        // Giới hạn lưu 500 logs gần nhất trong localStorage
+        if (existingLogs.length > 500) existingLogs.shift();
+        localStorage.setItem(LOGS_STORAGE_KEY, JSON.stringify(existingLogs));
+      } catch (e) {
+        console.warn('Không thể lưu review log:', e);
+      }
+    },
+    [studyMode]
+  );
+
+  // Xử lý chọn đáp án trắc nghiệm
   const handleSelectQuizOption = useCallback(
     (opt: QuizOption) => {
-      if (quizStatus !== 'idle') return; // đã chọn rồi thì không chọn lại
+      if (quizStatus !== 'idle' || !currentCard) return;
       setSelectedQuizOption(opt.id);
 
       if (opt.isCorrect) {
         setQuizStatus('correct');
-        // Tự động lật thẻ sau 400ms để hiển thị chi tiết
-        setTimeout(() => {
-          setIsFlipped(true);
-        }, 400);
+        logReview(currentCard.id, true, 'good');
+        setTimeout(() => setIsFlipped(true), 400);
       } else {
         setQuizStatus('wrong');
-        // Lật thẻ sau 600ms để học viên xem ngay đáp án đúng và phân tích
-        setTimeout(() => {
-          setIsFlipped(true);
-        }, 600);
+        logReview(currentCard.id, false, 'again');
+        // Tăng leechCount và re-queue vào hàng đợi trong cùng phiên sau 3 thẻ
+        setCards((prev) =>
+          prev.map((c) =>
+            c.id === currentCard.id ? { ...c, leechCount: (c.leechCount || 0) + 1 } : c
+          )
+        );
+        setSessionQueue((prev) => {
+          const updated = [...prev];
+          const insertIdx = Math.min(studyIndex + 4, updated.length);
+          updated.splice(insertIdx, 0, {
+            ...currentCard,
+            leechCount: (currentCard.leechCount || 0) + 1,
+          });
+          return updated;
+        });
+        setTimeout(() => setIsFlipped(true), 600);
       }
     },
-    [quizStatus]
+    [quizStatus, currentCard, logReview, studyIndex]
   );
 
-  // Bỏ qua trắc nghiệm để tự lật thẻ trực tiếp
+  // Xử lý Type-In Recall (Gõ chữ Hàn tự chấm)
+  const handleCheckTypeIn = useCallback(() => {
+    if (!currentCard || typeInChecked) return;
+    const cleanTyped = typeInAnswer.trim();
+    const cleanTarget = currentCard.hangeul.trim();
+    const matched = cleanTyped === cleanTarget;
+    setIsTypeInCorrect(matched);
+    setTypeInChecked(true);
+
+    if (matched) {
+      logReview(currentCard.id, true, 'good');
+      speakKorean(currentCard.hangeul);
+      setTimeout(() => setIsFlipped(true), 500);
+    } else {
+      logReview(currentCard.id, false, 'again');
+      // Re-queue card
+      setCards((prev) =>
+        prev.map((c) =>
+          c.id === currentCard.id ? { ...c, leechCount: (c.leechCount || 0) + 1 } : c
+        )
+      );
+      setSessionQueue((prev) => {
+        const updated = [...prev];
+        const insertIdx = Math.min(studyIndex + 4, updated.length);
+        updated.splice(insertIdx, 0, {
+          ...currentCard,
+          leechCount: (currentCard.leechCount || 0) + 1,
+        });
+        return updated;
+      });
+      setTimeout(() => setIsFlipped(true), 700);
+    }
+  }, [currentCard, typeInAnswer, typeInChecked, logReview, studyIndex]);
+
   const skipQuizAndFlip = useCallback(() => {
     setIsFlipped(true);
   }, []);
@@ -237,58 +350,89 @@ export function useKoreanVocab() {
       setIsFlipped(false);
       setSelectedQuizOption(null);
       setQuizStatus('idle');
+      setTypeInAnswer('');
+      setTypeInChecked(false);
 
-      const currentRep = currentCard.repetition || 0;
-      const currentInterval = currentCard.intervalDays || 0;
-      const currentEF = currentCard.easeFactor || 2.5;
+      const isSuccess = rating !== 'again';
+      logReview(currentCard.id, isSuccess, rating);
 
-      const sm2Result = calculateSM2(currentRep, currentInterval, currentEF, rating);
+      // Nếu chọn Again -> Đưa thẻ quay lại sau 3 thẻ nữa trong phiên
+      if (rating === 'again') {
+        setCards((prev) =>
+          prev.map((c) =>
+            c.id === currentCard.id ? { ...c, leechCount: (c.leechCount || 0) + 1 } : c
+          )
+        );
+        setSessionQueue((prev) => {
+          const updated = [...prev];
+          const insertIdx = Math.min(studyIndex + 4, updated.length);
+          updated.splice(insertIdx, 0, {
+            ...currentCard,
+            leechCount: (currentCard.leechCount || 0) + 1,
+          });
+          return updated;
+        });
+      } else {
+        // Cập nhật khoảng cách SM-2 lịch trình ngày tiếp theo
+        const currentRep = currentCard.repetition || 0;
+        const currentInterval = currentCard.intervalDays || 0;
+        const currentEF = currentCard.easeFactor || 2.5;
 
-      const nextD = new Date();
-      nextD.setDate(nextD.getDate() + sm2Result.intervalDays);
-      const nextDateStr = nextD.toISOString().split('T')[0];
+        const sm2Result = calculateSM2(currentRep, currentInterval, currentEF, rating);
 
-      setCards((prev) =>
-        prev.map((c) => {
-          if (c.id === currentCard.id) {
-            return {
-              ...c,
-              repetition: sm2Result.repetition,
-              intervalDays: sm2Result.intervalDays,
-              easeFactor: sm2Result.easeFactor,
-              nextReviewDate: nextDateStr,
-              status: sm2Result.repetition >= 3 ? 'mastered' : 'learning',
-            };
+        const nextD = new Date();
+        nextD.setDate(nextD.getDate() + sm2Result.intervalDays);
+        const nextDateStr = nextD.toISOString().split('T')[0];
+
+        setCards((prev) =>
+          prev.map((c) => {
+            if (c.id === currentCard.id) {
+              return {
+                ...c,
+                repetition: sm2Result.repetition,
+                intervalDays: sm2Result.intervalDays,
+                easeFactor: sm2Result.easeFactor,
+                nextReviewDate: nextDateStr,
+                status: sm2Result.repetition >= 3 ? 'mastered' : 'learning',
+              };
+            }
+            return c;
+          })
+        );
+
+        // Tăng daily count khi hoàn thành 1 thẻ tốt
+        setDailyReviewedCount((prev) => {
+          const nextCount = prev + 1;
+          if (typeof window !== 'undefined') {
+            localStorage.setItem(`korean_daily_reviews_${todayStr}`, String(nextCount));
           }
-          return c;
-        })
-      );
+          return nextCount;
+        });
+      }
 
-      // Tăng số lượng thẻ đã học hôm nay
-      setDailyReviewedCount((prev) => {
-        const nextCount = prev + 1;
-        if (typeof window !== 'undefined') {
-          localStorage.setItem(`korean_daily_reviews_${todayStr}`, String(nextCount));
-        }
-        return nextCount;
-      });
-
-      if (studyIndex + 1 < dueQueue.length) {
+      if (studyIndex + 1 < sessionQueue.length) {
         setStudyIndex((prev) => prev + 1);
       } else {
         setStudyCompleted(true);
       }
     },
-    [currentCard, dueQueue.length, studyIndex, todayStr]
+    [currentCard, sessionQueue.length, studyIndex, todayStr, logReview]
   );
 
   const restartStudy = useCallback(() => {
+    const due = cards.filter((c) => {
+      const matchTopic = selectedTopic === 'all' || c.topic === selectedTopic;
+      const isDue = !c.nextReviewDate || c.nextReviewDate <= todayStr;
+      return matchTopic && isDue;
+    });
+    const batch = due.slice(0, 15);
+    setSessionQueue(batch);
     setStudyIndex(0);
     setIsFlipped(false);
     setSelectedQuizOption(null);
     setQuizStatus('idle');
-    setStudyCompleted(false);
-  }, []);
+    setStudyCompleted(batch.length === 0);
+  }, [cards, selectedTopic, todayStr]);
 
   // Lọc thư viện từ vựng
   const filteredLibrary = useMemo(() => {
@@ -299,24 +443,21 @@ export function useKoreanVocab() {
         c.hangeul.toLowerCase().includes(search.toLowerCase()) ||
         c.romanization.toLowerCase().includes(search.toLowerCase()) ||
         c.meaningVi.toLowerCase().includes(search.toLowerCase()) ||
-        (c.hanjaVi && c.hanjaVi.toLowerCase().includes(search.toLowerCase())) ||
-        (c.actualPronunciation && c.actualPronunciation.toLowerCase().includes(search.toLowerCase()));
+        (c.hanjaVi && c.hanjaVi.toLowerCase().includes(search.toLowerCase()));
       return matchTopic && matchSearch;
     });
   }, [cards, selectedTopic, search]);
 
   const stats = useMemo(() => {
+    const total = cards.length;
     const mastered = cards.filter((c) => c.status === 'mastered').length;
     const learning = cards.filter((c) => c.status === 'learning').length;
-    return {
-      total: cards.length,
-      mastered,
-      learning,
-    };
+    const newCount = cards.filter((c) => c.status === 'new' || !c.status).length;
+    const leeches = cards.filter((c) => (c.leechCount || 0) >= 4).length;
+    return { total, mastered, learning, newCount, leeches };
   }, [cards]);
 
   return {
-    cards,
     stats,
     activeSubTab,
     setActiveSubTab,
@@ -324,7 +465,7 @@ export function useKoreanVocab() {
     setSelectedTopic,
     search,
     setSearch,
-    // Study Modes & Settings
+    // Modes
     studyMode,
     setStudyMode,
     hideRomanization,
@@ -332,7 +473,7 @@ export function useKoreanVocab() {
     dailyReviewedCount,
     dailyGoalTarget: DAILY_GOAL_TARGET,
     // Study
-    dueQueue,
+    dueQueue: sessionQueue,
     currentCard,
     studyIndex,
     isFlipped,
@@ -346,6 +487,12 @@ export function useKoreanVocab() {
     quizStatus,
     handleSelectQuizOption,
     skipQuizAndFlip,
+    // Type-In Recall
+    typeInAnswer,
+    setTypeInAnswer,
+    typeInChecked,
+    isTypeInCorrect,
+    handleCheckTypeIn,
     // Library
     filteredLibrary,
     topics: KOREAN_TOPICS,

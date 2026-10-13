@@ -24,6 +24,48 @@
   gap: 10px;
 }
 
+.kr-grammar-action-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 32px;
+}
+
+.kr-grammar-action-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.kr-grammar-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.kr-grammar-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 13.5px;
+}
+
+.kr-grammar-search-input::placeholder {
+  color: var(--text-muted);
+}
+
 .kr-grammar-list {
   display: flex;
   flex-direction: column;
@@ -56,12 +98,13 @@
 }
 
 .kr-grammar-title {
-  font-size: 16px;
+  font-size: 15.5px;
   font-weight: 800;
   color: #fff;
   display: flex;
   align-items: center;
   gap: 8px;
+  line-height: 1.4;
 }
 
 .kr-formula-badge {
@@ -71,7 +114,7 @@
   border-radius: var(--radius-full);
   font-size: 11.5px;
   font-weight: 800;
-  padding: 3px 12px;
+  padding: 4px 12px;
   display: inline-block;
   width: fit-content;
 }
@@ -79,7 +122,7 @@
 .kr-explanation-text {
   font-size: 13.5px;
   color: var(--text-main);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .kr-tips-box {
@@ -90,6 +133,7 @@
   font-size: 12.5px;
   color: #fcd34d;
   font-weight: 600;
+  line-height: 1.5;
 }
 
 .kr-examples-table {
@@ -125,6 +169,137 @@
 .kr-ex-breakdown {
   font-size: 11px;
   color: #a5b4fc;
-  margin-top: 2px;
+  margin-top: 3px;
   font-style: italic;
+}
+
+.kr-ex-speak-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  color: #a5b4fc;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.kr-ex-speak-btn:hover {
+  background: rgba(244, 63, 94, 0.2);
+  color: #fff;
+}
+
+/* Bài tập tương tác */
+.kr-grammar-exercises-box {
+  background: rgba(244, 63, 94, 0.06);
+  border: 1px solid rgba(244, 63, 94, 0.2);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.kr-exercises-header {
+  font-size: 13px;
+  font-weight: 800;
+  color: #fb7185;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.kr-single-exercise-card {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.kr-exercise-q {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.kr-exercise-options-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.kr-ex-opt-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s;
+  min-height: 40px;
+}
+
+.kr-ex-opt-btn:hover:not(:disabled) {
+  background: rgba(244, 63, 94, 0.2);
+  border-color: #f43f5e;
+  color: #fff;
+}
+
+.kr-ex-opt-btn.correct {
+  background: rgba(16, 185, 129, 0.25);
+  border-color: #10b981;
+  color: #6ee7b7;
+}
+
+.kr-ex-opt-btn.wrong {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #ef4444;
+  color: #fca5a5;
+}
+
+.kr-ex-opt-btn.dimmed {
+  opacity: 0.4;
+}
+
+.kr-exercise-feedback {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.kr-exercise-feedback.is-correct {
+  background: rgba(16, 185, 129, 0.12);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.kr-exercise-feedback.is-wrong {
+  background: rgba(239, 68, 68, 0.12);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+@media (max-width: 640px) {
+  .kr-grammar-card {
+    padding: 12px;
+  }
+  .kr-grammar-title {
+    font-size: 14.5px;
+  }
+  .kr-ex-opt-btn {
+    flex: 1;
+    min-width: 110px;
+    padding: 8px 10px;
+  }
 }

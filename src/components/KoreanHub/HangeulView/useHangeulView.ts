@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import {
   HANGEUL_LETTERS,
   INITIAL_CONSONANTS,
@@ -10,12 +10,14 @@ import {
   ESSENTIAL_PRONUNCIATION_RULES,
   KEYBOARD_2SET_LAYOUT,
   KEYBOARD_PRACTICE_WORDS,
+  MINIMAL_PAIRS,
 } from '../../../constants/koreanData';
-import type { HangeulLetter, KoreanLetterType, PatchimRule } from '../../../types/korean';
+import { HangulImeAutomata, PHYSICAL_KEY_MAP } from '../../../utils/hangulIme';
+import type { HangeulLetter, KoreanLetterType, PatchimRule, MinimalPair } from '../../../types/korean';
 
 const ROMAN_KEY = 'korean_hide_romanization';
 
-export type HangeulSubTab = 'chart' | 'patchim' | 'builder' | 'keyboard' | 'quiz';
+export type HangeulSubTab = 'chart' | 'patchim' | 'minimal_pairs' | 'builder' | 'keyboard' | 'quiz';
 
 export function useHangeulView() {
   const [subTab, setSubTab] = useState<HangeulSubTab>('chart');
@@ -43,16 +45,25 @@ export function useHangeulView() {
   // Patchim Tab State
   const [selectedPatchim, setSelectedPatchim] = useState<PatchimRule | null>(PATCHIM_RULES[0]);
 
+  // Minimal Pairs State
+  const [pairCategory, setPairCategory] = useState<'all' | 'consonant_trio' | 'vowel_confusion'>('all');
+  const filteredMinimalPairs = useMemo<MinimalPair[]>(() => {
+    if (pairCategory === 'all') return MINIMAL_PAIRS;
+    return MINIMAL_PAIRS.filter((p) => p.category === pairCategory);
+  }, [pairCategory]);
+
   // Syllable Builder State
   const [initialConsonant, setInitialConsonant] = useState('ㄱ');
   const [medialVowel, setMedialVowel] = useState('ㅏ');
   const [finalConsonant, setFinalConsonant] = useState('');
 
-  // Keyboard Trainer State
-  const [typedChars, setTypedChars] = useState<string[]>([]);
+  // Keyboard Trainer State (Hangul Automata IME)
+  const imeRef = useRef<HangulImeAutomata>(new HangulImeAutomata());
+  const [typedText, setTypedText] = useState<string>('');
   const [activeKey, setActiveKey] = useState<string | null>(null);
   const [isShiftActive, setIsShiftActive] = useState<boolean>(false);
   const [practiceWordIndex, setPracticeWordIndex] = useState<number>(0);
+  const [isWordMatched, setIsWordMatched] = useState<boolean>(false);
 
   // Quiz State
   const [quizIndex, setQuizIndex] = useState(0);
@@ -76,22 +87,43 @@ export function useHangeulView() {
   const currentPracticeWord = KEYBOARD_PRACTICE_WORDS[practiceWordIndex] || KEYBOARD_PRACTICE_WORDS[0];
 
   const handleInputKoChar = useCallback((char: string, keyName?: string) => {
-    setTypedChars((prev) => [...prev, char]);
+    const updated = imeRef.current.input(char);
+    setTypedText(updated);
     if (keyName) {
       setActiveKey(keyName.toLowerCase());
-      setTimeout(() => setActiveKey(null), 200);
+      setTimeout(() => setActiveKey(null), 180);
     }
   }, []);
 
   const handleBackspace = useCallback(() => {
-    setTypedChars((prev) => prev.slice(0, -1));
+    const updated = imeRef.current.backspace();
+    setTypedText(updated);
   }, []);
 
   const handleClearTyped = useCallback(() => {
-    setTypedChars([]);
+    imeRef.current.clear();
+    setTypedText('');
+    setIsWordMatched(false);
   }, []);
 
-  // Bắt phím vật lý khi đang ở tab Keyboard
+  // Kiểm tra hoàn thành từ đang gõ
+  useEffect(() => {
+    if (typedText && currentPracticeWord && typedText.trim() === currentPracticeWord.word.trim()) {
+      setIsWordMatched(true);
+      speakKorean(currentPracticeWord.word);
+      const timer = setTimeout(() => {
+        setIsWordMatched(false);
+        imeRef.current.clear();
+        setTypedText('');
+        setPracticeWordIndex((prev) => (prev + 1) % KEYBOARD_PRACTICE_WORDS.length);
+      }, 900);
+      return () => clearTimeout(timer);
+    } else {
+      setIsWordMatched(false);
+    }
+  }, [typedText, currentPracticeWord]);
+
+  // Bắt phím vật lý khi đang ở tab Keyboard dùng event.code (tránh lỗi Telex / IME ngoài)
   useEffect(() => {
     if (subTab !== 'keyboard') return;
 
@@ -100,8 +132,15 @@ export function useHangeulView() {
         return;
       }
 
-      if (e.key === 'Backspace') {
+      if (e.code === 'Backspace') {
+        e.preventDefault();
         handleBackspace();
+        return;
+      }
+
+      if (e.code === 'Space') {
+        e.preventDefault();
+        handleInputKoChar(' ', 'space');
         return;
       }
 
@@ -110,16 +149,12 @@ export function useHangeulView() {
         return;
       }
 
-      const keyLower = e.key.toLowerCase();
-      // Tìm phím trong KEYBOARD_2SET_LAYOUT
-      for (const row of KEYBOARD_2SET_LAYOUT) {
-        const found = row.find((k) => k.key === keyLower);
-        if (found) {
-          e.preventDefault();
-          const char = (e.shiftKey && found.shiftKo) ? found.shiftKo : found.normalKo;
-          handleInputKoChar(char, found.key);
-          break;
-        }
+      const map = PHYSICAL_KEY_MAP[e.code];
+      if (map) {
+        e.preventDefault();
+        const char = (e.shiftKey && map.shift) ? map.shift : map.normal;
+        const keyChar = e.code.replace('Key', '').toLowerCase();
+        handleInputKoChar(char, keyChar);
       }
     };
 
@@ -202,6 +237,10 @@ export function useHangeulView() {
     selectedPatchim,
     setSelectedPatchim,
     pronunciationRules: ESSENTIAL_PRONUNCIATION_RULES,
+    // Minimal Pairs
+    pairCategory,
+    setPairCategory,
+    filteredMinimalPairs,
     // Syllable Builder
     initialConsonant,
     setInitialConsonant,
@@ -214,16 +253,17 @@ export function useHangeulView() {
     MEDIAL_VOWELS,
     FINAL_CONSONANTS,
     speakKorean,
-    // Keyboard Trainer
+    // Keyboard Trainer (Automata IME)
     keyboardLayout: KEYBOARD_2SET_LAYOUT,
     practiceWords: KEYBOARD_PRACTICE_WORDS,
     currentPracticeWord,
     practiceWordIndex,
     setPracticeWordIndex,
-    typedChars,
+    typedText,
     activeKey,
     isShiftActive,
     setIsShiftActive,
+    isWordMatched,
     handleInputKoChar,
     handleBackspace,
     handleClearTyped,

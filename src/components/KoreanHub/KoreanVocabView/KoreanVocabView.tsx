@@ -13,6 +13,8 @@ import {
   XCircle,
   HelpCircle,
   Headphones,
+  Keyboard as KeyboardIcon,
+  AlertTriangle,
 } from 'lucide-react';
 import { useKoreanVocab } from './useKoreanVocab';
 import './KoreanVocabView.css';
@@ -26,7 +28,7 @@ export const KoreanVocabView: React.FC = () => {
     setSelectedTopic,
     search,
     setSearch,
-    // Study Modes & Settings
+    // Modes
     studyMode,
     setStudyMode,
     hideRomanization,
@@ -48,6 +50,12 @@ export const KoreanVocabView: React.FC = () => {
     quizStatus,
     handleSelectQuizOption,
     skipQuizAndFlip,
+    // Type-In Recall
+    typeInAnswer,
+    setTypeInAnswer,
+    typeInChecked,
+    isTypeInCorrect,
+    handleCheckTypeIn,
     // Library
     filteredLibrary,
     topics,
@@ -80,7 +88,7 @@ export const KoreanVocabView: React.FC = () => {
           </button>
         </div>
 
-        {/* Cụm công cụ phụ: Toggle Romanization + Mục tiêu ngày + Huy hiệu đã thuộc */}
+        {/* Cụm công cụ phụ */}
         <div className="kr-toolbar-right">
           <button
             type="button"
@@ -103,15 +111,21 @@ export const KoreanVocabView: React.FC = () => {
             <Trophy size={13} color="#10b981" />
             <span>Đã thuộc: <strong>{stats.mastered}</strong></span>
           </div>
+
+          {stats.leeches > 0 && (
+            <div className="kr-stats-pill" style={{ borderColor: 'rgba(239, 68, 68, 0.4)', background: 'rgba(239, 68, 68, 0.1)' }}>
+              <AlertTriangle size={13} color="#ef4444" />
+              <span style={{ color: '#fca5a5' }}>Leech: <strong>{stats.leeches}</strong></span>
+            </div>
+          )}
         </div>
       </div>
 
       {/* 2. CHẾ ĐỘ 1: ÔN TẬP SRS (STUDY) */}
       {activeSubTab === 'study' && (
         <div className="kr-study-stage">
-          {/* Hàng điều khiển: Chế độ ôn (Hàn->Việt, Việt->Hàn, Nghe->Hàn) & Chọn chủ đề */}
+          {/* Hàng điều khiển: 4 Chế độ ôn & Chọn chủ đề */}
           <div className="kr-study-controls-bar">
-            {/* 3 Chế độ ôn tập Active Recall */}
             <div className="kr-sub-modes-pill">
               <button
                 type="button"
@@ -137,9 +151,16 @@ export const KoreanVocabView: React.FC = () => {
               >
                 <Headphones size={12} /> Nghe ➔ Chọn
               </button>
+              <button
+                type="button"
+                className={`kr-sub-mode-btn ${studyMode === 'type-in' ? 'active' : ''}`}
+                onClick={() => setStudyMode('type-in')}
+                title="Gõ Phím ➔ Hàn: Gõ đúng chữ tiếng Hàn bằng bộ gõ IME"
+              >
+                <KeyboardIcon size={12} /> Gõ Từ Vựng ⌨️
+              </button>
             </div>
 
-            {/* Chọn chủ đề ôn */}
             <div className="kr-topic-selector-wrap">
               <span className="kr-selector-label">Chủ đề:</span>
               <select
@@ -162,11 +183,12 @@ export const KoreanVocabView: React.FC = () => {
               <div className="kr-completed-icon">🎉</div>
               <h3 className="kr-completed-title">Hoàn thành lượt ôn tiếng Hàn!</h3>
               <p className="kr-completed-desc">
-                Bạn đã hoàn thành các thẻ từ vựng cần ôn theo thuật toán <strong>SuperMemo-2 (SM-2)</strong>. Các khoảng cách ôn tập tiếp theo đã được lập lịch tự động dựa trên độ ghi nhớ của bạn!
+                Bạn đã hoàn thành các thẻ từ vựng trong phiên hôm nay (bao gồm cả các thẻ sai được lặp lại trong phiên).
+                Lịch trình ôn tiếp theo đã được SuperMemo-2 tối ưu hóa!
               </p>
               <div className="kr-completed-stats">
                 <span>🔥 Hôm nay đã ôn: <strong>{dailyReviewedCount}</strong> thẻ</span>
-                <span>🏆 Từ vựng đã thuần thục: <strong>{stats.mastered}</strong> từ</span>
+                <span>🏆 Từ vựng đã thuần thục: <strong>{stats.mastered}</strong>/{stats.total}</span>
               </div>
               <button
                 type="button"
@@ -182,24 +204,44 @@ export const KoreanVocabView: React.FC = () => {
               {/* Tiến độ bài ôn & SM-2 Info */}
               <div className="kr-study-progress-row">
                 <span className="kr-progress-text">
-                  Từ <strong>{studyIndex + 1}</strong> / {dueQueue.length}
+                  Thẻ <strong>{studyIndex + 1}</strong> / {dueQueue.length}
                 </span>
                 <span className="kr-card-meta-pill">
                   {currentCard.level} • {currentCard.topic} • EF: {currentCard.easeFactor || 2.5}
                 </span>
               </div>
 
+              {/* Cảnh báo Leech nếu thẻ này đã sai >= 4 lần */}
+              {(currentCard.leechCount || 0) >= 4 && (
+                <div style={{
+                  background: 'rgba(239, 68, 68, 0.15)',
+                  border: '1px solid rgba(239, 68, 68, 0.35)',
+                  color: '#fca5a5',
+                  padding: '8px 12px',
+                  borderRadius: 10,
+                  fontSize: 12,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                }}>
+                  <AlertTriangle size={15} color="#ef4444" />
+                  <span>
+                    <strong>Thẻ hay quên (Leech - Sai {currentCard.leechCount} lần):</strong> Hãy chú ý thật kỹ âm Hán-Hàn và câu ví dụ để ghi nhớ sâu sắc!
+                  </span>
+                </div>
+              )}
+
               {/* Thẻ 3D Flashcard */}
               <div
                 className={`kr-card-stage ${isFlipped ? 'flipped' : ''}`}
-                onClick={quizStatus !== 'idle' ? toggleFlip : undefined}
+                onClick={quizStatus !== 'idle' || typeInChecked ? toggleFlip : undefined}
               >
                 <div className={`kr-card-inner ${isFlipped ? 'is-flipped' : ''}`}>
                   {/* Mặt Trước (Front) */}
                   <div className="kr-card-face kr-card-front">
                     <div className="kr-card-top-tags">
                       <span className="kr-topic-tag">{currentCard.topic}</span>
-                      <span className="kr-level-tag">{currentCard.level}</span>
+                      <span className="kr-level-tag">{currentCard.partOfSpeech}</span>
                     </div>
 
                     <div className="kr-front-center">
@@ -256,50 +298,117 @@ export const KoreanVocabView: React.FC = () => {
                           </div>
                         </>
                       )}
-                    </div>
 
-                    {/* Vùng Trắc Nghiệm Chủ Động (Active Recall 4 Options) */}
-                    <div className="kr-quiz-section" onClick={(e) => e.stopPropagation()}>
-                      <div className="kr-quiz-grid">
-                        {quizOptions.map((opt) => {
-                          let btnClass = 'kr-quiz-opt-btn';
-                          if (selectedQuizOption) {
-                            if (opt.isCorrect) btnClass += ' opt-correct';
-                            else if (selectedQuizOption === opt.id) btnClass += ' opt-wrong';
-                            else btnClass += ' opt-dimmed';
-                          }
-                          return (
-                            <button
-                              key={opt.id}
-                              type="button"
-                              className={btnClass}
-                              onClick={() => handleSelectQuizOption(opt)}
-                              disabled={quizStatus !== 'idle'}
-                            >
-                              <span className="kr-opt-label">{opt.label}</span>
-                              {selectedQuizOption && opt.isCorrect && (
-                                <CheckCircle2 size={16} color="#10b981" />
-                              )}
-                              {selectedQuizOption === opt.id && !opt.isCorrect && (
-                                <XCircle size={16} color="#f43f5e" />
-                              )}
-                            </button>
-                          );
-                        })}
-                      </div>
-
-                      {/* Nút bỏ qua trắc nghiệm để tự lật thẻ */}
-                      {quizStatus === 'idle' && (
-                        <button
-                          type="button"
-                          className="kr-skip-quiz-btn"
-                          onClick={skipQuizAndFlip}
-                        >
-                          <HelpCircle size={13} />
-                          Tôi muốn tự lật thẻ không cần trắc nghiệm
-                        </button>
+                      {/* Chế độ 4: Type-In Gõ từ vựng */}
+                      {studyMode === 'type-in' && (
+                        <>
+                          <div className="kr-meaning-prompt-title">{currentCard.meaningVi}</div>
+                          {currentCard.hanjaVi && (
+                            <div className="kr-hanja-hint">💡 Gợi ý Hán-Hàn: {currentCard.hanjaVi}</div>
+                          )}
+                          <div className="kr-recall-sub">Nhập đúng từ Hangeul bằng bàn phím tiếng Hàn 👇</div>
+                        </>
                       )}
                     </div>
+
+                    {/* Vùng Trắc Nghiệm hoặc Gõ Phím */}
+                    {studyMode !== 'type-in' ? (
+                      <div className="kr-quiz-section" onClick={(e) => e.stopPropagation()}>
+                        <div className="kr-quiz-grid">
+                          {quizOptions.map((opt) => {
+                            let btnClass = 'kr-quiz-opt-btn';
+                            if (selectedQuizOption) {
+                              if (opt.isCorrect) btnClass += ' opt-correct';
+                              else if (selectedQuizOption === opt.id) btnClass += ' opt-wrong';
+                              else btnClass += ' opt-dimmed';
+                            }
+                            return (
+                              <button
+                                key={opt.id}
+                                type="button"
+                                className={btnClass}
+                                onClick={() => handleSelectQuizOption(opt)}
+                                disabled={quizStatus !== 'idle'}
+                              >
+                                <span className="kr-opt-label">{opt.label}</span>
+                                {selectedQuizOption && opt.isCorrect && (
+                                  <CheckCircle2 size={16} color="#10b981" />
+                                )}
+                                {selectedQuizOption === opt.id && !opt.isCorrect && (
+                                  <XCircle size={16} color="#f43f5e" />
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+
+                        {quizStatus === 'idle' && (
+                          <button
+                            type="button"
+                            className="kr-skip-quiz-btn"
+                            onClick={skipQuizAndFlip}
+                          >
+                            <HelpCircle size={13} />
+                            Tôi muốn tự lật thẻ không cần trắc nghiệm
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      /* Khung Gõ Từ Vựng Type-in Recall */
+                      <div className="kr-quiz-section" onClick={(e) => e.stopPropagation()}>
+                        <div style={{ display: 'flex', gap: 8, width: '100%', maxWidth: 360, margin: '0 auto' }}>
+                          <input
+                            type="text"
+                            placeholder="Gõ tiếng Hàn..."
+                            value={typeInAnswer}
+                            onChange={(e) => setTypeInAnswer(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') handleCheckTypeIn();
+                            }}
+                            disabled={typeInChecked}
+                            style={{
+                              flex: 1,
+                              padding: '10px 14px',
+                              borderRadius: 10,
+                              background: 'rgba(0, 0, 0, 0.4)',
+                              border: '1px solid var(--border-color)',
+                              color: '#fff',
+                              fontSize: 16,
+                              textAlign: 'center',
+                              outline: 'none',
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={handleCheckTypeIn}
+                            disabled={typeInChecked || !typeInAnswer.trim()}
+                            style={{
+                              background: '#f43f5e',
+                              color: '#fff',
+                              border: 'none',
+                              borderRadius: 10,
+                              padding: '0 16px',
+                              fontWeight: 700,
+                              fontSize: 13,
+                              cursor: 'pointer',
+                            }}
+                          >
+                            Kiểm tra
+                          </button>
+                        </div>
+                        {typeInChecked && (
+                          <div style={{
+                            marginTop: 10,
+                            fontSize: 13,
+                            fontWeight: 700,
+                            color: isTypeInCorrect ? '#10b981' : '#f43f5e',
+                            textAlign: 'center',
+                          }}>
+                            {isTypeInCorrect ? '✓ Hoàn toàn chính xác!' : `✕ Sai rồi! Đáp án đúng: ${currentCard.hangeul}`}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   {/* Mặt Sau (Back) */}
@@ -345,9 +454,54 @@ export const KoreanVocabView: React.FC = () => {
                     <div className="kr-card-back-body">
                       <div className="kr-meaning-vi">{currentCard.meaningVi}</div>
 
-                      {currentCard.hanjaVi && (
+                      {/* Phân loại gốc Hán / Bạn giả / Thuần Hàn */}
+                      {currentCard.hanjaType === 'false_friend' ? (
+                        <div style={{
+                          background: 'rgba(249, 115, 22, 0.15)',
+                          border: '1px solid rgba(249, 115, 22, 0.4)',
+                          color: '#fdba74',
+                          padding: '8px 10px',
+                          borderRadius: 8,
+                          fontSize: 12,
+                          lineHeight: 1.4,
+                        }}>
+                          {currentCard.hanjaWarning || `⚠️ Cảnh báo bạn giả: ${currentCard.hanjaVi}`}
+                        </div>
+                      ) : currentCard.hanjaType === 'identical' && currentCard.hanjaVi ? (
                         <div className="kr-hanja-badge">
-                          💡 Gốc Hán-Hàn: <strong>{currentCard.hanjaVi}</strong>
+                          🏷️ Gốc Hán-Việt tương đồng: <strong>{currentCard.hanjaVi}</strong>
+                        </div>
+                      ) : currentCard.hanjaType === 'pure_korean' ? (
+                        <div style={{
+                          background: 'rgba(255, 255, 255, 0.05)',
+                          border: '1px solid var(--border-color)',
+                          color: 'var(--text-muted)',
+                          padding: '4px 10px',
+                          borderRadius: 6,
+                          fontSize: 11.5,
+                          alignSelf: 'flex-start',
+                        }}>
+                          🇰🇷 Từ thuần Hàn (không có gốc Hanja)
+                        </div>
+                      ) : null}
+
+                      {/* Dạng nguyên thể & dạng chia nếu có */}
+                      {(currentCard.dictionaryForm || currentCard.conjugatedForm) && (
+                        <div style={{
+                          display: 'flex',
+                          gap: 12,
+                          background: 'rgba(255, 255, 255, 0.03)',
+                          padding: '6px 10px',
+                          borderRadius: 8,
+                          fontSize: 12,
+                          color: '#cbd5e1',
+                        }}>
+                          {currentCard.dictionaryForm && (
+                            <span>Nguyên thể: <strong>{currentCard.dictionaryForm}</strong></span>
+                          )}
+                          {currentCard.conjugatedForm && (
+                            <span>Đuôi -아요/어요: <strong style={{ color: '#38bdf8' }}>{currentCard.conjugatedForm}</strong></span>
+                          )}
                         </div>
                       )}
 
@@ -379,7 +533,7 @@ export const KoreanVocabView: React.FC = () => {
                 </div>
               </div>
 
-              {/* Hàng 4 nút đánh giá chuẩn SuperMemo-2 (SM-2) */}
+              {/* Hàng 4 nút đánh giá chuẩn SM-2 */}
               <div className="kr-rating-row">
                 <button
                   type="button"
@@ -387,7 +541,7 @@ export const KoreanVocabView: React.FC = () => {
                   onClick={() => handleReview('again')}
                 >
                   <span className="rating-title">Quên</span>
-                  <span className="rating-desc">Reset • +1 ngày</span>
+                  <span className="rating-desc">Lặp lại trong phiên</span>
                 </button>
                 <button
                   type="button"
@@ -501,9 +655,31 @@ export const KoreanVocabView: React.FC = () => {
 
                   <div className="kr-word-meaning">{w.meaningVi}</div>
 
-                  {w.hanjaVi && (
+                  {/* Hanja Type Badge */}
+                  {w.hanjaType === 'false_friend' ? (
+                    <div style={{
+                      fontSize: 11,
+                      color: '#fdba74',
+                      background: 'rgba(249, 115, 22, 0.15)',
+                      padding: '2px 6px',
+                      borderRadius: 4,
+                      marginTop: 4,
+                    }}>
+                      ⚠️ Bạn giả: {w.hanjaVi}
+                    </div>
+                  ) : w.hanjaVi ? (
                     <div className="kr-word-hanja">
                       💡 Hán-Hàn: <strong>{w.hanjaVi}</strong>
+                    </div>
+                  ) : (
+                    <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
+                      Thuần Hàn
+                    </div>
+                  )}
+
+                  {(w.dictionaryForm || w.conjugatedForm) && (
+                    <div style={{ fontSize: 11.5, color: '#94a3b8', marginTop: 4 }}>
+                      {w.conjugatedForm ? `Chia: ${w.conjugatedForm}` : `Dạng: ${w.dictionaryForm}`}
                     </div>
                   )}
 
@@ -516,7 +692,7 @@ export const KoreanVocabView: React.FC = () => {
 
                   <div className="kr-word-footer">
                     <span className="kr-lib-tag">{w.level}</span>
-                    <span className="kr-lib-tag">{w.topic}</span>
+                    <span className="kr-lib-tag">{w.partOfSpeech}</span>
                     {w.intervalDays ? (
                       <span className="kr-lib-srs-pill">Ôn lại: {w.intervalDays} ngày</span>
                     ) : null}

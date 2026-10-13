@@ -15,6 +15,8 @@ import {
   ArrowRight,
   Delete,
   RefreshCw,
+  Sliders,
+  Check,
 } from 'lucide-react';
 import { useHangeulView } from './useHangeulView';
 import type { KoreanLetterType } from '../../../types/korean';
@@ -36,6 +38,10 @@ export const HangeulView: React.FC = () => {
     selectedPatchim,
     setSelectedPatchim,
     pronunciationRules,
+    // Minimal Pairs
+    pairCategory,
+    setPairCategory,
+    filteredMinimalPairs,
     // Syllable Builder
     initialConsonant,
     setInitialConsonant,
@@ -54,10 +60,11 @@ export const HangeulView: React.FC = () => {
     currentPracticeWord,
     practiceWordIndex,
     setPracticeWordIndex,
-    typedChars,
+    typedText,
     activeKey,
     isShiftActive,
     setIsShiftActive,
+    isWordMatched,
     handleInputKoChar,
     handleBackspace,
     handleClearTyped,
@@ -97,6 +104,14 @@ export const HangeulView: React.FC = () => {
           </button>
           <button
             type="button"
+            className={`hangeul-tab-btn ${subTab === 'minimal_pairs' ? 'active' : ''}`}
+            onClick={() => setSubTab('minimal_pairs')}
+          >
+            <Sliders size={14} />
+            Cặp Âm Tối Thiểu 🎯
+          </button>
+          <button
+            type="button"
             className={`hangeul-tab-btn ${subTab === 'builder' ? 'active' : ''}`}
             onClick={() => setSubTab('builder')}
           >
@@ -109,7 +124,7 @@ export const HangeulView: React.FC = () => {
             onClick={() => setSubTab('keyboard')}
           >
             <KeyboardIcon size={14} />
-            Luyện Gõ Phím ⌨️
+            Bộ Gõ IME 2-Set ⌨️
           </button>
           <button
             type="button"
@@ -244,7 +259,7 @@ export const HangeulView: React.FC = () => {
           <div className="patchim-intro-box">
             <h3 className="patchim-intro-title">7 Nhóm Phát Âm Đại Diện Của Patchim (Phụ Âm Cuối)</h3>
             <p className="patchim-intro-desc">
-              Trong tiếng Hàn có tới 27 phụ âm và phụ âm kép có thể đứng ở vị trí Patchim, nhưng khi phát âm thì <strong>tất cả đều quy về 7 âm đại diện chuẩn</strong>: [ㄱ, ㄴ, ㄷ, ㄹ, ㅁ, ㅂ, ㅇ].
+              Tiếng Việt có lợi thế lớn: <strong>-c, -t, -p, -m, -n, -ng</strong> gần như tương đương 6/7 âm đại diện của tiếng Hàn! Chỉ duy nhất <strong>ㄹ</strong> cần uốn lưỡi đặc trưng.
             </p>
           </div>
 
@@ -289,6 +304,24 @@ export const HangeulView: React.FC = () => {
                   <Volume2 size={16} />
                 </button>
               </div>
+
+              {selectedPatchim.vietnameseAnalogy && (
+                <div style={{
+                  background: 'rgba(16, 185, 129, 0.12)',
+                  border: '1px solid rgba(16, 185, 129, 0.3)',
+                  padding: '10px 14px',
+                  borderRadius: 10,
+                  fontSize: 13,
+                  color: '#6ee7b7',
+                  marginBottom: 12,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                }}>
+                  <span style={{ fontSize: 16 }}>🇻🇳</span>
+                  <span><strong>Lợi thế người Việt:</strong> {selectedPatchim.vietnameseAnalogy}</span>
+                </div>
+              )}
 
               <p className="patchim-explanation-text">{selectedPatchim.explanation}</p>
 
@@ -355,7 +388,98 @@ export const HangeulView: React.FC = () => {
         </div>
       )}
 
-      {/* 4. CHẾ ĐỘ 3: GHÉP VẦN KHỐI (BUILDER) */}
+      {/* 4. CHẾ ĐỘ MỚI: CẶP ÂM TỐI THIỂU (MINIMAL PAIRS) */}
+      {subTab === 'minimal_pairs' && (
+        <div className="hangeul-patchim-stage">
+          <div className="patchim-intro-box">
+            <h3 className="patchim-intro-title">🎯 Luyện Phản Xạ Cặp Âm Tối Thiểu (Minimal Pairs)</h3>
+            <p className="patchim-intro-desc">
+              Tiếng Việt không phân biệt âm bật hơi, dẫn đến điểm khó nhất là bộ ba <strong>Thường - Bật hơi - Căng</strong> (ㅂ/ㅍ/ㅃ, ㅈ/ㅊ/ㅉ, ㄱ/ㅋ/ㄲ, ㄷ/ㅌ/ㄸ) và các nguyên âm dễ nhầm như <strong>ㅓ/ㅗ</strong>, <strong>ㅡ/ㅜ</strong>. Bấm vào từng từ để nghe và cảm nhận sự khác biệt!
+            </p>
+          </div>
+
+          <div className="hangeul-filters-row">
+            <button
+              type="button"
+              className={`hangeul-filter-pill ${pairCategory === 'all' ? 'active' : ''}`}
+              onClick={() => setPairCategory('all')}
+            >
+              Tất cả các cặp âm ({filteredMinimalPairs.length})
+            </button>
+            <button
+              type="button"
+              className={`hangeul-filter-pill ${pairCategory === 'consonant_trio' ? 'active' : ''}`}
+              onClick={() => setPairCategory('consonant_trio')}
+            >
+              Bộ ba phụ âm (Thường / Bật hơi / Căng)
+            </button>
+            <button
+              type="button"
+              className={`hangeul-filter-pill ${pairCategory === 'vowel_confusion' ? 'active' : ''}`}
+              onClick={() => setPairCategory('vowel_confusion')}
+            >
+              Cặp nguyên âm dễ nhầm (ㅓ/ㅗ, ㅡ/ㅜ)
+            </button>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            {filteredMinimalPairs.map((pair) => (
+              <div key={pair.id} className="patchim-card-detail" style={{ marginBottom: 0 }}>
+                <div style={{ marginBottom: 8 }}>
+                  <div style={{ fontSize: 16, fontWeight: 800, color: '#fff' }}>{pair.title}</div>
+                  <div style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 4 }}>{pair.description}</div>
+                </div>
+
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                  gap: 12,
+                  marginTop: 12,
+                }}>
+                  {pair.pairs.map((pItem, idx) => (
+                    <div
+                      key={idx}
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.04)',
+                        border: '1px solid var(--border-color)',
+                        borderRadius: 12,
+                        padding: '12px 14px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 6,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                      }}
+                      onClick={() => speakKorean(pItem.word)}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: 24, fontWeight: 900, color: '#f43f5e' }}>{pItem.word}</span>
+                        <button
+                          type="button"
+                          className="btn-mini-sound"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            speakKorean(pItem.word);
+                          }}
+                        >
+                          <Volume2 size={15} />
+                        </button>
+                      </div>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: '#38bdf8' }}>{pItem.soundType}</div>
+                      {!hideRomanization && (
+                        <div style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>[{pItem.rom}]</div>
+                      )}
+                      <div style={{ fontSize: 13, color: '#e2e8f0', fontWeight: 600 }}>Nghĩa: {pItem.meaningVi}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 5. CHẾ ĐỘ 3: GHÉP VẦN KHỐI (BUILDER) */}
       {subTab === 'builder' && (
         <div className="hangeul-builder-stage">
           <div className="builder-display-card">
@@ -449,17 +573,20 @@ export const HangeulView: React.FC = () => {
         </div>
       )}
 
-      {/* 5. CHẾ ĐỘ 4: BÀN PHÍM 2-SET TRAINER (KEYBOARD) */}
+      {/* 6. CHẾ ĐỘ 4: BỘ GÕ IME 2-SET TRAINER (KEYBOARD) */}
       {subTab === 'keyboard' && (
         <div className="hangeul-keyboard-stage">
           {/* Card từ luyện tập */}
           <div className="keyboard-practice-card">
             <div className="kb-card-top">
-              <span className="kb-pill-badge">Bài tập gõ {practiceWordIndex + 1}/{practiceWords.length}</span>
+              <span className="kb-pill-badge">Bài tập gõ {practiceWordIndex + 1}/{practiceWords.length} (Chuẩn IME Khối)</span>
               <button
                 type="button"
                 className="btn-next-practice"
-                onClick={() => setPracticeWordIndex((prev) => (prev + 1) % practiceWords.length)}
+                onClick={() => {
+                  handleClearTyped();
+                  setPracticeWordIndex((prev) => (prev + 1) % practiceWords.length);
+                }}
               >
                 Đổi từ tiếp theo <ArrowRight size={13} />
               </button>
@@ -482,13 +609,30 @@ export const HangeulView: React.FC = () => {
 
             <div className="kb-hint-text">💡 Cách gõ: {currentPracticeWord.hint}</div>
 
-            {/* Khu vực kết quả đã gõ */}
+            {/* Khu vực kết quả đã gõ (Âm tiết khối thực tế) */}
             <div className="kb-typed-display">
               <div className="kb-typed-content">
-                {typedChars.length === 0 ? (
-                  <span className="kb-placeholder">Gõ bằng bàn phím máy tính hoặc bấm các phím bên dưới...</span>
+                {typedText.length === 0 ? (
+                  <span className="kb-placeholder">Gõ trên bàn phím máy tính hoặc bấm các phím bên dưới...</span>
                 ) : (
-                  typedChars.map((ch, idx) => <span key={idx} className="typed-char">{ch}</span>)
+                  <span style={{ fontSize: 26, fontWeight: 900, color: isWordMatched ? '#10b981' : '#fff' }}>
+                    {typedText}
+                  </span>
+                )}
+                {isWordMatched && (
+                  <span style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 4,
+                    background: 'rgba(16, 185, 129, 0.2)',
+                    color: '#6ee7b7',
+                    padding: '2px 8px',
+                    borderRadius: 999,
+                    fontSize: 12,
+                    marginLeft: 10,
+                  }}>
+                    <Check size={14} /> Chính xác!
+                  </span>
                 )}
               </div>
               <div className="kb-typed-actions">
@@ -496,9 +640,9 @@ export const HangeulView: React.FC = () => {
                   type="button"
                   className="btn-kb-action"
                   onClick={handleBackspace}
-                  title="Xóa 1 ký tự"
+                  title="Xóa 1 nét Jamo"
                 >
-                  <Delete size={15} /> Xóa
+                  <Delete size={15} /> Xóa nét
                 </button>
                 <button
                   type="button"
@@ -515,15 +659,15 @@ export const HangeulView: React.FC = () => {
           {/* Mô phỏng Bàn Phím Ảo 2-Set (Dubeolsik) */}
           <div className="virtual-keyboard-wrap">
             <div className="keyboard-legend">
-              <span className="legend-item cons">👈 Tay Trái: Phụ Âm (ㅂ, ㅈ, ㄷ, ㄱ, ㅅ...)</span>
+              <span className="legend-item cons">👈 Tay Trái: Phụ Âm (ㅁㄴㅇㄹ...)</span>
               <button
                 type="button"
                 className={`btn-shift-toggle ${isShiftActive ? 'shift-on' : ''}`}
                 onClick={() => setIsShiftActive(!isShiftActive)}
               >
-                ⇧ Shift (Chữ căng: ㅃ, ㅉ, ㄸ...)
+                ⇧ Shift (Chữ căng: ㅃ, ㅉ, ㄸ, ㄲ, ㅆ)
               </button>
-              <span className="legend-item vowel">Tay Phải: Nguyên Âm (ㅛ, ㅕ, ㅑ, ㅐ, ㅔ...) 👉</span>
+              <span className="legend-item vowel">Tay Phải: Nguyên Âm (ㅗㅓㅏㅣ...) 👉</span>
             </div>
 
             <div className="virtual-keyboard-board">
@@ -547,11 +691,24 @@ export const HangeulView: React.FC = () => {
                 </div>
               ))}
             </div>
+
+            {/* Gợi ý điện thoại */}
+            <div style={{
+              marginTop: 12,
+              padding: '8px 12px',
+              borderRadius: 8,
+              background: 'rgba(255, 255, 255, 0.03)',
+              fontSize: 12,
+              color: 'var(--text-muted)',
+              textAlign: 'center',
+            }}>
+              📱 <em>Gợi ý trên điện thoại: Bạn có thể cài đặt thêm Bàn phím tiếng Hàn chuẩn (2-Bulsik hoặc 10-key) trong Gboard / Bàn phím iOS để luyện tập thực tế!</em>
+            </div>
           </div>
         </div>
       )}
 
-      {/* 6. CHẾ ĐỘ 5: MINI QUIZ (QUIZ) */}
+      {/* 7. CHẾ ĐỘ 5: MINI QUIZ (QUIZ) */}
       {subTab === 'quiz' && (
         <div className="hangeul-quiz-stage">
           {quizCompleted || !currentQuiz ? (

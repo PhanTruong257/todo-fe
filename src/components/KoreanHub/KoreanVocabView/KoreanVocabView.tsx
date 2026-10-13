@@ -1,5 +1,19 @@
 import React from 'react';
-import { Volume2, RotateCw, Layers, Search, Trophy, Sparkles, BookOpen } from 'lucide-react';
+import {
+  Volume2,
+  RotateCw,
+  Layers,
+  Search,
+  Trophy,
+  Sparkles,
+  Eye,
+  EyeOff,
+  Flame,
+  CheckCircle2,
+  XCircle,
+  HelpCircle,
+  Headphones,
+} from 'lucide-react';
 import { useKoreanVocab } from './useKoreanVocab';
 import './KoreanVocabView.css';
 
@@ -12,6 +26,13 @@ export const KoreanVocabView: React.FC = () => {
     setSelectedTopic,
     search,
     setSearch,
+    // Study Modes & Settings
+    studyMode,
+    setStudyMode,
+    hideRomanization,
+    toggleHideRomanization,
+    dailyReviewedCount,
+    dailyGoalTarget,
     // Study
     dueQueue,
     currentCard,
@@ -21,6 +42,12 @@ export const KoreanVocabView: React.FC = () => {
     handleReview,
     studyCompleted,
     restartStudy,
+    // Active Recall Quiz
+    quizOptions,
+    selectedQuizOption,
+    quizStatus,
+    handleSelectQuizOption,
+    skipQuizAndFlip,
     // Library
     filteredLibrary,
     topics,
@@ -40,9 +67,7 @@ export const KoreanVocabView: React.FC = () => {
             <RotateCw size={14} />
             Ôn Flashcard SRS
             {dueQueue.length > 0 && (
-              <span style={{ background: '#f43f5e', color: '#fff', borderRadius: 999, fontSize: 10, padding: '1px 6px', marginLeft: 2 }}>
-                {dueQueue.length}
-              </span>
+              <span className="kr-badge-count">{dueQueue.length}</span>
             )}
           </button>
           <button
@@ -55,197 +80,338 @@ export const KoreanVocabView: React.FC = () => {
           </button>
         </div>
 
-        <div className="kr-stats-pill">
-          <Trophy size={13} color="#10b981" />
-          Đã thuộc: <strong>{stats.mastered}</strong> từ
+        {/* Cụm công cụ phụ: Toggle Romanization + Mục tiêu ngày + Huy hiệu đã thuộc */}
+        <div className="kr-toolbar-right">
+          <button
+            type="button"
+            className={`kr-roman-toggle-btn ${hideRomanization ? 'hidden-mode' : ''}`}
+            onClick={toggleHideRomanization}
+            title={hideRomanization ? 'Đang ẩn phiên âm Latin (Buộc đọc mặt chữ Hangul)' : 'Đang hiện phiên âm Latin'}
+          >
+            {hideRomanization ? <EyeOff size={13} color="#f43f5e" /> : <Eye size={13} color="#38bdf8" />}
+            <span>{hideRomanization ? 'Ẩn Phiên Âm' : 'Hiện Phiên Âm'}</span>
+          </button>
+
+          <div className={`kr-daily-goal-pill ${dailyReviewedCount >= dailyGoalTarget ? 'goal-achieved' : ''}`}>
+            <Flame size={13} color={dailyReviewedCount >= dailyGoalTarget ? '#fbbf24' : '#f97316'} />
+            <span>
+              Hôm nay: <strong>{dailyReviewedCount}</strong>/{dailyGoalTarget}
+            </span>
+          </div>
+
+          <div className="kr-stats-pill">
+            <Trophy size={13} color="#10b981" />
+            <span>Đã thuộc: <strong>{stats.mastered}</strong></span>
+          </div>
         </div>
       </div>
 
       {/* 2. CHẾ ĐỘ 1: ÔN TẬP SRS (STUDY) */}
       {activeSubTab === 'study' && (
         <div className="kr-study-stage">
-          {/* Hàng chọn chủ đề ôn */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
-            <span style={{ fontSize: 12, color: 'var(--text-muted)', fontWeight: 600 }}>Chủ đề ôn:</span>
-            <select
-              style={{
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border-color)',
-                borderRadius: 'var(--radius-full)',
-                color: 'var(--text-main)',
-                fontSize: 12,
-                padding: '4px 10px',
-                outline: 'none',
-              }}
-              value={selectedTopic}
-              onChange={(e) => setSelectedTopic(e.target.value)}
-            >
-              <option value="all">🌟 Tất cả chủ đề ({stats.total})</option>
-              {topics.map((t) => (
-                <option key={t.key} value={t.key}>
-                  {t.icon} {t.nameVi}
-                </option>
-              ))}
-            </select>
+          {/* Hàng điều khiển: Chế độ ôn (Hàn->Việt, Việt->Hàn, Nghe->Hàn) & Chọn chủ đề */}
+          <div className="kr-study-controls-bar">
+            {/* 3 Chế độ ôn tập Active Recall */}
+            <div className="kr-sub-modes-pill">
+              <button
+                type="button"
+                className={`kr-sub-mode-btn ${studyMode === 'ko-to-vi' ? 'active' : ''}`}
+                onClick={() => setStudyMode('ko-to-vi')}
+                title="Hàn ➔ Việt: Đọc chữ Hàn và chọn nghĩa tiếng Việt"
+              >
+                🇰🇷 ➔ 🇻🇳 Nhận diện
+              </button>
+              <button
+                type="button"
+                className={`kr-sub-mode-btn ${studyMode === 'vi-to-ko' ? 'active' : ''}`}
+                onClick={() => setStudyMode('vi-to-ko')}
+                title="Việt ➔ Hàn: Đọc nghĩa tiếng Việt và chọn chữ Hangeul đúng"
+              >
+                🇻🇳 ➔ 🇰🇷 Phản xạ
+              </button>
+              <button
+                type="button"
+                className={`kr-sub-mode-btn ${studyMode === 'listen-to-ko' ? 'active' : ''}`}
+                onClick={() => setStudyMode('listen-to-ko')}
+                title="Nghe ➔ Hàn: Nghe phát âm và chọn chữ Hangeul đúng"
+              >
+                <Headphones size={12} /> Nghe ➔ Chọn
+              </button>
+            </div>
+
+            {/* Chọn chủ đề ôn */}
+            <div className="kr-topic-selector-wrap">
+              <span className="kr-selector-label">Chủ đề:</span>
+              <select
+                className="kr-topic-select"
+                value={selectedTopic}
+                onChange={(e) => setSelectedTopic(e.target.value)}
+              >
+                <option value="all">🌟 Tất cả ({stats.total})</option>
+                {topics.map((t) => (
+                  <option key={t.key} value={t.key}>
+                    {t.icon} {t.nameVi}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {studyCompleted || !currentCard ? (
-            <div
-              style={{
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border-color)',
-                borderRadius: 'var(--radius-lg)',
-                padding: '36px 20px',
-                textAlign: 'center',
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: 12,
-              }}
-            >
-              <div style={{ fontSize: 48 }}>🎉</div>
-              <h3 style={{ fontSize: 18, fontWeight: 800, color: '#fff' }}>Hoàn thành lượt ôn tiếng Hàn!</h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: 13, maxWidth: 360, lineHeight: 1.5 }}>
-                Bạn đã ôn xong các thẻ từ vựng cần ôn hôm nay theo thuật toán SRS. Rất xuất sắc!
+            <div className="kr-study-completed-card">
+              <div className="kr-completed-icon">🎉</div>
+              <h3 className="kr-completed-title">Hoàn thành lượt ôn tiếng Hàn!</h3>
+              <p className="kr-completed-desc">
+                Bạn đã hoàn thành các thẻ từ vựng cần ôn theo thuật toán <strong>SuperMemo-2 (SM-2)</strong>. Các khoảng cách ôn tập tiếp theo đã được lập lịch tự động dựa trên độ ghi nhớ của bạn!
               </p>
+              <div className="kr-completed-stats">
+                <span>🔥 Hôm nay đã ôn: <strong>{dailyReviewedCount}</strong> thẻ</span>
+                <span>🏆 Từ vựng đã thuần thục: <strong>{stats.mastered}</strong> từ</span>
+              </div>
               <button
                 type="button"
-                style={{
-                  background: 'linear-gradient(135deg, #f43f5e, #ec4899)',
-                  border: 'none',
-                  color: '#fff',
-                  borderRadius: 'var(--radius-full)',
-                  padding: '9px 20px',
-                  fontWeight: 700,
-                  fontSize: 13,
-                  cursor: 'pointer',
-                  marginTop: 6,
-                }}
+                className="btn-restart-study"
                 onClick={restartStudy}
               >
-                <RotateCw size={13} style={{ display: 'inline', marginRight: 6 }} />
+                <RotateCw size={14} />
                 Ôn Lại Lượt Này
               </button>
             </div>
           ) : (
             <>
-              {/* Tiến độ bài ôn */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', fontSize: 12, color: 'var(--text-muted)', fontWeight: 700 }}>
-                <span>Từ {studyIndex + 1} / {dueQueue.length}</span>
-                <span>TOPIK 1 • {currentCard.topic}</span>
+              {/* Tiến độ bài ôn & SM-2 Info */}
+              <div className="kr-study-progress-row">
+                <span className="kr-progress-text">
+                  Từ <strong>{studyIndex + 1}</strong> / {dueQueue.length}
+                </span>
+                <span className="kr-card-meta-pill">
+                  {currentCard.level} • {currentCard.topic} • EF: {currentCard.easeFactor || 2.5}
+                </span>
               </div>
 
-              {/* Thẻ 3D Flip Card */}
-              <div className="kr-card-stage" onClick={toggleFlip}>
+              {/* Thẻ 3D Flashcard */}
+              <div
+                className={`kr-card-stage ${isFlipped ? 'flipped' : ''}`}
+                onClick={quizStatus !== 'idle' ? toggleFlip : undefined}
+              >
                 <div className={`kr-card-inner ${isFlipped ? 'is-flipped' : ''}`}>
                   {/* Mặt Trước (Front) */}
                   <div className="kr-card-face kr-card-front">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                      <span style={{ background: 'rgba(244, 63, 94, 0.15)', color: '#fb7185', borderRadius: 999, fontSize: 11, padding: '2px 8px', fontWeight: 700 }}>
-                        {currentCard.topic}
-                      </span>
-                      <span style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#6ee7b7', borderRadius: 999, fontSize: 11, padding: '2px 8px', fontWeight: 800 }}>
-                        {currentCard.level}
-                      </span>
+                    <div className="kr-card-top-tags">
+                      <span className="kr-topic-tag">{currentCard.topic}</span>
+                      <span className="kr-level-tag">{currentCard.level}</span>
                     </div>
 
                     <div className="kr-front-center">
-                      <div className="kr-hangeul-title">{currentCard.hangeul}</div>
-                      <div className="kr-roman-text">[{currentCard.romanization}]</div>
+                      {/* Chế độ 1: Hàn -> Việt */}
+                      {studyMode === 'ko-to-vi' && (
+                        <>
+                          <div className="kr-hangeul-title">{currentCard.hangeul}</div>
+                          {!hideRomanization ? (
+                            <div className="kr-roman-text">[{currentCard.romanization}]</div>
+                          ) : (
+                            <div className="kr-roman-hidden">[Phiên âm đã ẩn • Tập đọc Hangeul]</div>
+                          )}
+                          <button
+                            type="button"
+                            className="btn-speak-vocab"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              speakKorean(currentCard.hangeul);
+                            }}
+                            title="Nghe phát âm"
+                          >
+                            <Volume2 size={20} />
+                          </button>
+                        </>
+                      )}
 
-                      <button
-                        type="button"
-                        className="btn-speak-vocab"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          speakKorean(currentCard.hangeul);
-                        }}
-                      >
-                        <Volume2 size={20} />
-                      </button>
+                      {/* Chế độ 2: Việt -> Hàn */}
+                      {studyMode === 'vi-to-ko' && (
+                        <>
+                          <div className="kr-meaning-prompt-title">{currentCard.meaningVi}</div>
+                          {currentCard.hanjaVi && (
+                            <div className="kr-hanja-hint">💡 Gợi ý Hán-Hàn: {currentCard.hanjaVi}</div>
+                          )}
+                          <div className="kr-recall-sub">Hãy nhớ và chọn chữ Hangeul đúng bên dưới 👇</div>
+                        </>
+                      )}
+
+                      {/* Chế độ 3: Nghe -> Hàn */}
+                      {studyMode === 'listen-to-ko' && (
+                        <>
+                          <div className="kr-listening-prompt-box">
+                            <button
+                              type="button"
+                              className="btn-big-listen-audio"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                speakKorean(currentCard.hangeul);
+                              }}
+                            >
+                              <Volume2 size={36} />
+                              <span>Bấm để nghe lại âm thanh</span>
+                            </button>
+                            <div className="kr-recall-sub">Nghe kỹ và chọn từ Hangeul chính xác 👇</div>
+                          </div>
+                        </>
+                      )}
                     </div>
 
-                    <div style={{ fontSize: 12, color: 'var(--text-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
-                      <Sparkles size={13} color="#f43f5e" />
-                      Chạm vào thẻ để lật xem nghĩa & âm Hán-Hàn
+                    {/* Vùng Trắc Nghiệm Chủ Động (Active Recall 4 Options) */}
+                    <div className="kr-quiz-section" onClick={(e) => e.stopPropagation()}>
+                      <div className="kr-quiz-grid">
+                        {quizOptions.map((opt) => {
+                          let btnClass = 'kr-quiz-opt-btn';
+                          if (selectedQuizOption) {
+                            if (opt.isCorrect) btnClass += ' opt-correct';
+                            else if (selectedQuizOption === opt.id) btnClass += ' opt-wrong';
+                            else btnClass += ' opt-dimmed';
+                          }
+                          return (
+                            <button
+                              key={opt.id}
+                              type="button"
+                              className={btnClass}
+                              onClick={() => handleSelectQuizOption(opt)}
+                              disabled={quizStatus !== 'idle'}
+                            >
+                              <span className="kr-opt-label">{opt.label}</span>
+                              {selectedQuizOption && opt.isCorrect && (
+                                <CheckCircle2 size={16} color="#10b981" />
+                              )}
+                              {selectedQuizOption === opt.id && !opt.isCorrect && (
+                                <XCircle size={16} color="#f43f5e" />
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {/* Nút bỏ qua trắc nghiệm để tự lật thẻ */}
+                      {quizStatus === 'idle' && (
+                        <button
+                          type="button"
+                          className="kr-skip-quiz-btn"
+                          onClick={skipQuizAndFlip}
+                        >
+                          <HelpCircle size={13} />
+                          Tôi muốn tự lật thẻ không cần trắc nghiệm
+                        </button>
+                      )}
                     </div>
                   </div>
 
                   {/* Mặt Sau (Back) */}
                   <div className="kr-card-face kr-card-back">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                      <span style={{ fontSize: 15, fontWeight: 800, color: '#fff' }}>{currentCard.hangeul}</span>
+                    <div className="kr-card-back-header">
+                      <div className="kr-card-back-word">
+                        <span className="kr-back-hangeul">{currentCard.hangeul}</span>
+                        {!hideRomanization && (
+                          <span className="kr-back-rom">[{currentCard.romanization}]</span>
+                        )}
+                      </div>
                       <button
                         type="button"
-                        className="btn-speak-vocab"
-                        style={{ width: 30, height: 30 }}
+                        className="btn-speak-vocab small"
                         onClick={(e) => {
                           e.stopPropagation();
                           speakKorean(currentCard.hangeul);
                         }}
                       >
-                        <Volume2 size={15} />
+                        <Volume2 size={16} />
                       </button>
                     </div>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, margin: 'auto 0' }}>
+                    {/* Huy hiệu phát âm thực tế nếu có */}
+                    {currentCard.actualPronunciation && (
+                      <div className="kr-actual-pronounce-badge">
+                        <span className="badge-tag">Phát âm thực tế:</span>
+                        <strong className="badge-val">{currentCard.actualPronunciation}</strong>
+                        <button
+                          type="button"
+                          className="btn-mini-sound"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            speakKorean(currentCard.hangeul);
+                          }}
+                          title="Nghe phát âm chuẩn"
+                        >
+                          <Volume2 size={13} />
+                        </button>
+                      </div>
+                    )}
+
+                    <div className="kr-card-back-body">
                       <div className="kr-meaning-vi">{currentCard.meaningVi}</div>
 
                       {currentCard.hanjaVi && (
                         <div className="kr-hanja-badge">
-                          💡 Gốc Hán-Hàn: {currentCard.hanjaVi}
+                          💡 Gốc Hán-Hàn: <strong>{currentCard.hanjaVi}</strong>
                         </div>
                       )}
 
                       {currentCard.exampleKo && (
                         <div className="kr-example-box">
-                          <div className="kr-example-ko">"{currentCard.exampleKo}"</div>
+                          <div className="kr-example-ko">
+                            "{currentCard.exampleKo}"
+                            <button
+                              type="button"
+                              className="btn-mini-sound"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                speakKorean(currentCard.exampleKo);
+                              }}
+                            >
+                              <Volume2 size={12} />
+                            </button>
+                          </div>
                           <div className="kr-example-vi">{currentCard.exampleVi}</div>
                         </div>
                       )}
                     </div>
 
-                    <div style={{ fontSize: 12, color: 'var(--text-subtle)' }}>
-                      Đánh giá độ nhớ của bạn bên dưới 👇
+                    <div className="kr-card-back-footer">
+                      <Sparkles size={13} color="#f43f5e" />
+                      <span>Đánh giá mức độ ghi nhớ theo thuật toán SM-2 👇</span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Hàng 4 nút đánh giá SRS */}
+              {/* Hàng 4 nút đánh giá chuẩn SuperMemo-2 (SM-2) */}
               <div className="kr-rating-row">
                 <button
                   type="button"
-                  className="btn-kr-rating again"
+                  className={`btn-kr-rating again ${quizStatus === 'wrong' ? 'recommended-action' : ''}`}
                   onClick={() => handleReview('again')}
                 >
-                  <span style={{ fontSize: 13, fontWeight: 800 }}>Quên</span>
-                  <span style={{ fontSize: 10.5, opacity: 0.85 }}>+1 ngày</span>
+                  <span className="rating-title">Quên</span>
+                  <span className="rating-desc">Reset • +1 ngày</span>
                 </button>
                 <button
                   type="button"
                   className="btn-kr-rating hard"
                   onClick={() => handleReview('hard')}
                 >
-                  <span style={{ fontSize: 13, fontWeight: 800 }}>Hơi khó</span>
-                  <span style={{ fontSize: 10.5, opacity: 0.85 }}>+2 ngày</span>
+                  <span className="rating-title">Hơi khó</span>
+                  <span className="rating-desc">+1-2 ngày</span>
                 </button>
                 <button
                   type="button"
-                  className="btn-kr-rating good"
+                  className={`btn-kr-rating good ${quizStatus === 'correct' ? 'recommended-action' : ''}`}
                   onClick={() => handleReview('good')}
                 >
-                  <span style={{ fontSize: 13, fontWeight: 800 }}>Nhớ tốt</span>
-                  <span style={{ fontSize: 10.5, opacity: 0.85 }}>+4 ngày</span>
+                  <span className="rating-title">Nhớ tốt</span>
+                  <span className="rating-desc">+3-4 ngày</span>
                 </button>
                 <button
                   type="button"
                   className="btn-kr-rating easy"
                   onClick={() => handleReview('easy')}
                 >
-                  <span style={{ fontSize: 13, fontWeight: 800 }}>Quá dễ</span>
-                  <span style={{ fontSize: 10.5, opacity: 0.85 }}>+7 ngày</span>
+                  <span className="rating-title">Quá dễ</span>
+                  <span className="rating-desc">+5-7 ngày</span>
                 </button>
               </div>
             </>
@@ -255,7 +421,7 @@ export const KoreanVocabView: React.FC = () => {
 
       {/* 3. CHẾ ĐỘ 2: THƯ VIỆN TỪ VỰNG (LIBRARY) */}
       {activeSubTab === 'library' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%' }}>
+        <div className="kr-library-stage">
           {/* Thanh lướt chọn chủ đề */}
           <div className="kr-chips-bar">
             <button
@@ -277,85 +443,88 @@ export const KoreanVocabView: React.FC = () => {
             ))}
           </div>
 
-          {/* Ô tìm kiếm */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-              background: 'var(--bg-input)',
-              border: '1px solid var(--border-color)',
-              borderRadius: 'var(--radius-full)',
-              padding: '7px 14px',
-            }}
-          >
+          {/* Ô tìm kiếm từ vựng */}
+          <div className="kr-search-input-wrap">
             <Search size={15} color="#94a3b8" />
             <input
-              style={{
-                background: 'transparent',
-                border: 'none',
-                outline: 'none',
-                color: 'var(--text-main)',
-                fontSize: 13,
-                width: '100%',
-              }}
-              placeholder="Tìm từ vựng tiếng Hàn, phiên âm hoặc nghĩa tiếng Việt..."
+              type="text"
+              placeholder="Tìm theo chữ Hangeul, phiên âm, nghĩa tiếng Việt, âm Hán-Hàn..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              className="kr-search-input"
             />
+            {search && (
+              <button
+                type="button"
+                className="kr-clear-search-btn"
+                onClick={() => setSearch('')}
+              >
+                ✕
+              </button>
+            )}
           </div>
 
-          {/* Lưới danh sách từ */}
-          {filteredLibrary.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '36px 0', color: 'var(--text-muted)' }}>
-              <BookOpen size={40} style={{ margin: '0 auto 10px auto', opacity: 0.5 }} />
-              <div>Không tìm thấy từ vựng nào phù hợp</div>
-            </div>
-          ) : (
-            <div className="kr-vocab-grid">
-              {filteredLibrary.map((w) => (
-                <div key={w.id} className="kr-vocab-card">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div className="kr-card-hangeul">
-                      {w.hangeul}
-                      <span style={{ fontSize: 12, color: '#fb7185', fontWeight: 500 }}>
-                        [{w.romanization}]
-                      </span>
+          {/* Grid danh sách từ vựng */}
+          <div className="kr-words-grid">
+            {filteredLibrary.length === 0 ? (
+              <div className="kr-empty-library">
+                <HelpCircle size={28} color="#94a3b8" />
+                <p>Không tìm thấy từ vựng nào phù hợp với từ khóa.</p>
+              </div>
+            ) : (
+              filteredLibrary.map((w) => (
+                <div key={w.id} className="kr-word-card">
+                  <div className="kr-word-header">
+                    <div className="kr-word-hangeul-wrap">
+                      <span className="kr-lib-hangeul">{w.hangeul}</span>
+                      {!hideRomanization ? (
+                        <span className="kr-lib-rom">[{w.romanization}]</span>
+                      ) : (
+                        <span className="kr-lib-rom-hidden">👁️</span>
+                      )}
                     </div>
                     <button
                       type="button"
-                      style={{
-                        background: 'transparent',
-                        border: 'none',
-                        color: 'var(--text-muted)',
-                        cursor: 'pointer',
-                        padding: 4,
-                      }}
-                      title="Nghe phát âm"
+                      className="btn-speak-vocab tiny"
                       onClick={() => speakKorean(w.hangeul)}
+                      title="Phát âm"
                     >
-                      <Volume2 size={16} />
+                      <Volume2 size={13} />
                     </button>
                   </div>
 
-                  <div className="kr-card-vi">{w.meaningVi}</div>
+                  {w.actualPronunciation && (
+                    <div className="kr-word-spoken-pill">
+                      Đọc: <strong>{w.actualPronunciation}</strong>
+                    </div>
+                  )}
+
+                  <div className="kr-word-meaning">{w.meaningVi}</div>
 
                   {w.hanjaVi && (
-                    <div style={{ fontSize: 11, color: '#fcd34d', fontWeight: 600 }}>
-                      Gốc Hán-Hàn: {w.hanjaVi}
+                    <div className="kr-word-hanja">
+                      💡 Hán-Hàn: <strong>{w.hanjaVi}</strong>
                     </div>
                   )}
 
                   {w.exampleKo && (
-                    <div style={{ fontSize: 12, color: 'var(--text-muted)', borderLeft: '2px solid rgba(255, 255, 255, 0.15)', paddingLeft: 8, marginTop: 4 }}>
-                      <div>"{w.exampleKo}"</div>
-                      <div style={{ color: 'var(--text-subtle)', fontSize: 11 }}>{w.exampleVi}</div>
+                    <div className="kr-word-example">
+                      <div className="ex-ko">"{w.exampleKo}"</div>
+                      <div className="ex-vi">{w.exampleVi}</div>
                     </div>
                   )}
+
+                  <div className="kr-word-footer">
+                    <span className="kr-lib-tag">{w.level}</span>
+                    <span className="kr-lib-tag">{w.topic}</span>
+                    {w.intervalDays ? (
+                      <span className="kr-lib-srs-pill">Ôn lại: {w.intervalDays} ngày</span>
+                    ) : null}
+                  </div>
                 </div>
-              ))}
-            </div>
-          )}
+              ))
+            )}
+          </div>
         </div>
       )}
     </div>

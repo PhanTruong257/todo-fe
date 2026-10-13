@@ -56,17 +56,85 @@
   box-shadow: 0 2px 10px rgba(244, 63, 94, 0.4);
 }
 
+.kr-badge-count {
+  background: #f43f5e;
+  color: #fff;
+  border-radius: 999px;
+  font-size: 10px;
+  padding: 1px 6px;
+  margin-left: 2px;
+}
+
+.kr-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Nút Toggle Phiên Âm */
+.kr-roman-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: var(--radius-full);
+  color: #38bdf8;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.kr-roman-toggle-btn.hidden-mode {
+  background: rgba(244, 63, 94, 0.12);
+  border-color: rgba(244, 63, 94, 0.35);
+  color: #fb7185;
+}
+
+.kr-roman-toggle-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Mục tiêu ngày */
+.kr-daily-goal-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #fdba74;
+  background: rgba(249, 115, 22, 0.1);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  border-radius: var(--radius-full);
+  padding: 4px 10px;
+}
+
+.kr-daily-goal-pill.goal-achieved {
+  background: rgba(234, 179, 8, 0.15);
+  border-color: rgba(234, 179, 8, 0.4);
+  color: #fde047;
+  animation: pulseGold 2s infinite ease-in-out;
+}
+
+@keyframes pulseGold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.2); }
+  50% { box-shadow: 0 0 10px 2px rgba(234, 179, 8, 0.4); }
+}
+
 .kr-stats-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 12px;
+  gap: 5px;
+  font-size: 11.5px;
   font-weight: 700;
   color: #34d399;
   background: rgba(16, 185, 129, 0.1);
   border: 1px solid rgba(16, 185, 129, 0.3);
   border-radius: var(--radius-full);
-  padding: 4px 12px;
+  padding: 4px 10px;
 }
 
 /* 2. CHẾ ĐỘ ÔN TẬP SRS (STUDY) */
@@ -80,22 +148,108 @@
   margin: 0 auto;
 }
 
+/* Hàng chọn chế độ con (Hàn->Việt, Việt->Hàn, Nghe->Hàn) & Chủ đề */
+.kr-study-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.kr-sub-modes-pill {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  gap: 3px;
+}
+
+.kr-sub-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-full);
+  color: var(--text-muted);
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.kr-sub-mode-btn.active {
+  background: rgba(244, 63, 94, 0.2);
+  color: #fda4af;
+  border: 1px solid rgba(244, 63, 94, 0.4);
+}
+
+.kr-topic-selector-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.kr-selector-label {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.kr-topic-select {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-main);
+  font-size: 12px;
+  padding: 4px 10px;
+  outline: none;
+  cursor: pointer;
+}
+
+.kr-study-progress-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.kr-card-meta-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 2px 8px;
+  font-size: 11px;
+  color: var(--text-subtle);
+}
+
 /* Thẻ 3D Flip Card */
 .kr-card-stage {
   perspective: 1200px;
   width: 100%;
-  min-height: 330px;
-  cursor: pointer;
+  min-height: 380px;
   user-select: none;
+}
+
+.kr-card-stage.flipped {
+  cursor: pointer;
 }
 
 .kr-card-inner {
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 330px;
+  min-height: 380px;
   text-align: center;
-  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
 }
 
@@ -109,10 +263,10 @@
   left: 0;
   width: 100%;
   height: 100%;
-  min-height: 330px;
+  min-height: 380px;
   backface-visibility: hidden;
   border-radius: 20px;
-  padding: 24px 20px;
+  padding: 22px 18px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -122,17 +276,307 @@
 
 /* Mặt Trước (Front) */
 .kr-card-front {
-  background: linear-gradient(145deg, #1f1826 0%, #120e1a 100%);
-  border: 1.5px solid rgba(244, 63, 94, 0.3);
+  background: linear-gradient(145deg, #181c2f, #101322);
+  border: 1px solid rgba(244, 63, 94, 0.25);
 }
 
-.kr-card-back {
-  background: linear-gradient(145deg, #1b162a 0%, #0e1220 100%);
-  border: 1.5px solid rgba(99, 102, 241, 0.4);
-  transform: rotateY(180deg);
+.kr-card-top-tags {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.kr-topic-tag {
+  background: rgba(244, 63, 94, 0.15);
+  color: #fb7185;
+  border-radius: 999px;
+  font-size: 11px;
+  padding: 2px 8px;
+  font-weight: 700;
+}
+
+.kr-level-tag {
+  background: rgba(16, 185, 129, 0.15);
+  color: #6ee7b7;
+  border-radius: 999px;
+  font-size: 11px;
+  padding: 2px 8px;
+  font-weight: 800;
 }
 
 .kr-front-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 10px 0;
+}
+
+.kr-hangeul-title {
+  font-size: 38px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 12px rgba(244, 63, 94, 0.4);
+}
+
+.kr-meaning-prompt-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #38bdf8;
+  max-width: 90%;
+  line-height: 1.35;
+}
+
+.kr-hanja-hint {
+  font-size: 12.5px;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+}
+
+.kr-recall-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.kr-roman-text {
+  font-size: 14px;
+  color: #38bdf8;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.kr-roman-hidden {
+  font-size: 12px;
+  color: #f43f5e;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.btn-speak-vocab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(244, 63, 94, 0.15);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  color: #fb7185;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 4px;
+}
+
+.btn-speak-vocab:hover {
+  background: #f43f5e;
+  color: #fff;
+  transform: scale(1.08);
+}
+
+.btn-speak-vocab.small {
+  width: 30px;
+  height: 30px;
+}
+
+.btn-speak-vocab.tiny {
+  width: 26px;
+  height: 26px;
+}
+
+/* Nút to nghe âm thanh */
+.kr-listening-prompt-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-big-listen-audio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(168, 85, 247, 0.2));
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  border-radius: 16px;
+  padding: 16px 24px;
+  color: #fda4af;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-big-listen-audio:hover {
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.35), rgba(168, 85, 247, 0.35));
+  transform: scale(1.03);
+}
+
+/* Vùng Trắc Nghiệm Active Recall 4 lựa chọn */
+.kr-quiz-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.kr-quiz-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.kr-quiz-opt-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.kr-quiz-opt-btn:hover:not(:disabled) {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  transform: translateY(-1px);
+}
+
+.kr-quiz-opt-btn.opt-correct {
+  background: rgba(16, 185, 129, 0.2) !important;
+  border-color: #10b981 !important;
+  color: #34d399 !important;
+  font-weight: 800;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+}
+
+.kr-quiz-opt-btn.opt-wrong {
+  background: rgba(244, 63, 94, 0.2) !important;
+  border-color: #f43f5e !important;
+  color: #fb7185 !important;
+  animation: shakeOpt 0.3s ease;
+}
+
+@keyframes shakeOpt {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.kr-quiz-opt-btn.opt-dimmed {
+  opacity: 0.4;
+}
+
+.kr-opt-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kr-skip-quiz-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  color: var(--text-subtle);
+  font-size: 11.5px;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.kr-skip-quiz-btn:hover {
+  color: #fda4af;
+  text-decoration: underline;
+}
+
+/* Mặt Sau (Back) */
+.kr-card-back {
+  background: linear-gradient(145deg, #1a162b, #120e20);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  transform: rotateY(180deg);
+}
+
+.kr-card-back-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.kr-card-back-word {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.kr-back-hangeul {
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.kr-back-rom {
+  font-size: 12px;
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+/* Huy hiệu phát âm thực tế */
+.kr-actual-pronounce-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(244, 63, 94, 0.15);
+  border: 1px solid rgba(244, 63, 94, 0.35);
+  border-radius: var(--radius-full);
+  padding: 4px 12px;
+  font-size: 12px;
+  margin: 6px auto;
+}
+
+.badge-tag {
+  color: #fda4af;
+  font-weight: 600;
+}
+
+.badge-val {
+  color: #ffffff;
+  font-size: 13.5px;
+  letter-spacing: 0.5px;
+}
+
+.btn-mini-sound {
+  background: transparent;
+  border: none;
+  color: #fda4af;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  transition: transform 0.2s;
+}
+
+.btn-mini-sound:hover {
+  transform: scale(1.15);
+  color: #fff;
+}
+
+.kr-card-back-body {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -140,79 +584,45 @@
   margin: auto 0;
 }
 
-.kr-hangeul-title {
-  font-size: 38px;
-  font-weight: 900;
-  color: #fff;
-  font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
-  text-shadow: 0 0 18px rgba(244, 63, 94, 0.4);
-}
-
-.kr-roman-text {
-  font-size: 15px;
-  color: #fb7185;
-  font-weight: 700;
-}
-
-.btn-speak-vocab {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(244, 63, 94, 0.2);
-  border: 1px solid rgba(244, 63, 94, 0.5);
-  color: #fb7185;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 0 15px rgba(244, 63, 94, 0.3);
-}
-
-.btn-speak-vocab:hover {
-  transform: scale(1.1);
-  background: #f43f5e;
-  color: #fff;
-  box-shadow: 0 0 20px rgba(244, 63, 94, 0.6);
-}
-
-/* Mặt Sau (Back) */
 .kr-meaning-vi {
   font-size: 22px;
   font-weight: 800;
   color: #38bdf8;
-  line-height: 1.3;
+  max-width: 90%;
+  line-height: 1.35;
 }
 
 .kr-hanja-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(245, 158, 11, 0.15);
-  border: 1px solid rgba(245, 158, 11, 0.4);
-  color: #fcd34d;
+  display: inline-block;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
   border-radius: var(--radius-full);
-  font-size: 12px;
-  font-weight: 700;
-  padding: 3px 12px;
+  padding: 4px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
 }
 
 .kr-example-box {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-md);
+  border-radius: 12px;
   padding: 10px 14px;
-  text-align: left;
+  max-width: 95%;
+  text-align: center;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  width: 100%;
 }
 
 .kr-example-ko {
   font-size: 13.5px;
-  font-weight: 700;
-  color: #f1f5f9;
+  color: #ffffff;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
 .kr-example-vi {
@@ -220,7 +630,16 @@
   color: var(--text-muted);
 }
 
-/* 4 Nút Đánh Giá SRS */
+.kr-card-back-footer {
+  font-size: 11.5px;
+  color: var(--text-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+/* 4 Nút đánh giá SM-2 */
 .kr-rating-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -232,139 +651,387 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  justify-content: center;
+  gap: 2px;
   padding: 10px 6px;
-  border-radius: var(--radius-md);
+  border-radius: 12px;
   border: 1px solid transparent;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.btn-kr-rating:hover {
-  transform: translateY(-2px);
+.btn-kr-rating .rating-title {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.btn-kr-rating .rating-desc {
+  font-size: 10.5px;
+  opacity: 0.85;
 }
 
 .btn-kr-rating.again {
   background: rgba(244, 63, 94, 0.15);
-  border-color: rgba(244, 63, 94, 0.4);
   color: #fb7185;
+  border-color: rgba(244, 63, 94, 0.3);
 }
+
 .btn-kr-rating.again:hover {
   background: #f43f5e;
   color: #fff;
 }
 
 .btn-kr-rating.hard {
-  background: rgba(245, 158, 11, 0.15);
-  border-color: rgba(245, 158, 11, 0.4);
-  color: #fbbf24;
+  background: rgba(249, 115, 22, 0.15);
+  color: #fb923c;
+  border-color: rgba(249, 115, 22, 0.3);
 }
+
 .btn-kr-rating.hard:hover {
-  background: #f59e0b;
+  background: #f97316;
   color: #fff;
 }
 
 .btn-kr-rating.good {
   background: rgba(16, 185, 129, 0.15);
-  border-color: rgba(16, 185, 129, 0.4);
   color: #34d399;
+  border-color: rgba(16, 185, 129, 0.3);
 }
+
 .btn-kr-rating.good:hover {
   background: #10b981;
   color: #fff;
 }
 
 .btn-kr-rating.easy {
-  background: rgba(99, 102, 241, 0.15);
-  border-color: rgba(99, 102, 241, 0.4);
-  color: #a5b4fc;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.3);
 }
+
 .btn-kr-rating.easy:hover {
-  background: #6366f1;
+  background: #0284c7;
   color: #fff;
 }
 
-/* 3. CHẾ ĐỘ THƯ VIỆN (LIBRARY) */
+/* Hiệu ứng gợi ý đánh giá sau khi trả lời Quiz */
+.btn-kr-rating.recommended-action {
+  box-shadow: 0 0 14px 2px currentColor;
+  transform: scale(1.04);
+}
+
+/* Thẻ báo hoàn thành bài học */
+.kr-study-completed-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 36px 20px;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.kr-completed-icon {
+  font-size: 48px;
+}
+
+.kr-completed-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.kr-completed-desc {
+  color: var(--text-muted);
+  font-size: 13px;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.kr-completed-stats {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 12.5px;
+  color: var(--text-main);
+  background: rgba(0, 0, 0, 0.25);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+}
+
+.btn-restart-study {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #f43f5e, #ec4899);
+  border: none;
+  color: #fff;
+  border-radius: var(--radius-full);
+  padding: 9px 20px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: transform 0.2s;
+}
+
+.btn-restart-study:hover {
+  transform: translateY(-2px);
+}
+
+/* 3. CHẾ ĐỘ THƯ VIỆN TỪ VỰNG (LIBRARY) */
+.kr-library-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
 .kr-chips-bar {
   display: flex;
   align-items: center;
   gap: 6px;
   overflow-x: auto;
-  padding: 2px 0 6px 0;
-  width: 100%;
-  scrollbar-width: thin;
-  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
 }
 
 .kr-chip-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border-color);
-  color: var(--text-muted);
-  border-radius: var(--radius-full);
-  padding: 5px 12px;
-  font-size: 11.5px;
-  font-weight: 700;
-  cursor: pointer;
+  gap: 5px;
   white-space: nowrap;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  cursor: pointer;
   transition: all 0.2s;
-  flex-shrink: 0;
 }
 
 .kr-chip-btn.active {
-  background: linear-gradient(135deg, rgba(244, 63, 94, 0.25), rgba(236, 72, 153, 0.25));
+  background: rgba(244, 63, 94, 0.15);
   border-color: #f43f5e;
   color: #fff;
+  font-weight: 700;
 }
 
-.kr-vocab-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 10px;
+.kr-search-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 7px 14px;
+}
+
+.kr-search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-main);
+  font-size: 13px;
   width: 100%;
 }
 
-.kr-vocab-card {
+.kr-clear-search-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.kr-words-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.kr-word-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 12px 14px;
+  border-radius: 14px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   transition: all 0.2s;
 }
 
-.kr-vocab-card:hover {
+.kr-word-card:hover {
+  border-color: rgba(244, 63, 94, 0.4);
   transform: translateY(-2px);
-  border-color: rgba(244, 63, 94, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
-.kr-card-hangeul {
+.kr-word-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.kr-word-hangeul-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.kr-lib-hangeul {
   font-size: 18px;
   font-weight: 800;
   color: #fff;
+}
+
+.kr-lib-rom {
+  font-size: 11.5px;
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+.kr-lib-rom-hidden {
+  font-size: 11px;
+  color: #f43f5e;
+  opacity: 0.6;
+}
+
+.kr-word-spoken-pill {
+  font-size: 11.5px;
+  color: #fca5a5;
+  background: rgba(244, 63, 94, 0.1);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  display: inline-block;
+  width: fit-content;
+}
+
+.kr-word-meaning {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.35;
+}
+
+.kr-word-hanja {
+  font-size: 11.5px;
+  color: #fbbf24;
+}
+
+.kr-word-example {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+}
+
+.kr-word-example .ex-ko {
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
+.kr-word-example .ex-vi {
+  color: var(--text-muted);
+}
+
+.kr-word-footer {
   display: flex;
   align-items: center;
   gap: 6px;
+  margin-top: auto;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.kr-card-vi {
-  font-size: 13.5px;
+.kr-lib-tag {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  padding: 2px 6px;
   font-weight: 700;
-  color: #38bdf8;
 }
 
-@media (max-width: 600px) {
+.kr-lib-srs-pill {
+  margin-left: auto;
+  font-size: 10.5px;
+  color: #34d399;
+  font-weight: 600;
+}
+
+.kr-empty-library {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 36px 20px;
+  color: var(--text-muted);
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* MOBILE RESPONSIVE OPTIMIZATION */
+@media (max-width: 768px) {
+  .kr-vocab-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .kr-toolbar-right {
+    justify-content: space-between;
+  }
+
+  .kr-card-stage,
+  .kr-card-inner,
+  .kr-card-face {
+    min-height: 400px;
+  }
+
+  .kr-hangeul-title {
+    font-size: 30px;
+  }
+
+  .kr-quiz-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
   .kr-rating-row {
     grid-template-columns: repeat(2, 1fr);
   }
-  .kr-vocab-grid {
+
+  .kr-words-grid {
     grid-template-columns: 1fr;
   }
-  .kr-hangeul-title {
-    font-size: 30px;
+}
+
+@media (max-width: 480px) {
+  .kr-sub-modes-pill {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .kr-sub-mode-btn {
+    padding: 4px 6px;
+    font-size: 11px;
+  }
+
+  .kr-card-stage,
+  .kr-card-inner,
+  .kr-card-face {
+    min-height: 420px;
+    padding: 16px 12px;
   }
 }

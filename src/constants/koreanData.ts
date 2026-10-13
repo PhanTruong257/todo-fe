@@ -3,6 +3,7 @@ import type {
   KoreanVocabWord,
   KoreanGrammarPoint,
   KoreanDialogueItem,
+  PatchimRule,
 } from '../types/korean';
 
 // ==========================================
@@ -109,6 +110,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-1',
     hangeul: '안녕하세요',
     romanization: 'an-nyeong-ha-se-yo',
+    actualPronunciation: '[안녕하세요]',
     meaningVi: 'Xin chào (lịch sự thông dụng)',
     hanjaVi: 'An Ninh (安寧)',
     partOfSpeech: 'phrase',
@@ -121,6 +123,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-2',
     hangeul: '감사합니다',
     romanization: 'gam-sa-ham-ni-da',
+    actualPronunciation: '[감사함니다]',
     meaningVi: 'Cảm ơn bạn (trang trọng)',
     hanjaVi: 'Cảm Tạ (感謝)',
     partOfSpeech: 'phrase',
@@ -133,6 +136,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-3',
     hangeul: '죄송합니다',
     romanization: 'joe-song-ham-ni-da',
+    actualPronunciation: '[죄송함니다]',
     meaningVi: 'Xin lỗi (chân thành, trang trọng)',
     hanjaVi: 'Tội Tung (罪悚)',
     partOfSpeech: 'phrase',
@@ -145,6 +149,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-4',
     hangeul: '안녕히 가세요',
     romanization: 'an-nyeong-hi ga-se-yo',
+    actualPronunciation: '[안녕히 가세요]',
     meaningVi: 'Tạm biệt (chúc người đi bình an)',
     hanjaVi: 'Khứ (Đi)',
     partOfSpeech: 'phrase',
@@ -157,6 +162,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-5',
     hangeul: '안녕히 계세요',
     romanization: 'an-nyeong-hi gye-se-yo',
+    actualPronunciation: '[안녕히 계세요]',
     meaningVi: 'Tạm biệt (chúc người ở lại bình an)',
     hanjaVi: 'Giai (Ở lại)',
     partOfSpeech: 'phrase',
@@ -169,6 +175,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-6',
     hangeul: '이름',
     romanization: 'i-reum',
+    actualPronunciation: '[이름]',
     meaningVi: 'Tên, danh tính',
     partOfSpeech: 'noun',
     topic: 'greetings',
@@ -182,6 +189,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-7',
     hangeul: '일, 이, 삼, 사, 오',
     romanization: 'il, i, sam, sa, o',
+    actualPronunciation: '[일, 이, 삼, 사, 오]',
     meaningVi: '1, 2, 3, 4, 5 (Số Hán Hàn dùng tính tiền, số điện thoại, ngày tháng)',
     hanjaVi: 'Nhất, Nhị, Tam, Tứ, Ngũ (一, 二, 三, 四, 五)',
     partOfSpeech: 'number',
@@ -194,6 +202,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-8',
     hangeul: '하나, 둘, 셋, 넷, 다섯',
     romanization: 'ha-na, dul, set, net, da-seot',
+    actualPronunciation: '[하나, 둘, 섿, 넫, 다섣]',
     meaningVi: '1, 2, 3, 4, 5 (Số Thuần Hàn dùng đếm đồ vật, đếm người, đếm giờ)',
     partOfSpeech: 'number',
     topic: 'numbers',
@@ -205,6 +214,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-9',
     hangeul: '오늘',
     romanization: 'o-neul',
+    actualPronunciation: '[오늘]',
     meaningVi: 'Hôm nay',
     partOfSpeech: 'noun',
     topic: 'numbers',
@@ -216,6 +226,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-10',
     hangeul: '지금',
     romanization: 'ji-geum',
+    actualPronunciation: '[지금]',
     meaningVi: 'Bây giờ, hiện tại',
     hanjaVi: 'Chỉ Kim (只今)',
     partOfSpeech: 'noun',
@@ -230,6 +241,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-11',
     hangeul: '밥',
     romanization: 'bap',
+    actualPronunciation: '[밥]',
     meaningVi: 'Cơm, bữa ăn',
     partOfSpeech: 'noun',
     topic: 'food',
@@ -241,6 +253,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-12',
     hangeul: '물',
     romanization: 'mul',
+    actualPronunciation: '[물]',
     meaningVi: 'Nước uống',
     partOfSpeech: 'noun',
     topic: 'food',
@@ -252,6 +265,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-13',
     hangeul: '김치',
     romanization: 'gim-chi',
+    actualPronunciation: '[김치]',
     meaningVi: 'Kim chi (món dưa muối truyền thống)',
     partOfSpeech: 'noun',
     topic: 'food',
@@ -263,6 +277,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-14',
     hangeul: '식당',
     romanization: 'sik-dang',
+    actualPronunciation: '[식땅]',
     meaningVi: 'Nhà hàng, quán ăn',
     hanjaVi: 'Thực Đường (食堂)',
     partOfSpeech: 'noun',
@@ -275,6 +290,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-15',
     hangeul: '맛있다',
     romanization: 'ma-sit-da',
+    actualPronunciation: '[마싣따]',
     meaningVi: 'Ngon, hợp khẩu vị',
     partOfSpeech: 'adjective',
     topic: 'food',
@@ -288,6 +304,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-16',
     hangeul: '가족',
     romanization: 'ga-jok',
+    actualPronunciation: '[가족]',
     meaningVi: 'Gia đình',
     hanjaVi: 'Gia Tộc (家族)',
     partOfSpeech: 'noun',
@@ -300,6 +317,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-17',
     hangeul: '아버지',
     romanization: 'a-beo-ji',
+    actualPronunciation: '[아버지]',
     meaningVi: 'Bố, cha (gọi thân mật: 아빠 - Appa)',
     partOfSpeech: 'noun',
     topic: 'family',
@@ -311,6 +329,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-18',
     hangeul: '어머니',
     romanization: 'eo-meo-ni',
+    actualPronunciation: '[어머니]',
     meaningVi: 'Mẹ (gọi thân mật: 엄마 - Eomma)',
     partOfSpeech: 'noun',
     topic: 'family',
@@ -322,6 +341,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-19',
     hangeul: '친구',
     romanization: 'chin-gu',
+    actualPronunciation: '[친구]',
     meaningVi: 'Bạn bè, bạn thân',
     hanjaVi: 'Thân Cựu (親舊)',
     partOfSpeech: 'noun',
@@ -336,6 +356,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-20',
     hangeul: '학생',
     romanization: 'hak-saeng',
+    actualPronunciation: '[학쌩]',
     meaningVi: 'Học sinh, sinh viên',
     hanjaVi: 'Học Sinh (學生)',
     partOfSpeech: 'noun',
@@ -348,6 +369,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-21',
     hangeul: '선생님',
     romanization: 'seon-saeng-nim',
+    actualPronunciation: '[선생님]',
     meaningVi: 'Thầy giáo / Cô giáo (kính ngữ)',
     hanjaVi: 'Tiên Sinh (先生)',
     partOfSpeech: 'noun',
@@ -360,6 +382,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-22',
     hangeul: '회사',
     romanization: 'hoe-sa',
+    actualPronunciation: '[회사]',
     meaningVi: 'Công ty, cơ quan làm việc',
     hanjaVi: 'Hội Xã (會社)',
     partOfSpeech: 'noun',
@@ -372,6 +395,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-23',
     hangeul: '한국어',
     romanization: 'han-gu-geo',
+    actualPronunciation: '[한구거]',
     meaningVi: 'Tiếng Hàn Quốc',
     hanjaVi: 'Hàn Quốc Ngữ (韓國語)',
     partOfSpeech: 'noun',
@@ -386,6 +410,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-24',
     hangeul: '돈',
     romanization: 'don',
+    actualPronunciation: '[돈]',
     meaningVi: 'Tiền bạc',
     partOfSpeech: 'noun',
     topic: 'places',
@@ -397,6 +422,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-25',
     hangeul: '얼마예요?',
     romanization: 'eol-ma-ye-yo',
+    actualPronunciation: '[얼마예요?]',
     meaningVi: 'Cái này bao nhiêu tiền ạ?',
     partOfSpeech: 'phrase',
     topic: 'places',
@@ -408,6 +434,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-26',
     hangeul: '어디',
     romanization: 'eo-di',
+    actualPronunciation: '[어디]',
     meaningVi: 'Ở đâu, chỗ nào',
     partOfSpeech: 'pronoun',
     topic: 'places',
@@ -419,6 +446,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-27',
     hangeul: '화장실',
     romanization: 'hwa-jang-sil',
+    actualPronunciation: '[화장실]',
     meaningVi: 'Nhà vệ sinh, toilet',
     hanjaVi: 'Hóa Trang Thất (化粧室)',
     partOfSpeech: 'noun',
@@ -433,6 +461,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-28',
     hangeul: '좋다',
     romanization: 'jo-ta',
+    actualPronunciation: '[조타]',
     meaningVi: 'Tốt, thích',
     partOfSpeech: 'adjective',
     topic: 'feelings',
@@ -444,6 +473,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-29',
     hangeul: '예쁘다',
     romanization: 'ye-ppeu-da',
+    actualPronunciation: '[예쁘다]',
     meaningVi: 'Đẹp, xinh xắn',
     partOfSpeech: 'adjective',
     topic: 'feelings',
@@ -455,6 +485,7 @@ export const KOREAN_VOCAB_LIST: KoreanVocabWord[] = [
     id: 'ko-30',
     hangeul: '재미있다',
     romanization: 'jae-mi-it-da',
+    actualPronunciation: '[재미읻따]',
     meaningVi: 'Thú vị, vui nhộn',
     hanjaVi: 'Tư Vị (滋味) + Có',
     partOfSpeech: 'adjective',
@@ -719,3 +750,219 @@ export function speakKorean(text: string, rate: number = 0.85) {
     console.warn('Phát âm tiếng Hàn thất bại:', err);
   }
 }
+
+// ==========================================
+// 5. QUY TẮC PATCHIM & BIẾN ÂM TIẾNG HÀN
+// ==========================================
+export const PATCHIM_RULES: PatchimRule[] = [
+  {
+    id: 'p-1',
+    representativeSound: 'ㄱ',
+    soundLabel: 'Âm Tắc Họng [K]',
+    letters: ['ㄱ', 'ㄲ', 'ㅋ', 'ㄳ', 'ㄺ'],
+    explanation: 'Dù viết là ㄲ, ㅋ hay phụ âm kép ㄳ, ㄺ, khi ở vị trí phụ âm cuối (patchim) đều ngậm hơi và phát âm thành [ㄱ] (k).',
+    examples: [
+      { word: '책', reading: '[책]', meaningVi: 'Cuốn sách' },
+      { word: '부엌', reading: '[부억]', meaningVi: 'Nhà bếp (ㅋ phát âm thành ㄱ)' },
+      { word: '밖', reading: '[박]', meaningVi: 'Bên ngoài (ㄲ phát âm thành ㄱ)' },
+      { word: '닭', reading: '[닥]', meaningVi: 'Con gà (phụ âm kép ㄺ -> ㄱ)' },
+    ],
+  },
+  {
+    id: 'p-2',
+    representativeSound: 'ㄴ',
+    soundLabel: 'Âm Mũi [N]',
+    letters: ['ㄴ', 'ㄵ', 'ㄶ'],
+    explanation: 'Đầu lưỡi chạm vòm miệng trên, luồng hơi đi qua mũi tạo âm [ㄴ] (n).',
+    examples: [
+      { word: '눈', reading: '[눈]', meaningVi: 'Mắt / Tuyết' },
+      { word: '앉다', reading: '[안따]', meaningVi: 'Ngồi (ㄵ đọc thành ㄴ)' },
+      { word: '많다', reading: '[만타]', meaningVi: 'Nhiều (ㄶ đọc thành ㄴ)' },
+    ],
+  },
+  {
+    id: 'p-3',
+    representativeSound: 'ㄷ',
+    soundLabel: 'Âm Tắc Lưỡi [T] (Nhóm đông nhất)',
+    letters: ['ㄷ', 'ㅅ', 'ㅆ', 'ㅈ', 'ㅊ', 'ㅌ', 'ㅎ'],
+    explanation: 'Có tới 7 phụ âm khác nhau khi đứng làm patchim đều phát âm quy về [ㄷ] (t)! Lưỡi chạm chân răng chặn hơi.',
+    examples: [
+      { word: '옷', reading: '[옫]', meaningVi: 'Quần áo (ㅅ -> ㄷ)' },
+      { word: '꽃', reading: '[꼳]', meaningVi: 'Bông hoa (ㅊ -> ㄷ)' },
+      { word: '낮', reading: '[낟]', meaningVi: 'Ban ngày (ㅈ -> ㄷ)' },
+      { word: '있다', reading: '[읻따]', meaningVi: 'Có (ㅆ -> ㄷ)' },
+      { word: '끝', reading: '[끋]', meaningVi: 'Kết thúc (ㅌ -> ㄷ)' },
+    ],
+  },
+  {
+    id: 'p-4',
+    representativeSound: 'ㄹ',
+    soundLabel: 'Âm Uốn Lưỡi [L]',
+    letters: ['ㄹ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㅀ'],
+    explanation: 'Đầu lưỡi cong lên chạm nhẹ vòm họng trên tạo âm [ㄹ] (l uốn lưỡi nhẹ).',
+    examples: [
+      { word: '달', reading: '[달]', meaningVi: 'Mặt trăng / Tháng' },
+      { word: '물', reading: '[물]', meaningVi: 'Nước uống' },
+      { word: '여덟', reading: '[여덜]', meaningVi: 'Số 8 (ㄼ -> ㄹ)' },
+    ],
+  },
+  {
+    id: 'p-5',
+    representativeSound: 'ㅁ',
+    soundLabel: 'Âm Môi [M]',
+    letters: ['ㅁ', 'ㄻ'],
+    explanation: 'Hai môi khép chặt, luồng hơi thoát qua đường mũi tạo âm [ㅁ] (m).',
+    examples: [
+      { word: '엄마', reading: '[엄마]', meaningVi: 'Mẹ' },
+      { word: '마음', reading: '[마음]', meaningVi: 'Tấm lòng, trái tim' },
+      { word: '삶', reading: '[삼]', meaningVi: 'Cuộc sống (ㄻ -> ㅁ)' },
+    ],
+  },
+  {
+    id: 'p-6',
+    representativeSound: 'ㅂ',
+    soundLabel: 'Âm Tắc Môi [P]',
+    letters: ['ㅂ', 'ㅍ', 'ㅄ', 'ㄿ'],
+    explanation: 'Hai môi khép chặn luồng khí đột ngột tạo âm [ㅂ] (p chặn môi).',
+    examples: [
+      { word: '밥', reading: '[밥]', meaningVi: 'Cơm' },
+      { word: '앞', reading: '[압]', meaningVi: 'Phía trước (ㅍ -> ㅂ)' },
+      { word: '없다', reading: '[업따]', meaningVi: 'Không có (ㅄ -> ㅂ)' },
+    ],
+  },
+  {
+    id: 'p-7',
+    representativeSound: 'ㅇ',
+    soundLabel: 'Âm Ngân Mũi [NG]',
+    letters: ['ㅇ'],
+    explanation: 'Đứng đầu âm tiết ㅇ là âm câm, nhưng khi đứng ở đáy âm tiết (patchim) thì phát âm thành âm ngắt ngân mũi [ㅇ] (ng).',
+    examples: [
+      { word: '강', reading: '[강]', meaningVi: 'Dòng sông' },
+      { word: '사랑', reading: '[사랑]', meaningVi: 'Tình yêu' },
+      { word: '안녕', reading: '[안녕]', meaningVi: 'Xin chào' },
+    ],
+  },
+];
+
+export interface PronunciationRule {
+  id: string;
+  title: string;
+  koreanName: string;
+  explanation: string;
+  formula: string;
+  examples: { original: string; spoken: string; meaningVi: string }[];
+}
+
+export const ESSENTIAL_PRONUNCIATION_RULES: PronunciationRule[] = [
+  {
+    id: 'pr-1',
+    title: 'Quy tắc Nối Âm (Liaison)',
+    koreanName: '연음 법칙',
+    explanation: 'Khi âm tiết trước có Patchim gặp âm tiết sau bắt đầu bằng nguyên âm (âm câm ㅇ), phụ âm Patchim sẽ được nối thẳng lên làm phụ âm đầu của âm tiết sau.',
+    formula: '[Patchim] + [ㅇ] ➔ [Patchim đọc ở âm sau]',
+    examples: [
+      { original: '한국어', spoken: '[한구거]', meaningVi: 'Tiếng Hàn Quốc (ㄱ nối lên 어 -> 거)' },
+      { original: '먹어요', spoken: '[머거요]', meaningVi: 'Ăn (ㄱ nối lên 어 -> 거)' },
+      { original: '음악', spoken: '[으막]', meaningVi: 'Âm nhạc (ㅁ nối lên 악 -> 막)' },
+      { original: '집에', spoken: '[지베]', meaningVi: 'Ở nhà (ㅂ nối lên 에 -> 베)' },
+    ],
+  },
+  {
+    id: 'pr-2',
+    title: 'Quy tắc Mũi Hóa (Nasalization)',
+    koreanName: '비음화',
+    explanation: 'Khi Patchim kết thúc bằng ㅂ, ㄷ, ㄱ gặp phụ âm ㄴ hoặc ㅁ ở phía sau, chúng sẽ biến âm thành âm mũi mềm: ㅂ ➔ ㅁ, ㄷ ➔ ㄴ, ㄱ ➔ ㅇ.',
+    formula: 'ㅂ + ㄴ/ㅁ ➔ ㅁ | ㄷ + ㄴ/ㅁ ➔ ㄴ | ㄱ + ㄴ/ㅁ ➔ ㅇ',
+    examples: [
+      { original: '감사합니다', spoken: '[감사함니다]', meaningVi: 'Cảm ơn (ㅂ gặp ㄴ biến thành ㅁ)' },
+      { original: '국물', spoken: '[궁물]', meaningVi: 'Nước canh (ㄱ gặp ㅁ biến thành ㅇ)' },
+      { original: '입니다', spoken: '[임니다]', meaningVi: 'Là (ㅂ gặp ㄴ biến thành ㅁ)' },
+    ],
+  },
+  {
+    id: 'pr-3',
+    title: 'Quy tắc Căng Âm (Tensification)',
+    koreanName: '경음화',
+    explanation: 'Khi các Patchim tắc (ㄱ, ㄷ, ㅂ) gặp các phụ âm thường (ㄱ, ㄷ, ㅂ, ㅅ, ㅈ), các phụ âm sau sẽ phải phát âm căng đanh (ㄲ, ㄸ, ㅃ, ㅆ, ㅉ).',
+    formula: 'ㄱ, ㄷ, ㅂ + ㄱ, ㄷ, ㅂ, ㅅ, ㅈ ➔ ㄲ, ㄸ, ㅃ, ㅆ, ㅉ',
+    examples: [
+      { original: '식당', spoken: '[식땅]', meaningVi: 'Nhà hàng (ㄷ biến thành ㄸ)' },
+      { original: '학생', spoken: '[학쌩]', meaningVi: 'Học sinh (ㅅ biến thành ㅆ)' },
+      { original: '학교', spoken: '[학꾜]', meaningVi: 'Trường học (ㄱ biến thành ㄲ)' },
+    ],
+  },
+  {
+    id: 'pr-4',
+    title: 'Quy tắc Bật Hơi (Aspiration)',
+    koreanName: '격음화',
+    explanation: 'Khi phụ âm ㅎ kết hợp trước hoặc sau các phụ âm ㄱ, ㄷ, ㅂ, ㅈ, chúng sẽ hợp thành âm bật hơi mạnh ㅋ, ㅌ, ㅍ, ㅊ.',
+    formula: 'ㄱ/ㄷ/ㅂ/ㅈ + ㅎ (hoặc ngược lại) ➔ ㅋ/ㅌ/ㅍ/ㅊ',
+    examples: [
+      { original: '좋다', spoken: '[조타]', meaningVi: 'Tốt (ㅎ + ㄷ ➔ ㅌ)' },
+      { original: '축하', spoken: '[추카]', meaningVi: 'Chúc mừng (ㄱ + ㅎ ➔ ㅋ)' },
+      { original: '어떻게', spoken: '[어떠케]', meaningVi: 'Làm sao (ㅎ + ㄱ ➔ ㅋ)' },
+    ],
+  },
+];
+
+// ==========================================
+// 6. BÀN PHÍM TIẾNG HÀN 2-SET (두벌식 DUBEOLSIK)
+// ==========================================
+export interface KeyboardKeyDef {
+  key: string;       // Ký tự phím máy tính QWERTY (q, w, e...)
+  normalKo: string;  // Chữ Hàn khi gõ bình thường
+  shiftKo?: string;  // Chữ Hàn khi ấn Shift
+  type: 'consonant' | 'vowel';
+}
+
+export const KEYBOARD_2SET_LAYOUT: KeyboardKeyDef[][] = [
+  // Hàng 1 (Top row)
+  [
+    { key: 'q', normalKo: 'ㅂ', shiftKo: 'ㅃ', type: 'consonant' },
+    { key: 'w', normalKo: 'ㅈ', shiftKo: 'ㅉ', type: 'consonant' },
+    { key: 'e', normalKo: 'ㄷ', shiftKo: 'ㄸ', type: 'consonant' },
+    { key: 'r', normalKo: 'ㄱ', shiftKo: 'ㄲ', type: 'consonant' },
+    { key: 't', normalKo: 'ㅅ', shiftKo: 'ㅆ', type: 'consonant' },
+    { key: 'y', normalKo: 'ㅛ', type: 'vowel' },
+    { key: 'u', normalKo: 'ㅕ', type: 'vowel' },
+    { key: 'i', normalKo: 'ㅑ', type: 'vowel' },
+    { key: 'o', normalKo: 'ㅐ', shiftKo: 'ㅒ', type: 'vowel' },
+    { key: 'p', normalKo: 'ㅔ', shiftKo: 'ㅖ', type: 'vowel' },
+  ],
+  // Hàng 2 (Home row)
+  [
+    { key: 'a', normalKo: 'ㅁ', type: 'consonant' },
+    { key: 's', normalKo: 'ㄴ', type: 'consonant' },
+    { key: 'd', normalKo: 'ㅇ', type: 'consonant' },
+    { key: 'f', normalKo: 'ㄹ', type: 'consonant' },
+    { key: 'g', normalKo: 'ㅎ', type: 'consonant' },
+    { key: 'h', normalKo: 'ㅗ', type: 'vowel' },
+    { key: 'j', normalKo: 'ㅓ', type: 'vowel' },
+    { key: 'k', normalKo: 'ㅏ', type: 'vowel' },
+    { key: 'l', normalKo: 'ㅣ', type: 'vowel' },
+  ],
+  // Hàng 3 (Bottom row)
+  [
+    { key: 'z', normalKo: 'ㅋ', type: 'consonant' },
+    { key: 'x', normalKo: 'ㅌ', type: 'consonant' },
+    { key: 'c', normalKo: 'ㅊ', type: 'consonant' },
+    { key: 'v', normalKo: 'ㅍ', type: 'consonant' },
+    { key: 'b', normalKo: 'ㅠ', type: 'vowel' },
+    { key: 'n', normalKo: 'ㅜ', type: 'vowel' },
+    { key: 'm', normalKo: 'ㅡ', type: 'vowel' },
+  ],
+];
+
+export const KEYBOARD_PRACTICE_WORDS = [
+  { word: '가', rom: 'ga', hint: 'Phụ âm ㄱ (r) + Nguyên âm ㅏ (k)' },
+  { word: '나', rom: 'na', hint: 'Phụ âm ㄴ (s) + Nguyên âm ㅏ (k)' },
+  { word: '다', rom: 'da', hint: 'Phụ âm ㄷ (e) + Nguyên âm ㅏ (k)' },
+  { word: '사과', rom: 'sa-gwa', hint: 'ㅅ(t) + ㅏ(k) + ㄱ(r) + ㅗ(h) + ㅏ(k)' },
+  { word: '한국', rom: 'han-guk', hint: 'ㅎ(g) + ㅏ(k) + ㄴ(s) + ㄱ(r) + ㅜ(n) + ㄱ(r)' },
+  { word: '학교', rom: 'hak-gyo', hint: 'ㅎ(g) + ㅏ(k) + ㄱ(r) + ㄱ(r) + ㅛ(y)' },
+  { word: '안녕', rom: 'an-nyeong', hint: 'ㅇ(d) + ㅏ(k) + ㄴ(s) + ㄴ(s) + ㅕ(u) + ㅇ(d)' },
+  { word: '우유', rom: 'u-yu', hint: 'ㅇ(d) + ㅜ(n) + ㅇ(d) + ㅠ(b)' },
+  { word: '커피', rom: 'keo-pi', hint: 'ㅋ(z) + ㅓ(j) + ㅍ(v) + ㅣ(l)' },
+  { word: '감사', rom: 'gam-sa', hint: 'ㄱ(r) + ㅏ(k) + ㅁ(a) + ㅅ(t) + ㅏ(k)' },
+];
+

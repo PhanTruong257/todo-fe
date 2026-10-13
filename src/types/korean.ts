@@ -14,6 +14,7 @@ export interface KoreanVocabWord {
   id: string;
   hangeul: string;
   romanization: string;
+  actualPronunciation?: string; // Dạng đọc thực tế (ví dụ: [함니다], [머거요])
   meaningVi: string;
   hanjaVi?: string; // Âm Hán-Hàn tương đương trong tiếng Việt (ví dụ: 학생 -> Học sinh)
   partOfSpeech: string;
@@ -26,6 +27,20 @@ export interface KoreanVocabWord {
   easeFactor?: number;
   nextReviewDate?: string;
   status?: 'new' | 'learning' | 'mastered';
+  isMachineTranslated?: boolean;
+}
+
+export interface PatchimRule {
+  id: string;
+  representativeSound: string;
+  soundLabel: string;
+  letters: string[];
+  explanation: string;
+  examples: {
+    word: string;
+    reading: string;
+    meaningVi: string;
+  }[];
 }
 
 export interface KoreanGrammarPoint {

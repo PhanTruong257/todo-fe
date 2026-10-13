@@ -1,5 +1,21 @@
 import React from 'react';
-import { Volume2, Sparkles, Layers, RotateCw, Trophy, HelpCircle, CheckCircle2, XCircle } from 'lucide-react';
+import {
+  Volume2,
+  Sparkles,
+  Layers,
+  RotateCw,
+  Trophy,
+  HelpCircle,
+  CheckCircle2,
+  XCircle,
+  Keyboard as KeyboardIcon,
+  BookOpen,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  Delete,
+  RefreshCw,
+} from 'lucide-react';
 import { useHangeulView } from './useHangeulView';
 import type { KoreanLetterType } from '../../../types/korean';
 import './HangeulView.css';
@@ -13,6 +29,13 @@ export const HangeulView: React.FC = () => {
     selectedLetter,
     setSelectedLetter,
     filteredLetters,
+    hideRomanization,
+    toggleHideRomanization,
+    // Patchim & Pronunciation
+    patchimRules,
+    selectedPatchim,
+    setSelectedPatchim,
+    pronunciationRules,
     // Syllable Builder
     initialConsonant,
     setInitialConsonant,
@@ -25,6 +48,19 @@ export const HangeulView: React.FC = () => {
     MEDIAL_VOWELS,
     FINAL_CONSONANTS,
     speakKorean,
+    // Keyboard Trainer
+    keyboardLayout,
+    practiceWords,
+    currentPracticeWord,
+    practiceWordIndex,
+    setPracticeWordIndex,
+    typedChars,
+    activeKey,
+    isShiftActive,
+    setIsShiftActive,
+    handleInputKoChar,
+    handleBackspace,
+    handleClearTyped,
     // Quiz
     currentQuiz,
     quizIndex,
@@ -53,11 +89,27 @@ export const HangeulView: React.FC = () => {
           </button>
           <button
             type="button"
+            className={`hangeul-tab-btn ${subTab === 'patchim' ? 'active' : ''}`}
+            onClick={() => setSubTab('patchim')}
+          >
+            <BookOpen size={14} />
+            Patchim & Biến Âm
+          </button>
+          <button
+            type="button"
             className={`hangeul-tab-btn ${subTab === 'builder' ? 'active' : ''}`}
             onClick={() => setSubTab('builder')}
           >
             <Sparkles size={14} />
-            Bộ Ghép Vần Khối
+            Ghép Vần Khối
+          </button>
+          <button
+            type="button"
+            className={`hangeul-tab-btn ${subTab === 'keyboard' ? 'active' : ''}`}
+            onClick={() => setSubTab('keyboard')}
+          >
+            <KeyboardIcon size={14} />
+            Luyện Gõ Phím ⌨️
           </button>
           <button
             type="button"
@@ -65,9 +117,20 @@ export const HangeulView: React.FC = () => {
             onClick={() => setSubTab('quiz')}
           >
             <HelpCircle size={14} />
-            Mini Quiz Phản Xạ
+            Quiz Phản Xạ
           </button>
         </div>
+
+        {/* Nút Toggle Phiên Âm */}
+        <button
+          type="button"
+          className={`hangeul-roman-toggle-btn ${hideRomanization ? 'hidden-mode' : ''}`}
+          onClick={toggleHideRomanization}
+          title={hideRomanization ? 'Đang ẩn phiên âm Latin' : 'Đang hiện phiên âm Latin'}
+        >
+          {hideRomanization ? <EyeOff size={13} color="#f43f5e" /> : <Eye size={13} color="#38bdf8" />}
+          <span>{hideRomanization ? 'Ẩn Phiên Âm' : 'Hiện Phiên Âm'}</span>
+        </button>
       </div>
 
       {/* 2. CHẾ ĐỘ 1: BẢNG CHỮ CÁI HANGEUL (CHART) */}
@@ -105,7 +168,11 @@ export const HangeulView: React.FC = () => {
                 }}
               >
                 <div className="hangeul-char-big">{letter.char}</div>
-                <div className="hangeul-roman-tag">[{letter.romanization}]</div>
+                {!hideRomanization ? (
+                  <div className="hangeul-roman-tag">[{letter.romanization}]</div>
+                ) : (
+                  <div className="hangeul-roman-tag-hidden">👁️</div>
+                )}
                 <div className="hangeul-vi-hint">{letter.vietnameseGuide}</div>
                 <button
                   type="button"
@@ -122,151 +189,205 @@ export const HangeulView: React.FC = () => {
             ))}
           </div>
 
-          {/* Modal popup chi tiết khi click vào 1 chữ cái */}
+          {/* Modal / Card chi tiết ký tự đang chọn */}
           {selectedLetter && (
-            <div
-              style={{
-                position: 'fixed',
-                inset: 0,
-                background: 'rgba(0, 0, 0, 0.75)',
-                backdropFilter: 'blur(8px)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                zIndex: 99999,
-                padding: 16,
-              }}
-              onClick={() => setSelectedLetter(null)}
-            >
-              <div
-                style={{
-                  background: 'var(--bg-card)',
-                  border: '1.5px solid rgba(244, 63, 94, 0.4)',
-                  borderRadius: 'var(--radius-lg)',
-                  padding: 24,
-                  maxWidth: 380,
-                  width: '100%',
-                  textAlign: 'center',
-                  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.6)',
-                }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div style={{ fontSize: 56, fontWeight: 900, color: '#fff', textShadow: '0 0 15px rgba(244, 63, 94, 0.5)' }}>
-                  {selectedLetter.char}
+            <div className="hangeul-detail-drawer" onClick={() => setSelectedLetter(null)}>
+              <div className="hangeul-detail-content" onClick={(e) => e.stopPropagation()}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div style={{ fontSize: 44, fontWeight: 900, color: '#f43f5e' }}>{selectedLetter.char}</div>
+                    <div>
+                      <div style={{ fontSize: 16, fontWeight: 800, color: '#fff' }}>Tên chữ: {selectedLetter.name}</div>
+                      {!hideRomanization && (
+                        <div style={{ fontSize: 13, color: '#38bdf8', fontWeight: 600 }}>Phiên âm: [{selectedLetter.romanization}]</div>
+                      )}
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    style={{ background: 'transparent', border: 'none', color: '#94a3b8', fontSize: 18, cursor: 'pointer' }}
+                    onClick={() => setSelectedLetter(null)}
+                  >
+                    ✕
+                  </button>
                 </div>
-                <div style={{ fontSize: 16, fontWeight: 800, color: '#fb7185', marginTop: 4 }}>
-                  Tên chữ: {selectedLetter.name} [{selectedLetter.romanization}]
+
+                <div style={{ background: 'rgba(0,0,0,0.25)', padding: 12, borderRadius: 12, fontSize: 13, color: 'var(--text-main)', lineHeight: 1.5 }}>
+                  💡 <strong>Hướng dẫn phát âm:</strong> {selectedLetter.vietnameseGuide}
                 </div>
-                <p style={{ color: 'var(--text-muted)', fontSize: 13, marginTop: 10, lineHeight: 1.5 }}>
-                  💡 {selectedLetter.vietnameseGuide}
-                </p>
 
                 {selectedLetter.sampleWord && (
-                  <div
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.04)',
-                      border: '1px solid var(--border-color)',
-                      borderRadius: 'var(--radius-md)',
-                      padding: '10px 14px',
-                      marginTop: 14,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                    }}
-                  >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(244, 63, 94, 0.1)', border: '1px solid rgba(244, 63, 94, 0.25)', padding: '10px 14px', borderRadius: 12 }}>
                     <div>
-                      <div style={{ fontSize: 16, fontWeight: 800, color: '#38bdf8' }}>
-                        {selectedLetter.sampleWord}
-                      </div>
-                      <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-                        Nghĩa: {selectedLetter.sampleMeaning}
-                      </div>
+                      <span style={{ fontSize: 16, fontWeight: 800, color: '#fff', marginRight: 8 }}>{selectedLetter.sampleWord}</span>
+                      <span style={{ fontSize: 12.5, color: '#fca5a5' }}>({selectedLetter.sampleMeaning})</span>
                     </div>
                     <button
                       type="button"
                       className="btn-speak-char"
-                      onClick={() => speakKorean(selectedLetter.sampleWord!)}
+                      onClick={() => speakKorean(selectedLetter.sampleWord || '')}
                     >
                       <Volume2 size={14} />
                     </button>
                   </div>
                 )}
-
-                <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
-                  <button
-                    type="button"
-                    style={{
-                      flex: 1,
-                      background: 'linear-gradient(135deg, #f43f5e, #ec4899)',
-                      border: 'none',
-                      color: '#fff',
-                      borderRadius: 'var(--radius-full)',
-                      padding: '8px 16px',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => speakKorean(selectedLetter.char)}
-                  >
-                    Nghe Lại 🔊
-                  </button>
-                  <button
-                    type="button"
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.08)',
-                      border: '1px solid var(--border-color)',
-                      color: 'var(--text-main)',
-                      borderRadius: 'var(--radius-full)',
-                      padding: '8px 16px',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => setSelectedLetter(null)}
-                  >
-                    Đóng
-                  </button>
-                </div>
               </div>
             </div>
           )}
         </>
       )}
 
-      {/* 3. CHẾ ĐỘ 2: BỘ MÔ PHỎNG GHÉP VẦN KHỐI (SYLLABLE BUILDER) */}
-      {subTab === 'builder' && (
-        <div className="syllable-builder-wrap">
-          {/* Khung hiển thị khối chữ kết quả */}
-          <div className="syllable-preview-box">
-            <span style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 700 }}>
-              Khối chữ tiếng Hàn được tạo thành:
-            </span>
-            <div className="composed-hangeul-big">{composedChar}</div>
-            <div style={{ fontSize: 13, color: '#a5b4fc', fontWeight: 600 }}>
-              [{initialConsonant}] + [{medialVowel}] {finalConsonant ? `+ [${finalConsonant}]` : ''}
-            </div>
-            <button
-              type="button"
-              className="btn-speak-block"
-              onClick={() => speakKorean(composedChar)}
-            >
-              <Volume2 size={16} />
-              Nghe Phát Âm Khối Chữ
-            </button>
+      {/* 3. CHẾ ĐỘ 2: PATCHIM & BIẾN ÂM (PATCHIM) */}
+      {subTab === 'patchim' && (
+        <div className="hangeul-patchim-stage">
+          {/* Header Giới thiệu Patchim */}
+          <div className="patchim-intro-box">
+            <h3 className="patchim-intro-title">7 Nhóm Phát Âm Đại Diện Của Patchim (Phụ Âm Cuối)</h3>
+            <p className="patchim-intro-desc">
+              Trong tiếng Hàn có tới 27 phụ âm và phụ âm kép có thể đứng ở vị trí Patchim, nhưng khi phát âm thì <strong>tất cả đều quy về 7 âm đại diện chuẩn</strong>: [ㄱ, ㄴ, ㄷ, ㄹ, ㅁ, ㅂ, ㅇ].
+            </p>
           </div>
 
-          {/* 3 Cột chọn: Phụ âm đầu + Nguyên âm + Patchim */}
-          <div className="syllable-builder-grid">
-            {/* Cột 1: Phụ âm đầu */}
-            <div className="builder-column">
-              <div className="builder-col-title">
-                <span>1. Phụ âm đầu ({INITIAL_CONSONANTS.length})</span>
-                <span style={{ color: '#fff' }}>[{initialConsonant}]</span>
+          {/* Hàng chọn 7 âm đại diện */}
+          <div className="patchim-selector-row">
+            {patchimRules.map((rule) => {
+              const isSelected = selectedPatchim?.id === rule.id;
+              return (
+                <button
+                  key={rule.id}
+                  type="button"
+                  className={`patchim-rule-pill ${isSelected ? 'active' : ''}`}
+                  onClick={() => setSelectedPatchim(rule)}
+                >
+                  <span className="rep-char">[{rule.representativeSound}]</span>
+                  <span className="rep-sound">{rule.soundLabel.split(' ')[0]}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Chi tiết nhóm Patchim đang chọn */}
+          {selectedPatchim && (
+            <div className="patchim-card-detail">
+              <div className="patchim-card-header">
+                <div>
+                  <div className="patchim-main-sound">
+                    Nhóm âm đại diện: <strong>[{selectedPatchim.representativeSound}]</strong> - {selectedPatchim.soundLabel}
+                  </div>
+                  <div className="patchim-letters-included">
+                    Bao gồm các phụ âm viết: {selectedPatchim.letters.map((l) => (
+                      <span key={l} className="letter-badge">{l}</span>
+                    ))}
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="btn-speak-vocab small"
+                  onClick={() => speakKorean(selectedPatchim.representativeSound)}
+                  title="Nghe âm đại diện"
+                >
+                  <Volume2 size={16} />
+                </button>
               </div>
-              <div className="builder-char-pills">
+
+              <p className="patchim-explanation-text">{selectedPatchim.explanation}</p>
+
+              {/* Các từ ví dụ thực tế */}
+              <div className="patchim-examples-grid">
+                {selectedPatchim.examples.map((ex, idx) => (
+                  <div key={idx} className="patchim-example-card">
+                    <div className="ex-word-row">
+                      <span className="ex-word">{ex.word}</span>
+                      <ArrowRight size={13} color="#94a3b8" />
+                      <span className="ex-reading">{ex.reading}</span>
+                      <button
+                        type="button"
+                        className="btn-mini-sound"
+                        onClick={() => speakKorean(ex.word)}
+                        title="Nghe phát âm"
+                      >
+                        <Volume2 size={13} />
+                      </button>
+                    </div>
+                    <div className="ex-vi">{ex.meaningVi}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Sổ tay 4 Quy tắc Biến Âm Sống Còn */}
+          <div className="sound-rules-section">
+            <h3 className="sound-rules-title">⚡ 4 Quy Tắc Biến Âm Thiết Yếu Người Mới Phải Biết</h3>
+            <div className="sound-rules-grid">
+              {pronunciationRules.map((pRule) => (
+                <div key={pRule.id} className="sound-rule-card">
+                  <div className="sound-rule-header">
+                    <div>
+                      <span className="sound-rule-name">{pRule.title}</span>
+                      <span className="sound-rule-ko">({pRule.koreanName})</span>
+                    </div>
+                    <span className="sound-rule-formula">{pRule.formula}</span>
+                  </div>
+                  <p className="sound-rule-explain">{pRule.explanation}</p>
+                  <div className="sound-rule-examples">
+                    {pRule.examples.map((ex, i) => (
+                      <div key={i} className="sound-ex-item">
+                        <span className="ex-orig">{ex.original}</span>
+                        <ArrowRight size={11} color="#f43f5e" />
+                        <span className="ex-spoken">{ex.spoken}</span>
+                        <span className="ex-desc">{ex.meaningVi}</span>
+                        <button
+                          type="button"
+                          className="btn-mini-sound"
+                          onClick={() => speakKorean(ex.original)}
+                          title="Nghe đọc chuẩn"
+                        >
+                          <Volume2 size={12} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 4. CHẾ ĐỘ 3: GHÉP VẦN KHỐI (BUILDER) */}
+      {subTab === 'builder' && (
+        <div className="hangeul-builder-stage">
+          <div className="builder-display-card">
+            <div className="builder-char-result">{composedChar || '가'}</div>
+            <button
+              type="button"
+              className="btn-speak-builder"
+              onClick={() => speakKorean(composedChar)}
+            >
+              <Volume2 size={18} />
+              Nghe âm tiết ghép
+            </button>
+            <div className="builder-formula-row">
+              <span className="formula-item">Phụ âm đầu: <strong>{initialConsonant}</strong></span>
+              <span>+</span>
+              <span className="formula-item">Nguyên âm: <strong>{medialVowel}</strong></span>
+              <span>+</span>
+              <span className="formula-item">Patchim: <strong>{finalConsonant || '(không có)'}</strong></span>
+            </div>
+          </div>
+
+          {/* 3 Cột chọn ký tự */}
+          <div className="builder-columns-grid">
+            {/* Cột 1: Phụ âm đầu */}
+            <div className="builder-col">
+              <div className="builder-col-header">1. Phụ âm đầu (초성)</div>
+              <div className="builder-keys-list">
                 {INITIAL_CONSONANTS.map((c) => (
                   <button
                     key={c}
                     type="button"
-                    className={`builder-char-btn ${initialConsonant === c ? 'active' : ''}`}
+                    className={`builder-key-btn ${initialConsonant === c ? 'active' : ''}`}
                     onClick={() => {
                       setInitialConsonant(c);
                       speakKorean(c);
@@ -279,17 +400,14 @@ export const HangeulView: React.FC = () => {
             </div>
 
             {/* Cột 2: Nguyên âm giữa */}
-            <div className="builder-column">
-              <div className="builder-col-title">
-                <span>2. Nguyên âm giữa ({MEDIAL_VOWELS.length})</span>
-                <span style={{ color: '#fff' }}>[{medialVowel}]</span>
-              </div>
-              <div className="builder-char-pills">
+            <div className="builder-col">
+              <div className="builder-col-header">2. Nguyên âm giữa (중성)</div>
+              <div className="builder-keys-list">
                 {MEDIAL_VOWELS.map((v) => (
                   <button
                     key={v}
                     type="button"
-                    className={`builder-char-btn ${medialVowel === v ? 'active' : ''}`}
+                    className={`builder-key-btn ${medialVowel === v ? 'active' : ''}`}
                     onClick={() => {
                       setMedialVowel(v);
                       speakKorean(v);
@@ -301,26 +419,22 @@ export const HangeulView: React.FC = () => {
               </div>
             </div>
 
-            {/* Cột 3: Phụ âm cuối Patchim (tùy chọn) */}
-            <div className="builder-column">
-              <div className="builder-col-title">
-                <span>3. Phụ âm cuối Patchim</span>
-                <span style={{ color: '#fff' }}>{finalConsonant ? `[${finalConsonant}]` : '(Không có)'}</span>
-              </div>
-              <div className="builder-char-pills">
+            {/* Cột 3: Phụ âm cuối (Patchim) */}
+            <div className="builder-col">
+              <div className="builder-col-header">3. Patchim (종성)</div>
+              <div className="builder-keys-list">
                 <button
                   type="button"
-                  className={`builder-char-btn ${!finalConsonant ? 'active' : ''}`}
+                  className={`builder-key-btn ${finalConsonant === '' ? 'active' : ''}`}
                   onClick={() => setFinalConsonant('')}
-                  style={{ width: 'auto', padding: '0 8px', fontSize: 12 }}
                 >
-                  Không có
+                  (Không)
                 </button>
                 {FINAL_CONSONANTS.filter(Boolean).map((f) => (
                   <button
                     key={f}
                     type="button"
-                    className={`builder-char-btn ${finalConsonant === f ? 'active' : ''}`}
+                    className={`builder-key-btn ${finalConsonant === f ? 'active' : ''}`}
                     onClick={() => {
                       setFinalConsonant(f);
                       speakKorean(f);
@@ -335,89 +449,163 @@ export const HangeulView: React.FC = () => {
         </div>
       )}
 
-      {/* 4. CHẾ ĐỘ 3: MINI QUIZ PHẢN XẠ */}
-      {subTab === 'quiz' && (
-        <div>
-          {quizCompleted ? (
-            <div className="hangeul-quiz-card animate-fade-in">
-              <Trophy size={48} color="#f43f5e" />
-              <h3 style={{ fontSize: 20, color: '#fff', fontWeight: 800 }}>Hoàn thành Quiz!</h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>
-                Bạn đạt được <strong>{score} / {totalQuiz}</strong> điểm phản xạ chữ cái Hangeul!
-              </p>
+      {/* 5. CHẾ ĐỘ 4: BÀN PHÍM 2-SET TRAINER (KEYBOARD) */}
+      {subTab === 'keyboard' && (
+        <div className="hangeul-keyboard-stage">
+          {/* Card từ luyện tập */}
+          <div className="keyboard-practice-card">
+            <div className="kb-card-top">
+              <span className="kb-pill-badge">Bài tập gõ {practiceWordIndex + 1}/{practiceWords.length}</span>
               <button
                 type="button"
-                className="btn-quiz-next"
-                onClick={restartQuiz}
+                className="btn-next-practice"
+                onClick={() => setPracticeWordIndex((prev) => (prev + 1) % practiceWords.length)}
               >
-                <RotateCw size={14} style={{ display: 'inline', marginRight: 6 }} />
-                Chơi Lại Lượt Mới
+                Đổi từ tiếp theo <ArrowRight size={13} />
               </button>
             </div>
-          ) : currentQuiz ? (
-            <div className="hangeul-quiz-card">
-              <div className="quiz-progress-pill">
-                Câu {quizIndex + 1} / {totalQuiz} • Điểm: {score}
-              </div>
 
-              <div style={{ fontSize: 13, color: 'var(--text-muted)' }}>
-                Chữ cái dưới đây phát âm phiên âm La-tinh là gì?
-              </div>
-
-              <div
-                className="quiz-char-display"
-                onClick={() => speakKorean(currentQuiz.questionChar)}
-                style={{ cursor: 'pointer' }}
-                title="Bấm để nghe âm thanh"
-              >
-                {currentQuiz.questionChar}
-              </div>
-
+            <div className="kb-target-row">
+              <span className="kb-target-word">{currentPracticeWord.word}</span>
+              {!hideRomanization && (
+                <span className="kb-target-rom">[{currentPracticeWord.rom}]</span>
+              )}
               <button
                 type="button"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid var(--border-color)',
-                  color: '#a5b4fc',
-                  borderRadius: 'var(--radius-full)',
-                  padding: '4px 14px',
-                  fontSize: 12,
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 4,
-                }}
-                onClick={() => speakKorean(currentQuiz.questionChar)}
+                className="btn-speak-vocab small"
+                onClick={() => speakKorean(currentPracticeWord.word)}
+                title="Nghe phát âm"
               >
-                <Volume2 size={13} />
-                Nghe phát âm
+                <Volume2 size={16} />
               </button>
+            </div>
+
+            <div className="kb-hint-text">💡 Cách gõ: {currentPracticeWord.hint}</div>
+
+            {/* Khu vực kết quả đã gõ */}
+            <div className="kb-typed-display">
+              <div className="kb-typed-content">
+                {typedChars.length === 0 ? (
+                  <span className="kb-placeholder">Gõ bằng bàn phím máy tính hoặc bấm các phím bên dưới...</span>
+                ) : (
+                  typedChars.map((ch, idx) => <span key={idx} className="typed-char">{ch}</span>)
+                )}
+              </div>
+              <div className="kb-typed-actions">
+                <button
+                  type="button"
+                  className="btn-kb-action"
+                  onClick={handleBackspace}
+                  title="Xóa 1 ký tự"
+                >
+                  <Delete size={15} /> Xóa
+                </button>
+                <button
+                  type="button"
+                  className="btn-kb-action"
+                  onClick={handleClearTyped}
+                  title="Xóa trắng"
+                >
+                  <RefreshCw size={13} /> Làm mới
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Mô phỏng Bàn Phím Ảo 2-Set (Dubeolsik) */}
+          <div className="virtual-keyboard-wrap">
+            <div className="keyboard-legend">
+              <span className="legend-item cons">👈 Tay Trái: Phụ Âm (ㅂ, ㅈ, ㄷ, ㄱ, ㅅ...)</span>
+              <button
+                type="button"
+                className={`btn-shift-toggle ${isShiftActive ? 'shift-on' : ''}`}
+                onClick={() => setIsShiftActive(!isShiftActive)}
+              >
+                ⇧ Shift (Chữ căng: ㅃ, ㅉ, ㄸ...)
+              </button>
+              <span className="legend-item vowel">Tay Phải: Nguyên Âm (ㅛ, ㅕ, ㅑ, ㅐ, ㅔ...) 👉</span>
+            </div>
+
+            <div className="virtual-keyboard-board">
+              {keyboardLayout.map((row, rIdx) => (
+                <div key={rIdx} className="virtual-kb-row">
+                  {row.map((k) => {
+                    const displayKo = isShiftActive && k.shiftKo ? k.shiftKo : k.normalKo;
+                    const isKeyActive = activeKey === k.key;
+                    return (
+                      <button
+                        key={k.key}
+                        type="button"
+                        className={`virtual-key ${k.type} ${isKeyActive ? 'key-active' : ''}`}
+                        onClick={() => handleInputKoChar(displayKo, k.key)}
+                      >
+                        <span className="key-ko">{displayKo}</span>
+                        <span className="key-latin">{k.key.toUpperCase()}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 6. CHẾ ĐỘ 5: MINI QUIZ (QUIZ) */}
+      {subTab === 'quiz' && (
+        <div className="hangeul-quiz-stage">
+          {quizCompleted || !currentQuiz ? (
+            <div className="quiz-completed-box">
+              <Trophy size={48} color="#fbbf24" />
+              <h3>Hoàn thành bài kiểm tra phản xạ!</h3>
+              <p>
+                Bạn đạt <strong>{score} / {totalQuiz}</strong> điểm ({Math.round((score / totalQuiz) * 100)}%).
+              </p>
+              <button type="button" className="btn-restart-quiz" onClick={restartQuiz}>
+                <RotateCw size={14} /> Làm Lại Bài Quiz
+              </button>
+            </div>
+          ) : (
+            <div className="quiz-card">
+              <div className="quiz-header">
+                <span>Câu {quizIndex + 1} / {totalQuiz}</span>
+                <span>Điểm: <strong>{score}</strong></span>
+              </div>
+
+              <div className="quiz-question-box">
+                <div className="quiz-char-big">{currentQuiz.questionChar}</div>
+                <div className="quiz-prompt">Chữ cái này đọc phiên âm là gì?</div>
+                <button
+                  type="button"
+                  className="btn-speak-char"
+                  onClick={() => speakKorean(currentQuiz.questionChar)}
+                >
+                  <Volume2 size={16} />
+                </button>
+              </div>
 
               <div className="quiz-options-grid">
                 {currentQuiz.options.map((opt) => {
-                  let statusClass = '';
+                  let optClass = 'quiz-opt-btn';
                   if (isAnswerChecked) {
-                    if (opt === currentQuiz.correctAnswer) {
-                      statusClass = 'correct';
-                    } else if (opt === selectedAnswer) {
-                      statusClass = 'wrong';
-                    }
+                    if (opt === currentQuiz.correctAnswer) optClass += ' correct';
+                    else if (selectedAnswer === opt) optClass += ' wrong';
+                    else optClass += ' dimmed';
                   }
-
                   return (
                     <button
                       key={opt}
                       type="button"
-                      className={`btn-quiz-option ${statusClass}`}
+                      className={optClass}
                       onClick={() => handleSelectAnswer(opt)}
                       disabled={isAnswerChecked}
                     >
-                      {opt}
+                      <span>[{opt}]</span>
                       {isAnswerChecked && opt === currentQuiz.correctAnswer && (
-                        <CheckCircle2 size={16} style={{ display: 'inline', marginLeft: 6, verticalAlign: 'middle' }} />
+                        <CheckCircle2 size={16} color="#10b981" />
                       )}
-                      {isAnswerChecked && opt === selectedAnswer && opt !== currentQuiz.correctAnswer && (
-                        <XCircle size={16} style={{ display: 'inline', marginLeft: 6, verticalAlign: 'middle' }} />
+                      {isAnswerChecked && selectedAnswer === opt && opt !== currentQuiz.correctAnswer && (
+                        <XCircle size={16} color="#f43f5e" />
                       )}
                     </button>
                   );
@@ -425,16 +613,12 @@ export const HangeulView: React.FC = () => {
               </div>
 
               {isAnswerChecked && (
-                <button
-                  type="button"
-                  className="btn-quiz-next animate-slide-up"
-                  onClick={handleNextQuiz}
-                >
+                <button type="button" className="btn-next-quiz" onClick={handleNextQuiz}>
                   {quizIndex + 1 < totalQuiz ? 'Câu Tiếp Theo ➔' : 'Xem Kết Quả 🎉'}
                 </button>
               )}
             </div>
-          ) : null}
+          )}
         </div>
       )}
     </div>

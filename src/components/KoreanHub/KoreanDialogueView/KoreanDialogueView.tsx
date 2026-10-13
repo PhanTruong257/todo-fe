@@ -9,10 +9,15 @@ import {
   Plus,
   Loader2,
   Sparkles,
+  AlertTriangle,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
 import { KOREAN_DIALOGUES, speakKorean } from '../../../constants/koreanData';
 import type { KoreanVocabWord } from '../../../types/korean';
 import './KoreanDialogueView.css';
+
+const ROMAN_KEY = 'korean_hide_romanization';
 
 const CATEGORIES = [
   { key: 'all', label: '🌟 Tất cả (15+ câu)' },
@@ -27,6 +32,24 @@ export const KoreanDialogueView: React.FC = () => {
   const [subTab, setSubTab] = useState<'dialogue' | 'translator'>('dialogue');
   const [selectedCat, setSelectedCat] = useState('all');
 
+  // Romanization Toggle
+  const [hideRomanization, setHideRomanization] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem(ROMAN_KEY) === 'true';
+    }
+    return false;
+  });
+
+  const toggleHideRomanization = () => {
+    setHideRomanization((prev) => {
+      const next = !prev;
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(ROMAN_KEY, String(next));
+      }
+      return next;
+    });
+  };
+
   // Translator State
   const [direction, setDirection] = useState<'vi-to-ko' | 'ko-to-vi'>('vi-to-ko');
   const [inputText, setInputText] = useState('');
@@ -34,6 +57,11 @@ export const KoreanDialogueView: React.FC = () => {
   const [isTranslating, setIsTranslating] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+
+  // Modal xác nhận lưu Machine Translation vào Flashcard
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [modalKo, setModalKo] = useState('');
+  const [modalVi, setModalVi] = useState('');
 
   // Lọc mẫu câu
   const filteredDialogues = KOREAN_DIALOGUES.filter(
@@ -75,33 +103,42 @@ export const KoreanDialogueView: React.FC = () => {
     setTimeout(() => setIsCopied(false), 2000);
   };
 
-  const handleSaveToFlashcard = () => {
+  // Mở modal xác nhận & cho phép chỉnh sửa trước khi lưu
+  const openSaveModal = () => {
     if (!resultText) return;
+    const isViToKo = direction === 'vi-to-ko';
+    setModalKo(isViToKo ? resultText : inputText);
+    setModalVi(isViToKo ? inputText : resultText);
+    setShowSaveModal(true);
+  };
+
+  const confirmSaveToFlashcard = () => {
     try {
       const savedCards: KoreanVocabWord[] = JSON.parse(
         localStorage.getItem('korean_vocab_cards') || '[]',
       );
-      const isViToKo = direction === 'vi-to-ko';
       const newCard: KoreanVocabWord = {
         id: `custom-ko-${Date.now()}`,
-        hangeul: isViToKo ? resultText : inputText,
+        hangeul: modalKo.trim(),
         romanization: '',
-        meaningVi: isViToKo ? inputText : resultText,
+        meaningVi: modalVi.trim(),
         partOfSpeech: 'phrase',
         topic: 'daily',
         level: 'Custom',
-        exampleKo: isViToKo ? resultText : inputText,
-        exampleVi: isViToKo ? inputText : resultText,
+        exampleKo: modalKo.trim(),
+        exampleVi: modalVi.trim(),
         repetition: 0,
         intervalDays: 0,
         easeFactor: 2.5,
         status: 'new',
+        isMachineTranslated: true,
         nextReviewDate: new Date().toISOString().split('T')[0],
       };
 
       savedCards.unshift(newCard);
       localStorage.setItem('korean_vocab_cards', JSON.stringify(savedCards));
       setIsSaved(true);
+      setShowSaveModal(false);
     } catch (err) {
       console.warn('Lỗi lưu flashcard:', err);
     }
@@ -129,6 +166,17 @@ export const KoreanDialogueView: React.FC = () => {
             Công Cụ Dịch Hàn ⇄ Việt
           </button>
         </div>
+
+        {/* Nút Toggle Phiên Âm */}
+        <button
+          type="button"
+          className={`kr-dl-roman-btn ${hideRomanization ? 'hidden-mode' : ''}`}
+          onClick={toggleHideRomanization}
+          title={hideRomanization ? 'Đang ẩn phiên âm' : 'Đang hiện phiên âm'}
+        >
+          {hideRomanization ? <EyeOff size={13} color="#f43f5e" /> : <Eye size={13} color="#38bdf8" />}
+          <span>{hideRomanization ? 'Ẩn Phiên Âm' : 'Hiện Phiên Âm'}</span>
+        </button>
       </div>
 
       {/* 2. CHẾ ĐỘ 1: MẪU CÂU GIAO TIẾP SỐNG CÒN */}
@@ -197,7 +245,11 @@ export const KoreanDialogueView: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="kr-dl-roman">[{item.romanization}]</div>
+                {!hideRomanization ? (
+                  <div className="kr-dl-roman">[{item.romanization}]</div>
+                ) : (
+                  <div className="kr-dl-roman-hidden">👁️</div>
+                )}
                 <div className="kr-dl-vi">{item.vietnamese}</div>
                 <div className="kr-dl-situation">💡 {item.situation}</div>
               </div>
@@ -285,15 +337,84 @@ export const KoreanDialogueView: React.FC = () => {
                 <button
                   type="button"
                   className="btn-trans-act"
-                  onClick={handleSaveToFlashcard}
+                  onClick={openSaveModal}
                   disabled={isSaved}
                 >
                   {isSaved ? <Check size={13} color="#10b981" /> : <Plus size={13} />}
-                  {isSaved ? 'Đã lưu vào Flashcard' : 'Lưu Flashcard'}
+                  {isSaved ? 'Đã lưu Flashcard' : 'Lưu Flashcard ⚠️'}
                 </button>
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* 4. MODAL XÁC NHẬN LƯU VÀO FLASHCARD [BẢN DỊCH MÁY ⚠️] */}
+      {showSaveModal && (
+        <div className="kr-modal-overlay" onClick={() => setShowSaveModal(false)}>
+          <div className="kr-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="kr-modal-header">
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <AlertTriangle size={18} color="#f59e0b" />
+                <h3 style={{ margin: 0, fontSize: 16, color: '#fff' }}>Lưu Vào Flashcard</h3>
+              </div>
+              <button
+                type="button"
+                className="kr-modal-close"
+                onClick={() => setShowSaveModal(false)}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="kr-modal-warning-box">
+              ⚠️ <strong>Lưu ý:</strong> Đây là bản dịch máy tự động, có thể chưa chuẩn sắc thái kính ngữ hoặc ngữ cảnh. Vui lòng rà soát hoặc sửa lại bên dưới trước khi lưu!
+            </div>
+
+            <div className="kr-modal-form">
+              <div className="kr-form-group">
+                <label>Câu tiếng Hàn (Hangeul):</label>
+                <input
+                  type="text"
+                  value={modalKo}
+                  onChange={(e) => setModalKo(e.target.value)}
+                  className="kr-form-input"
+                />
+              </div>
+
+              <div className="kr-form-group">
+                <label>Nghĩa tiếng Việt:</label>
+                <input
+                  type="text"
+                  value={modalVi}
+                  onChange={(e) => setModalVi(e.target.value)}
+                  className="kr-form-input"
+                />
+              </div>
+
+              <div className="kr-form-badge-preview">
+                Thẻ sẽ được tự động gắn nhãn: <span className="machine-tag">Bản dịch máy ⚠️</span>
+              </div>
+            </div>
+
+            <div className="kr-modal-footer">
+              <button
+                type="button"
+                className="btn-modal-cancel"
+                onClick={() => setShowSaveModal(false)}
+              >
+                Hủy bỏ
+              </button>
+              <button
+                type="button"
+                className="btn-modal-save"
+                onClick={confirmSaveToFlashcard}
+                disabled={!modalKo.trim() || !modalVi.trim()}
+              >
+                Xác Nhận & Lưu Thẻ
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

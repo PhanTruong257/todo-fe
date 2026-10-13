@@ -5,14 +5,15 @@ import {
   UserCheck,
   Heart,
   Users,
+  Layers,
 } from 'lucide-react';
 import type { Todo } from '../../types/todo';
 import { DatePicker } from '../DatePicker/DatePicker';
 import './Header.css';
 
 interface HeaderProps {
-  activeTab: 'reports' | 'stats';
-  onTabChange: (tab: 'reports' | 'stats') => void;
+  activeTab: 'reports' | 'stats' | 'flashcards' | 'korean';
+  onTabChange: (tab: 'reports' | 'stats' | 'flashcards' | 'korean') => void;
   activeStudent: string;
   selectedDate: string | null;
   onSelectDate: (date: string | null) => void;
@@ -70,7 +71,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* 2. Ô Chọn Ngày Pop-up Tùy Biến (Click bất kỳ đâu cũng mở, UI cực đẹp) */}
+      {/* 2. Ô Chọn Ngày Pop-up Tùy Biến */}
       <DatePicker
         selectedDate={selectedDate}
         onSelectDate={onSelectDate}
@@ -78,7 +79,7 @@ export const Header: React.FC<HeaderProps> = ({
         activeStudent={activeStudent}
       />
 
-      {/* 3. Tabs Chức Năng: Nhật Ký & Thống Kê */}
+      {/* 3. Tabs Chức Năng: Nhật Ký, Thống Kê, Từ Vựng Flashcards */}
       <nav className="header-nav-tabs">
         <button
           type="button"
@@ -87,6 +88,24 @@ export const Header: React.FC<HeaderProps> = ({
         >
           <BookOpen size={15} />
           <span>Nhật Ký</span>
+        </button>
+
+        <button
+          type="button"
+          className={`nav-tab-btn ${activeTab === 'flashcards' ? 'active' : ''}`}
+          onClick={() => onTabChange('flashcards')}
+        >
+          <Layers size={15} />
+          <span>Từ Vựng 🎴</span>
+        </button>
+
+        <button
+          type="button"
+          className={`nav-tab-btn ${activeTab === 'korean' ? 'active' : ''}`}
+          onClick={() => onTabChange('korean')}
+        >
+          <span style={{ fontSize: 14 }}>🇰🇷</span>
+          <span>Tiếng Hàn</span>
         </button>
 
         <button

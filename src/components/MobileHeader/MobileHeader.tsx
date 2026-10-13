@@ -11,6 +11,7 @@ import {
   Check,
   UserPlus,
   Timer,
+  Layers,
 } from 'lucide-react';
 import type { Todo, TodoStats } from '../../types/todo';
 import { DatePicker } from '../DatePicker/DatePicker';
@@ -23,8 +24,8 @@ interface MobileHeaderProps {
   students: string[];
   onAddStudent: (name: string) => void;
   stats: TodoStats;
-  activeTab: 'reports' | 'stats';
-  onTabChange: (tab: 'reports' | 'stats') => void;
+  activeTab: 'reports' | 'stats' | 'flashcards' | 'korean';
+  onTabChange: (tab: 'reports' | 'stats' | 'flashcards' | 'korean') => void;
   selectedDate: string | null;
   onSelectDate: (date: string | null) => void;
   todos: Todo[];
@@ -68,7 +69,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
 
   return (
     <header className="mobile-app-header">
-      {/* HÀNG 1: Brand Logo + Tabs Báo Cáo / Thống Kê */}
+      {/* HÀNG 1: Brand Logo + Tabs Báo Cáo / Thống Kê / Từ Vựng */}
       <div className="mobile-header-top-row">
         <div className="mobile-brand-group">
           <div className="mobile-brand-icon">
@@ -85,15 +86,31 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
             className={`mobile-tab-btn ${activeTab === 'reports' ? 'active' : ''}`}
             onClick={() => onTabChange('reports')}
           >
-            <BookOpen size={13} />
+            <BookOpen size={12} />
             <span>Nhật Ký</span>
+          </button>
+          <button
+            type="button"
+            className={`mobile-tab-btn ${activeTab === 'flashcards' ? 'active' : ''}`}
+            onClick={() => onTabChange('flashcards')}
+          >
+            <Layers size={12} />
+            <span>Từ Vựng</span>
+          </button>
+          <button
+            type="button"
+            className={`mobile-tab-btn ${activeTab === 'korean' ? 'active' : ''}`}
+            onClick={() => onTabChange('korean')}
+          >
+            <span style={{ fontSize: 11 }}>🇰🇷</span>
+            <span>Tiếng Hàn</span>
           </button>
           <button
             type="button"
             className={`mobile-tab-btn ${activeTab === 'stats' ? 'active' : ''}`}
             onClick={() => onTabChange('stats')}
           >
-            <BarChart3 size={13} />
+            <BarChart3 size={12} />
             <span>Thống Kê</span>
           </button>
         </nav>

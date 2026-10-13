@@ -9,6 +9,8 @@ import { StatsView } from './components/StatsView/StatsView';
 import { StudyTimer } from './components/StudyTimer/StudyTimer';
 import type { StudyTimerSession } from './components/StudyTimer/useStudyTimer';
 import { useTodos } from './components/TodoList/useTodos';
+import { FlashcardView } from './components/FlashcardView/FlashcardView';
+import { KoreanHubView } from './components/KoreanHub/KoreanHubView';
 import './App.css';
 
 const useIsMobile = (breakpoint = 1024) => {
@@ -169,8 +171,18 @@ export const App: React.FC = () => {
                 onUpdate={updateTodo}
               />
             </main>
+          ) : activeTab === 'korean' ? (
+            /* Tab: Lộ Trình Học Tiếng Hàn Toàn Diện */
+            <main className="tab-content animate-fade-in">
+              <KoreanHubView />
+            </main>
+          ) : activeTab === 'flashcards' ? (
+            /* Tab 2: Học Từ Vựng Flashcards SRS */
+            <main className="tab-content animate-fade-in">
+              <FlashcardView currentStudent={studentFilter} />
+            </main>
           ) : (
-            /* Tab 2: Thống Kê & Phân Tích Tiến Độ Học */
+            /* Tab 3: Thống Kê & Phân Tích Tiến Độ Học */
             <main className="tab-content animate-fade-in">
               <StatsView
                 todos={allTodos}

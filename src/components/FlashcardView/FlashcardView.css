@@ -1,0 +1,916 @@
+.flashcard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  animation: fadeInFC 0.25s ease-out;
+}
+
+@keyframes fadeInFC {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 1. Header Toolbar của Flashcard */
+.fc-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 10px 16px;
+  backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-sm);
+}
+
+.fc-mode-tabs {
+  display: flex;
+  background: rgba(13, 17, 28, 0.7);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  gap: 4px;
+}
+
+.fc-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  background: transparent;
+  border: none;
+}
+
+.fc-mode-btn:hover {
+  color: var(--text-main);
+}
+
+.fc-mode-btn.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
+}
+
+.fc-badge-due {
+  background: #f43f5e;
+  color: #fff;
+  border-radius: var(--radius-full);
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 1px 6px;
+  margin-left: 2px;
+}
+
+.fc-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fc-stats-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 6px 12px;
+}
+
+.fc-stats-pill strong {
+  color: #a5b4fc;
+}
+
+.btn-add-word-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 7px 16px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 3px 12px rgba(99, 102, 241, 0.4);
+  transition: all 0.2s;
+}
+
+.btn-add-word-main:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 16px rgba(99, 102, 241, 0.6);
+}
+
+/* =========================================
+   2. CHẾ ĐỘ ÔN TẬP (STUDY MODE - 3D CARD FLIP)
+   ========================================= */
+.fc-study-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.fc-progress-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.fc-progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.fc-progress-bar-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.fc-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+  border-radius: 999px;
+  transition: width 0.3s ease-out;
+}
+
+/* KHUNG 3D FLIP */
+.fc-3d-card-stage {
+  perspective: 1200px;
+  width: 100%;
+  min-height: 340px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.fc-3d-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 340px;
+  text-align: center;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.fc-3d-card-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+/* CẢ 2 MẶT THẺ */
+.fc-card-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 340px;
+  backface-visibility: hidden;
+  border-radius: 22px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(99, 102, 241, 0.15);
+}
+
+/* Mặt Trước (Front) */
+.fc-card-front {
+  background: linear-gradient(145deg, #161c2d 0%, #0d121f 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+}
+
+.fc-front-meta-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.fc-topic-tag {
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  color: #a5b4fc;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+}
+
+.fc-level-tag {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #6ee7b7;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+}
+
+.fc-front-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: auto 0;
+}
+
+.fc-word-title {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(90deg, #ffffff, #e2e8f0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.fc-word-details {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fc-ipa-text {
+  font-size: 16px;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-weight: 500;
+}
+
+.fc-pos-badge {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  color: #cbd5e1;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  font-style: italic;
+}
+
+.btn-speak-audio {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.2);
+  border: 1px solid rgba(99, 102, 241, 0.5);
+  color: #a5b4fc;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+}
+
+.btn-speak-audio:hover {
+  transform: scale(1.1);
+  background: #6366f1;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.7);
+}
+
+.fc-tap-hint {
+  font-size: 12px;
+  color: var(--text-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+/* Mặt Sau (Back) */
+.fc-card-back {
+  background: linear-gradient(145deg, #182035 0%, #0e1424 100%);
+  border: 1.5px solid rgba(129, 140, 248, 0.35);
+  transform: rotateY(180deg);
+}
+
+.fc-back-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin: auto 0;
+  text-align: center;
+}
+
+.fc-meaning-vi {
+  font-size: 22px;
+  font-weight: 800;
+  color: #38bdf8;
+  line-height: 1.3;
+}
+
+.fc-meaning-en {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  max-width: 440px;
+}
+
+.fc-example-box {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-width: 480px;
+  text-align: left;
+}
+
+.fc-example-en {
+  font-size: 13px;
+  font-weight: 600;
+  color: #f1f5f9;
+  line-height: 1.4;
+}
+
+.fc-example-vi {
+  font-size: 12px;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+/* HÀNG NÚT ĐÁNH GIÁ SRS */
+.fc-rating-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  width: 100%;
+  animation: slideUpActions 0.25s ease-out;
+}
+
+@keyframes slideUpActions {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-fc-rating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 8px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-fc-rating:hover {
+  transform: translateY(-2px);
+}
+
+.btn-fc-rating .rating-name {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.btn-fc-rating .rating-time {
+  font-size: 10.5px;
+  opacity: 0.85;
+  font-weight: 600;
+}
+
+/* 4 Mức SRS */
+.btn-fc-rating.rating-again {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: rgba(244, 63, 94, 0.4);
+  color: #fb7185;
+}
+.btn-fc-rating.rating-again:hover {
+  background: #f43f5e;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.5);
+}
+
+.btn-fc-rating.rating-hard {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+}
+.btn-fc-rating.rating-hard:hover {
+  background: #f59e0b;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.5);
+}
+
+.btn-fc-rating.rating-good {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #34d399;
+}
+.btn-fc-rating.rating-good:hover {
+  background: #10b981;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.5);
+}
+
+.btn-fc-rating.rating-easy {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #a5b4fc;
+}
+.btn-fc-rating.rating-easy:hover {
+  background: #6366f1;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.5);
+}
+
+/* Trạng thái hoàn thành bài ôn hôm nay */
+.fc-completed-state {
+  text-align: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 48px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.fc-celebrate-icon {
+  font-size: 54px;
+  animation: bounceCelebrate 1s infinite alternate;
+}
+
+@keyframes bounceCelebrate {
+  from { transform: translateY(0) scale(1); }
+  to { transform: translateY(-8px) scale(1.08); }
+}
+
+.fc-completed-state h3 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.fc-completed-state p {
+  color: var(--text-muted);
+  font-size: 13.5px;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.btn-restart-study {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border: none;
+  color: #fff;
+  border-radius: var(--radius-full);
+  padding: 10px 24px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+}
+
+/* =========================================
+   3. CHẾ ĐỘ THƯ VIỆN (LIBRARY MODE - WORD BANK)
+   ========================================= */
+.fc-library-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.fc-library-filter-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.fc-search-wrap {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 8px 14px;
+}
+
+.fc-search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-main);
+  font-size: 13px;
+  width: 100%;
+}
+
+.fc-filter-select {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 7px 12px;
+  outline: none;
+}
+
+.fc-words-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+.fc-word-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.fc-word-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.fc-card-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fc-card-word-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fc-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-fc-card-icon {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-fc-card-icon:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.btn-fc-card-icon.delete:hover {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.fc-card-meaning {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+.fc-card-example {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  border-left: 2px solid rgba(255, 255, 255, 0.15);
+  padding-left: 8px;
+}
+
+.fc-card-bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+  font-size: 11px;
+}
+
+.fc-srs-status-tag {
+  border-radius: var(--radius-full);
+  padding: 2px 8px;
+  font-weight: 700;
+  font-size: 10.5px;
+}
+
+.fc-srs-status-tag.new {
+  background: rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
+}
+.fc-srs-status-tag.learning {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}
+.fc-srs-status-tag.mastered {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN (MOBILE & TABLET)
+   ========================================= */
+@media (max-width: 768px) {
+  .fc-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .fc-mode-tabs {
+    width: 100%;
+  }
+  .fc-mode-btn {
+    flex: 1;
+    justify-content: center;
+  }
+  .fc-toolbar-right {
+    justify-content: space-between;
+  }
+  .fc-words-grid {
+    grid-template-columns: 1fr;
+  }
+  .fc-rating-actions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .fc-word-title {
+    font-size: 28px;
+  }
+  .fc-meaning-vi {
+    font-size: 19px;
+  }
+  .fc-card-face {
+    padding: 20px 16px;
+    min-height: 320px;
+  }
+  .fc-3d-card-stage,
+  .fc-3d-card-inner {
+    min-height: 320px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fc-word-title {
+    font-size: 24px;
+  }
+  .fc-meaning-vi {
+    font-size: 17px;
+  }
+  .fc-rating-actions {
+    gap: 6px;
+  }
+  .btn-fc-rating {
+    padding: 10px 6px;
+  }
+}
+
+/* Bộ lọc cấp độ ôn tập */
+.fc-study-level-filter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.fc-study-level-label {
+  font-size: 11.5px;
+  color: var(--text-subtle);
+  font-weight: 600;
+}
+
+.fc-study-level-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+  border-radius: var(--radius-full);
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.fc-study-level-pill:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.fc-study-level-pill.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-color: #818cf8;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+}
+
+/* Nút tải thêm từ trong thư viện */
+.btn-load-more-fc {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-main);
+  border-radius: var(--radius-full);
+  padding: 10px 24px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-load-more-fc:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: #818cf8;
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+}
+
+/* =========================================
+   4. BỘ LỌC CHỦ ĐỀ & THANH CHỦ ĐỀ MỚI
+   ========================================= */
+.fc-study-filters-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+}
+
+.fc-study-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.fc-study-topic-select {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-main);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  outline: none;
+  cursor: pointer;
+  max-width: 250px;
+}
+
+.fc-study-level-pills {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+/* Thanh lướt chọn chủ đề (Topic Chips Bar) */
+.fc-topic-chips-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px 10px 2px;
+  width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.3) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.fc-topic-chips-bar::-webkit-scrollbar {
+  height: 5px;
+}
+
+.fc-topic-chips-bar::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.3);
+  border-radius: 999px;
+}
+
+.fc-topic-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.fc-topic-chip:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.fc-topic-chip.active {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(139, 92, 246, 0.25));
+  border-color: #818cf8;
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.25);
+}
+
+.fc-chip-icon {
+  font-size: 13px;
+}
+
+.fc-chip-name {
+  font-weight: 700;
+}
+
+.fc-chip-count {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  padding: 1px 7px;
+  font-size: 10.5px;
+  color: #a5b4fc;
+  font-weight: 800;
+}
+
+.fc-topic-chip.active .fc-chip-count {
+  background: #6366f1;
+  color: #fff;
+}
+
+.fc-card-topic-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #a5b4fc;
+}
+
+@media (max-width: 600px) {
+  .fc-study-filters-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .fc-study-topic-select {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+

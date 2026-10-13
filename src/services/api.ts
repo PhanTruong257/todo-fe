@@ -72,4 +72,61 @@ export const api = {
       return false;
     }
   },
+
+  // --- FLASHCARDS API ---
+  async getFlashcards(params?: {
+    studentName?: string;
+    topic?: string;
+    level?: string;
+    status?: string;
+    dueOnly?: boolean;
+    search?: string;
+  }) {
+    const response = await client.get('/flashcards', { params });
+    return response.data;
+  },
+
+  async getFlashcardStats(studentName?: string) {
+    const response = await client.get('/flashcards/stats', {
+      params: { studentName },
+    });
+    return response.data;
+  },
+
+  async createFlashcard(payload: any) {
+    const response = await client.post('/flashcards', payload);
+    return response.data;
+  },
+
+  async updateFlashcard(id: string, payload: any) {
+    const response = await client.patch(`/flashcards/${id}`, payload);
+    return response.data;
+  },
+
+  async deleteFlashcard(id: string) {
+    const response = await client.delete(`/flashcards/${id}`);
+    return response.data;
+  },
+
+  async reviewFlashcard(id: string, rating: string, studentName?: string) {
+    const response = await client.post(`/flashcards/review/${id}`, {
+      rating,
+      studentName,
+    });
+    return response.data;
+  },
+
+  async seedFlashcards(studentName?: string) {
+    const response = await client.post('/flashcards/seed', null, {
+      params: { studentName },
+    });
+    return response.data;
+  },
+
+  async lookupWord(word: string) {
+    const response = await client.get('/flashcards/lookup', {
+      params: { word },
+    });
+    return response.data;
+  },
 };

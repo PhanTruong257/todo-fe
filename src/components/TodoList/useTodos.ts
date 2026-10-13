@@ -52,8 +52,8 @@ export function useTodos() {
   const [loading, setLoading] = useState<boolean>(true);
   const [isBackendConnected, setIsBackendConnected] = useState<boolean>(false);
 
-  // Navigation tab ('reports' | 'stats')
-  const [activeTab, setActiveTab] = useState<'reports' | 'stats'>('reports');
+  // Navigation tab ('reports' | 'stats' | 'flashcards' | 'korean')
+  const [activeTab, setActiveTab] = useState<'reports' | 'stats' | 'flashcards' | 'korean'>('reports');
 
   // Selected date filter (mặc định luôn luôn là ngày hôm nay theo giờ địa phương)
   const [selectedDate, setSelectedDate] = useState<string | null>(getTodayLocalISO());

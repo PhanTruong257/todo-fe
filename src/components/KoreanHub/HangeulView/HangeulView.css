@@ -1,0 +1,396 @@
+.hangeul-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  animation: fadeInHg 0.25s ease-out;
+}
+
+@keyframes fadeInHg {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 1. THANH CHUYỂN CHẾ ĐỘ HANGEUL */
+.hangeul-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 8px 14px;
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+}
+
+.hangeul-subtabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(13, 17, 28, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 3px;
+}
+
+.hangeul-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  transition: all 0.2s;
+}
+
+.hangeul-tab-btn:hover {
+  color: var(--text-main);
+}
+
+.hangeul-tab-btn.active {
+  background: linear-gradient(135deg, #f43f5e, #ec4899);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(244, 63, 94, 0.4);
+}
+
+/* 2. CHẾ ĐỘ 1: BẢNG CHỮ CÁI (CHART) */
+.hangeul-filters-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 2px 0 6px 0;
+  width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(244, 63, 94, 0.3) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.hangeul-filters-row::-webkit-scrollbar {
+  height: 4px;
+}
+.hangeul-filters-row::-webkit-scrollbar-thumb {
+  background: rgba(244, 63, 94, 0.3);
+  border-radius: 999px;
+}
+
+.hangeul-filter-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  border-radius: var(--radius-full);
+  padding: 5px 12px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.hangeul-filter-pill:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.hangeul-filter-pill.active {
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.25), rgba(236, 72, 153, 0.25));
+  border-color: #f43f5e;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(244, 63, 94, 0.25);
+}
+
+/* Lưới chữ cái Hangeul */
+.hangeul-letters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+.hangeul-letter-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  text-align: center;
+}
+
+.hangeul-letter-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(244, 63, 94, 0.5);
+  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.2);
+}
+
+.hangeul-char-big {
+  font-size: 32px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+  text-shadow: 0 0 12px rgba(244, 63, 94, 0.3);
+}
+
+.hangeul-roman-tag {
+  font-size: 12px;
+  font-weight: 800;
+  color: #fb7185;
+  background: rgba(244, 63, 94, 0.12);
+  border-radius: var(--radius-full);
+  padding: 1px 8px;
+}
+
+.hangeul-vi-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.25;
+}
+
+.btn-speak-char {
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  color: #a5b4fc;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.2s;
+}
+
+.btn-speak-char:hover {
+  background: #f43f5e;
+  color: #fff;
+}
+
+/* 3. CHẾ ĐỘ 2: BỘ MÔ PHỎNG GHÉP VẦN (SYLLABLE BUILDER) */
+.syllable-builder-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.syllable-preview-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.1), rgba(99, 102, 241, 0.08));
+  border: 1.5px solid rgba(244, 63, 94, 0.3);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  text-align: center;
+}
+
+.composed-hangeul-big {
+  font-size: 72px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+  font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+  text-shadow: 0 0 25px rgba(244, 63, 94, 0.6);
+  animation: pulseBlock 0.3s ease-out;
+}
+
+@keyframes pulseBlock {
+  from { transform: scale(0.92); opacity: 0.6; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.btn-speak-block {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #f43f5e, #ec4899);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.4);
+  transition: all 0.2s;
+}
+
+.btn-speak-block:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(244, 63, 94, 0.6);
+}
+
+.syllable-builder-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  width: 100%;
+}
+
+.builder-column {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.builder-col-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: #f43f5e;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.builder-char-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.builder-char-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  border-radius: var(--radius-sm);
+  width: 32px;
+  height: 32px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.builder-char-btn:hover {
+  background: rgba(244, 63, 94, 0.2);
+  border-color: #f43f5e;
+}
+
+.builder-char-btn.active {
+  background: #f43f5e;
+  border-color: #f43f5e;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(244, 63, 94, 0.5);
+}
+
+/* 4. CHẾ ĐỘ 3: MINI QUIZ */
+.hangeul-quiz-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 500px;
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+}
+
+.quiz-progress-pill {
+  background: rgba(244, 63, 94, 0.12);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  color: #fb7185;
+  border-radius: var(--radius-full);
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 3px 12px;
+}
+
+.quiz-char-display {
+  font-size: 64px;
+  font-weight: 900;
+  color: #fff;
+  margin: 10px 0;
+  text-shadow: 0 0 20px rgba(244, 63, 94, 0.5);
+}
+
+.quiz-options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+.btn-quiz-option {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid var(--border-color);
+  color: var(--text-main);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-quiz-option:hover:not(:disabled) {
+  border-color: #f43f5e;
+  background: rgba(244, 63, 94, 0.15);
+}
+
+.btn-quiz-option.correct {
+  background: rgba(16, 185, 129, 0.2) !important;
+  border-color: #10b981 !important;
+  color: #34d399 !important;
+}
+
+.btn-quiz-option.wrong {
+  background: rgba(239, 68, 68, 0.2) !important;
+  border-color: #ef4444 !important;
+  color: #f87171 !important;
+}
+
+.btn-quiz-next {
+  background: linear-gradient(135deg, #f43f5e, #ec4899);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 10px 24px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(244, 63, 94, 0.4);
+  margin-top: 6px;
+}
+
+@media (max-width: 600px) {
+  .syllable-builder-grid {
+    grid-template-columns: 1fr;
+  }
+  .hangeul-letters-grid {
+    grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+  }
+  .composed-hangeul-big {
+    font-size: 56px;
+  }
+}

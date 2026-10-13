@@ -4,7 +4,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 12px 22px;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
@@ -16,125 +16,67 @@
   box-sizing: border-box;
 }
 
-/* Cụm Trái: Brand Logo + Ngữ cảnh thành viên */
-.header-left-cluster {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
 .header-brand-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.header-brand-logo {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
-  flex-shrink: 0;
-}
-
-.header-brand-titles h2 {
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: -0.3px;
-  background: linear-gradient(to right, #ffffff, #e2e8f0);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  line-height: 1.2;
-}
-
-.header-brand-sub {
-  font-size: 10.5px;
-  color: var(--text-muted);
-  font-weight: 500;
-  display: block;
-}
-
-.header-divider-v {
-  width: 1px;
-  height: 26px;
-  background: var(--border-color);
-}
-
-/* 1. Ngữ cảnh thành viên */
-.header-context-info {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.context-avatar {
-  width: 38px;
-  height: 38px;
+.header-brand-logo {
+  width: 40px;
+  height: 40px;
   border-radius: 12px;
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(99, 102, 241, 0.2));
+  border: 1px solid rgba(244, 63, 94, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 14px rgba(244, 63, 94, 0.25);
   flex-shrink: 0;
 }
 
-.avatar-truong {
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
-  color: #ffffff;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-}
-
-.avatar-nguyet {
-  background: linear-gradient(135deg, #ec4899, #f43f5e);
-  color: #ffffff;
-  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
-}
-
-.avatar-all {
-  background: rgba(255, 255, 255, 0.12);
-  color: #ffffff;
-}
-
-.context-sublabel {
-  font-size: 11px;
-  color: var(--text-subtle);
-  font-weight: 500;
-  display: block;
-}
-
-.context-student-title {
+.header-brand-titles h2 {
   font-size: 16px;
   font-weight: 800;
-  color: var(--text-main);
   letter-spacing: -0.3px;
+  background: linear-gradient(to right, #ffffff, #fda4af);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   line-height: 1.2;
+  margin: 0;
 }
 
-/* 3. Navigation Tabs: Báo Cáo & Thống Kê */
+.header-brand-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+  display: block;
+  margin-top: 2px;
+}
+
 .header-nav-tabs {
   display: flex;
   background: rgba(13, 17, 28, 0.7);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-full);
-  padding: 3px;
-  gap: 3px;
+  padding: 4px;
+  gap: 4px;
 }
 
 .nav-tab-btn {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 7px 16px;
+  gap: 8px;
+  padding: 8px 18px;
   border-radius: var(--radius-full);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-muted);
   cursor: pointer;
+  background: transparent;
+  border: none;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
 }
 
 .nav-tab-btn:hover {
@@ -143,55 +85,32 @@
 }
 
 .nav-tab-btn.active {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  background: linear-gradient(135deg, #f43f5e, #ec4899);
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.35);
 }
 
-@media (max-width: 800px) {
+@media (max-width: 640px) {
   .app-top-header {
     flex-direction: column;
     align-items: stretch;
-    gap: 12px;
-    padding: 14px 16px;
+    gap: 10px;
+    padding: 10px 14px;
+  }
+
+  .header-brand-group {
+    justify-content: center;
   }
 
   .header-nav-tabs {
-    justify-content: center;
     width: 100%;
+    justify-content: center;
   }
 
   .nav-tab-btn {
     flex: 1;
     justify-content: center;
-    padding: 8px 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .app-top-header {
-    padding: 12px;
-    gap: 10px;
-    border-radius: var(--radius-md);
-  }
-
-  .context-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 9px;
-  }
-
-  .context-student-title {
-    font-size: 14.5px;
-  }
-
-  .context-sublabel {
-    font-size: 10px;
-  }
-
-  .nav-tab-btn {
+    padding: 7px 12px;
     font-size: 12px;
-    padding: 7px 10px;
-    gap: 5px;
   }
 }

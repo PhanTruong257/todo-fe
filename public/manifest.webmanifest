@@ -1,7 +1,7 @@
 {
-  "name": "TaskFlow Study - Nhật Ký Học Tiếng Anh",
-  "short_name": "TaskFlow Study",
-  "description": "Ứng dụng ghi chép nhật ký và theo dõi tiến độ học tiếng Anh hàng ngày cho Trường & Nguyệt",
+  "name": "TaskFlow Korean - Học Tiếng Hàn Mỗi Ngày",
+  "short_name": "TaskFlow Korean",
+  "description": "Nền tảng tự học tiếng Hàn toàn diện từ con số 0: Hangeul, Patchim, Gõ phím 2-Set, Từ vựng TOPIK 1 SRS, Ngữ pháp và Đàm thoại",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#090d16",

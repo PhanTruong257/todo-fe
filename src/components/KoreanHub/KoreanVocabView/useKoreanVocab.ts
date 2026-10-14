@@ -4,7 +4,8 @@ import {
   KOREAN_TOPICS,
   speakKorean,
 } from '../../../constants/koreanData';
-import type { KoreanVocabWord, ReviewLog } from '../../../types/korean';
+import { DAILY_VOCAB_PLAN } from '../../../constants/dailyVocabPlan';
+import type { KoreanVocabWord, ReviewLog, DailyVocabLesson } from '../../../types/korean';
 
 const STORAGE_KEY = 'korean_vocab_cards';
 const ROMAN_KEY = 'korean_hide_romanization';
@@ -111,7 +112,53 @@ export function useKoreanVocab() {
     }));
   });
 
-  const [activeSubTab, setActiveSubTab] = useState<'study' | 'library'>('study');
+  const PLAN_DAY_KEY = 'korean_current_plan_day';
+  const COMPLETED_PLAN_DAYS_KEY = 'korean_completed_plan_days';
+
+  const [activeSubTab, setActiveSubTab] = useState<'roadmap' | 'study' | 'library'>('roadmap');
+  const [currentPlanDay, setCurrentPlanDay] = useState<number>(() => {
+    if (typeof window !== 'undefined') {
+      const val = localStorage.getItem(PLAN_DAY_KEY);
+      return val ? parseInt(val, 10) || 1 : 1;
+    }
+    return 1;
+  });
+
+  const [completedPlanDays, setCompletedPlanDays] = useState<number[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(COMPLETED_PLAN_DAYS_KEY);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) return parsed;
+        } catch {
+          // ignore
+        }
+      }
+    }
+    return [];
+  });
+
+  const [selectedPlanWeek, setSelectedPlanWeek] = useState<number>(0); // 0 = All
+
+  const selectPlanDay = useCallback((day: number) => {
+    setCurrentPlanDay(day);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(PLAN_DAY_KEY, String(day));
+    }
+  }, []);
+
+  const toggleCompletePlanDay = useCallback((day: number) => {
+    setCompletedPlanDays((prev) => {
+      const exists = prev.includes(day);
+      const next = exists ? prev.filter((d) => d !== day) : [...prev, day];
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(COMPLETED_PLAN_DAYS_KEY, JSON.stringify(next));
+      }
+      return next;
+    });
+  }, []);
+
   const [selectedTopic, setSelectedTopic] = useState('all');
   const [search, setSearch] = useState('');
 
@@ -457,6 +504,28 @@ export function useKoreanVocab() {
     return { total, mastered, learning, newCount, leeches };
   }, [cards]);
 
+  const startStudyDay = useCallback((day: number) => {
+    const lesson = DAILY_VOCAB_PLAN.find((d) => d.day === day);
+    if (!lesson) return;
+    setSessionQueue(lesson.words);
+    setStudyIndex(0);
+    setIsFlipped(false);
+    setSelectedQuizOption(null);
+    setQuizStatus('idle');
+    setTypeInAnswer('');
+    setTypeInChecked(false);
+    setStudyCompleted(false);
+    setActiveSubTab('study');
+  }, []);
+
+  const currentDayLesson: DailyVocabLesson = useMemo(() => {
+    return DAILY_VOCAB_PLAN.find((d) => d.day === currentPlanDay) || DAILY_VOCAB_PLAN[0];
+  }, [currentPlanDay]);
+
+  const nextDayLesson: DailyVocabLesson | null = useMemo(() => {
+    return DAILY_VOCAB_PLAN.find((d) => d.day === currentPlanDay + 1) || null;
+  }, [currentPlanDay]);
+
   return {
     stats,
     activeSubTab,
@@ -465,6 +534,17 @@ export function useKoreanVocab() {
     setSelectedTopic,
     search,
     setSearch,
+    // 30-Day Daily Roadmap
+    dailyPlan: DAILY_VOCAB_PLAN,
+    currentPlanDay,
+    selectPlanDay,
+    completedPlanDays,
+    toggleCompletePlanDay,
+    selectedPlanWeek,
+    setSelectedPlanWeek,
+    startStudyDay,
+    currentDayLesson,
+    nextDayLesson,
     // Modes
     studyMode,
     setStudyMode,

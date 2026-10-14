@@ -4,7 +4,7 @@
   margin: 0 auto;
   min-height: 100vh;
   min-height: 100dvh;
-  padding: 16px 20px;
+  padding: 16px 20px 48px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -41,25 +41,10 @@
   }
 }
 
-.app-footer {
-  margin-top: 36px;
-  text-align: center;
-  font-size: 11.5px;
-  color: var(--text-subtle);
-  border-top: 1px solid var(--border-color);
-  padding: 16px 0 24px;
-  line-height: 1.6;
-}
-
 @media (max-width: 768px) {
   .app-layout-wrapper {
-    padding: 10px 10px 40px;
+    padding: 10px 10px 56px;
     gap: 12px;
   }
-
-  .app-footer {
-    margin-top: 24px;
-    font-size: 10.5px;
-    padding-bottom: 20px;
-  }
 }
+

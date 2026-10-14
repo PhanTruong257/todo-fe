@@ -151,3 +151,15 @@ export interface VietnameseNameGuide {
   hanjaVi?: string;
   meaning?: string;
 }
+
+export interface DailyVocabLesson {
+  day: number;
+  week: number;
+  theme: string;
+  title: string;
+  focus: string;
+  grammarTip?: string;
+  quickAdvice?: string;
+  words: KoreanVocabWord[];
+}
+

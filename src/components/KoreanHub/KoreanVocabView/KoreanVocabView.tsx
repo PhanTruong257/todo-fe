@@ -15,6 +15,11 @@ import {
   Headphones,
   Keyboard as KeyboardIcon,
   AlertTriangle,
+  Calendar,
+  Check,
+  ArrowRight,
+  Lightbulb,
+  Zap,
 } from 'lucide-react';
 import { useKoreanVocab } from './useKoreanVocab';
 import './KoreanVocabView.css';
@@ -28,6 +33,17 @@ export const KoreanVocabView: React.FC = () => {
     setSelectedTopic,
     search,
     setSearch,
+    // 30-Day Daily Roadmap
+    dailyPlan,
+    currentPlanDay,
+    selectPlanDay,
+    completedPlanDays,
+    toggleCompletePlanDay,
+    selectedPlanWeek,
+    setSelectedPlanWeek,
+    startStudyDay,
+    currentDayLesson,
+    nextDayLesson,
     // Modes
     studyMode,
     setStudyMode,
@@ -67,6 +83,15 @@ export const KoreanVocabView: React.FC = () => {
       {/* 1. THANH ĐIỀU HƯỚNG TỔNG QUAN */}
       <div className="kr-vocab-toolbar">
         <div className="kr-mode-tabs">
+          <button
+            type="button"
+            className={`kr-mode-btn ${activeSubTab === 'roadmap' ? 'active' : ''}`}
+            onClick={() => setActiveSubTab('roadmap')}
+          >
+            <Calendar size={14} />
+            Lộ Trình 30 Ngày 📅
+            <span className="kr-badge-count">{completedPlanDays.length}/30</span>
+          </button>
           <button
             type="button"
             className={`kr-mode-btn ${activeSubTab === 'study' ? 'active' : ''}`}
@@ -121,7 +146,229 @@ export const KoreanVocabView: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. CHẾ ĐỘ 1: ÔN TẬP SRS (STUDY) */}
+      {/* =========================================================
+          2. CHẾ ĐỘ MỚI: LỘ TRÌNH 30 NGÀY (HÔM NAY HỌC TỪ GÌ - NGÀY MAI HỌC TỪ GÌ)
+          ========================================================= */}
+      {activeSubTab === 'roadmap' && (
+        <div className="kr-roadmap-stage">
+          {/* 2.1 Header Lộ Trình & Thanh Tiến Độ */}
+          <div className="roadmap-header-card">
+            <div className="roadmap-header-top">
+              <div className="roadmap-title-group">
+                <span className="roadmap-badge-pill">
+                  <Calendar size={13} /> Lộ Trình 30 Ngày TOPIK 1
+                </span>
+                <h3 className="roadmap-main-heading">Hôm Nay Học Từ Gì - Ngày Mai Học Từ Gì?</h3>
+              </div>
+
+              <div className="roadmap-progress-info">
+                <div className="roadmap-progress-label">
+                  Tiến độ: <strong>{completedPlanDays.length}/30 ngày</strong> ({Math.round((completedPlanDays.length / 30) * 100)}%)
+                </div>
+                <div className="roadmap-progress-track">
+                  <div
+                    className="roadmap-progress-fill"
+                    style={{ width: `${(completedPlanDays.length / 30) * 100}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Bộ Lọc Tuần */}
+            <div className="roadmap-week-filter-row">
+              {[
+                { week: 0, label: 'Tất cả (30 ngày)' },
+                { week: 1, label: 'Tuần 1: Sinh tồn & Bản thân' },
+                { week: 2, label: 'Tuần 2: Động từ hành động' },
+                { week: 3, label: 'Tuần 3: Tính từ & Miêu tả' },
+                { week: 4, label: 'Tuần 4: Số đếm & Đời sống' },
+                { week: 5, label: 'Chặng cuối: Về đích TOPIK 1' },
+              ].map((w) => (
+                <button
+                  key={w.week}
+                  type="button"
+                  className={`week-filter-pill ${selectedPlanWeek === w.week ? 'active' : ''}`}
+                  onClick={() => setSelectedPlanWeek(w.week)}
+                >
+                  {w.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Dải 30 Ngày Học (Day Pills Selector) */}
+            <div className="roadmap-days-strip">
+              {dailyPlan
+                .filter((d) => selectedPlanWeek === 0 || d.week === selectedPlanWeek)
+                .map((d) => {
+                  const isCurrent = d.day === currentPlanDay;
+                  const isDone = completedPlanDays.includes(d.day);
+                  return (
+                    <button
+                      key={d.day}
+                      type="button"
+                      className={`roadmap-day-pill ${isCurrent ? 'active' : ''} ${isDone ? 'completed' : ''}`}
+                      onClick={() => selectPlanDay(d.day)}
+                    >
+                      <span className="pill-day-num">
+                        {isDone ? <Check size={12} color="#10b981" /> : `Ngày ${d.day}`}
+                      </span>
+                      <span className="pill-day-title">{d.title.split('&')[0].trim()}</span>
+                    </button>
+                  );
+                })}
+            </div>
+          </div>
+
+          {/* 2.2 Thẻ Nhiệm Vụ Ngày Hiện Tại (Today's Mission) */}
+          <div className="roadmap-today-card">
+            <div className="today-card-header">
+              <div className="today-badge-row">
+                <span className="today-highlight-badge">
+                  <Zap size={13} /> NHIỆM VỤ NGÀY {currentDayLesson.day} • {currentDayLesson.theme}
+                </span>
+                {completedPlanDays.includes(currentDayLesson.day) && (
+                  <span className="today-completed-badge">
+                    <CheckCircle2 size={13} color="#10b981" /> Đã hoàn thành ngày này
+                  </span>
+                )}
+              </div>
+              <h2 className="today-lesson-title">{currentDayLesson.title}</h2>
+              <p className="today-lesson-focus">🎯 Trọng tâm: {currentDayLesson.focus}</p>
+
+              {/* Box Gợi ý ngữ pháp & Mẹo sư phạm */}
+              <div className="today-tips-row">
+                {currentDayLesson.grammarTip && (
+                  <div className="today-tip-item grammar">
+                    <Lightbulb size={15} color="#38bdf8" />
+                    <span>{currentDayLesson.grammarTip}</span>
+                  </div>
+                )}
+                {currentDayLesson.quickAdvice && (
+                  <div className="today-tip-item advice">
+                    <Sparkles size={15} color="#fbbf24" />
+                    <span>{currentDayLesson.quickAdvice}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Hàng nút hành động nhanh */}
+              <div className="today-actions-bar">
+                <button
+                  type="button"
+                  className="btn-start-day-study"
+                  onClick={() => startStudyDay(currentDayLesson.day)}
+                >
+                  <RotateCw size={15} />
+                  <span>Bắt đầu ôn Flashcard Ngày {currentDayLesson.day} ({currentDayLesson.words.length} từ)</span>
+                  <ArrowRight size={15} />
+                </button>
+
+                <button
+                  type="button"
+                  className={`btn-toggle-day-done ${completedPlanDays.includes(currentDayLesson.day) ? 'is-done' : ''}`}
+                  onClick={() => toggleCompletePlanDay(currentDayLesson.day)}
+                >
+                  {completedPlanDays.includes(currentDayLesson.day) ? (
+                    <>
+                      <Check size={14} /> Đã hoàn thành (Nhấn để hủy)
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle2 size={14} /> Đánh dấu đã học xong Ngày {currentDayLesson.day}
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Bảng Danh Sách Từ Vựng Của Ngày */}
+            <div className="today-words-grid">
+              {currentDayLesson.words.map((word) => (
+                <div
+                  key={word.id}
+                  className="today-word-card"
+                  onClick={() => speakKorean(word.hangeul)}
+                >
+                  <div className="today-word-top">
+                    <span className="today-word-pos">{word.partOfSpeech}</span>
+                    <button
+                      type="button"
+                      className="btn-word-sound"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        speakKorean(word.hangeul);
+                      }}
+                      title="Nghe phát âm"
+                    >
+                      <Volume2 size={15} />
+                    </button>
+                  </div>
+
+                  <div className="today-word-hangeul">{word.hangeul}</div>
+                  {!hideRomanization && (
+                    <div className="today-word-rom">[{word.romanization}]</div>
+                  )}
+                  {word.actualPronunciation && (
+                    <div className="today-word-actual">{word.actualPronunciation}</div>
+                  )}
+
+                  <div className="today-word-meaning">{word.meaningVi}</div>
+
+                  {word.hanjaVi && (
+                    <div className="today-word-hanja">
+                      <span className="hanja-tag">Hán-Hàn</span> {word.hanjaVi}
+                    </div>
+                  )}
+
+                  <div className="today-word-example">
+                    <div className="ex-ko">{word.exampleKo}</div>
+                    <div className="ex-vi">{word.exampleVi}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 2.3 Thẻ Xem Trước Ngày Mai (Tomorrow's Preview) */}
+          {nextDayLesson && (
+            <div className="roadmap-nextday-card">
+              <div className="nextday-card-left">
+                <span className="nextday-badge">
+                  🔮 XEM TRƯỚC NGÀY MAI: NGÀY {nextDayLesson.day}
+                </span>
+                <h4 className="nextday-title">{nextDayLesson.title}</h4>
+                <p className="nextday-focus">Trọng tâm: {nextDayLesson.focus}</p>
+
+                <div className="nextday-preview-chips">
+                  {nextDayLesson.words.slice(0, 5).map((w) => (
+                    <span
+                      key={w.id}
+                      className="nextday-word-chip"
+                      onClick={() => speakKorean(w.hangeul)}
+                      title={`Nhấp để nghe ${w.hangeul}: ${w.meaningVi}`}
+                    >
+                      <Volume2 size={12} /> {w.hangeul} ({w.meaningVi})
+                    </span>
+                  ))}
+                  {nextDayLesson.words.length > 5 && (
+                    <span className="nextday-more-chip">+{nextDayLesson.words.length - 5} từ khác</span>
+                  )}
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className="btn-jump-nextday"
+                onClick={() => selectPlanDay(nextDayLesson.day)}
+              >
+                Xem chi tiết Ngày {nextDayLesson.day} <ArrowRight size={15} />
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* 3. CHẾ ĐỘ 2: ÔN TẬP SRS (STUDY) */}
       {activeSubTab === 'study' && (
         <div className="kr-study-stage">
           {/* Hàng điều khiển: 4 Chế độ ôn & Chọn chủ đề */}

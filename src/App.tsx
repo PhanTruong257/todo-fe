@@ -3,6 +3,7 @@ import { Header } from './components/Header/Header';
 import type { KoreanStage } from './components/Header/Header';
 import { KoreanHubView } from './components/KoreanHub/KoreanHubView';
 import { FlashcardView } from './components/FlashcardView/FlashcardView';
+import { Footer } from './components/Footer/Footer';
 import './App.css';
 
 export const App: React.FC = () => {
@@ -33,12 +34,16 @@ export const App: React.FC = () => {
           <FlashcardView currentStudent="all" />
         )}
 
-        {/* Footer */}
-        <footer className="app-footer">
-          <p>
-            TaskFlow Korean • Lộ trình tự học tiếng Hàn toàn diện từ con số 0 • Hangeul, TOPIK 1 SRS, Ngữ pháp & Hội thoại
-          </p>
-        </footer>
+        {/* 3. Footer Sang Trọng, Đa Tính Năng & Responsive */}
+        <Footer
+          currentStage={koreanStage}
+          onSelectStage={(stage) => {
+            setKoreanStage(stage);
+            setActiveTab('korean');
+          }}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+        />
       </main>
     </div>
   );

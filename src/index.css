@@ -46,15 +46,11 @@
 
 html, body {
   overflow-x: hidden;
+  overflow-y: auto;
   width: 100%;
+  min-height: 100%;
   scrollbar-gutter: stable;
-}
-
-@media (min-width: 1025px) {
-  html, body {
-    height: 100%;
-    overflow: hidden;
-  }
+  scroll-behavior: smooth;
 }
 
 body {

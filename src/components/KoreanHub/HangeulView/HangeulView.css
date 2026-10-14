@@ -315,19 +315,20 @@
   background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.06));
   border: 1px solid rgba(245, 158, 11, 0.25);
   border-radius: var(--radius-md);
-  padding: 12px 16px;
+  padding: 14px 18px;
   display: flex;
   align-items: flex-start;
   gap: 12px;
   font-size: 13px;
   color: #fde68a;
   line-height: 1.5;
+  margin: 14px 0 18px;
 }
 
 .journey-next-stage-wrap {
   display: flex;
   justify-content: center;
-  padding: 8px 0;
+  padding: 12px 0 24px;
 }
 
 .btn-journey-primary {

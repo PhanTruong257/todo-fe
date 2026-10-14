@@ -83,6 +83,796 @@
   color: #fb7185;
 }
 
+/* =================================================== */
+/* 0. LỘ TRÌNH 5 NGÀY VỠ LÒNG (JOURNEY STAGE)          */
+/* =================================================== */
+.hangeul-journey-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.journey-days-selector-bar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+.journey-day-pill {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 10px 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+}
+
+.journey-day-pill:hover {
+  transform: translateY(-2px);
+  border-color: rgba(244, 63, 94, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.journey-day-pill.active {
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(236, 72, 153, 0.15));
+  border-color: #f43f5e;
+  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.25);
+}
+
+.journey-day-pill.completed {
+  border-color: rgba(16, 185, 129, 0.5);
+}
+
+.day-number-tag {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.journey-day-pill.active .day-number-tag {
+  color: #fb7185;
+}
+
+.day-pill-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.journey-current-header-card {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.8));
+  border: 1px solid rgba(244, 63, 94, 0.25);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-md);
+}
+
+.journey-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.journey-badge-pill {
+  font-size: 13px;
+  font-weight: 800;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--radius-full);
+  padding: 4px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.journey-substage-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 3px;
+}
+
+.substage-btn {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.substage-btn:hover {
+  color: var(--text-main);
+}
+
+.substage-btn.active {
+  background: linear-gradient(135deg, #f43f5e, #ec4899);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(244, 63, 94, 0.4);
+}
+
+.journey-lesson-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Giai đoạn 1: Chữ cái */
+.journey-letters-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.journey-letters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.journey-letter-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+}
+
+.journey-letter-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(244, 63, 94, 0.5);
+  box-shadow: 0 6px 20px rgba(244, 63, 94, 0.25);
+}
+
+.journey-letter-char {
+  font-size: 38px;
+  font-weight: 800;
+  color: #fff;
+  font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+  line-height: 1;
+  text-shadow: 0 0 16px rgba(244, 63, 94, 0.35);
+}
+
+.journey-letter-anchor {
+  font-size: 12px;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+  border-radius: var(--radius-full);
+  padding: 2px 8px;
+  font-weight: 600;
+}
+
+.journey-letter-anchor strong {
+  color: #7dd3fc;
+  font-weight: 800;
+}
+
+.journey-letter-hint {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+.journey-speak-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fb7185;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 4px;
+}
+
+.journey-speak-btn:hover {
+  background: #f43f5e;
+  color: #fff;
+  transform: scale(1.08);
+}
+
+.journey-phonetic-banner {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.06));
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 13px;
+  color: #fde68a;
+  line-height: 1.5;
+}
+
+.journey-next-stage-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.btn-journey-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #f43f5e, #ec4899);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 10px 24px;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.35);
+}
+
+.btn-journey-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(244, 63, 94, 0.5);
+}
+
+.btn-journey-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Giai đoạn 2: Từ vựng thật */
+.journey-words-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.journey-words-intro {
+  font-size: 13px;
+  color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+}
+
+.journey-words-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.journey-word-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+}
+
+.journey-word-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(244, 63, 94, 0.4);
+  box-shadow: 0 6px 20px rgba(244, 63, 94, 0.2);
+}
+
+.word-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.word-icon {
+  font-size: 20px;
+}
+
+.journey-speak-btn.small {
+  width: 26px;
+  height: 26px;
+  margin-top: 0;
+}
+
+.word-hangeul-text {
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+  font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+  letter-spacing: 1px;
+}
+
+.word-rom-text {
+  font-size: 11px;
+  font-weight: 700;
+  color: #fb7185;
+}
+
+.word-meaning-text {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+.word-breakdown-tag {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-full);
+  padding: 2px 8px;
+  margin-top: 2px;
+}
+
+/* Giai đoạn 3: Quiz nhanh */
+.journey-quiz-section {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.journey-quiz-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  max-width: 650px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: var(--shadow-md);
+}
+
+.journey-quiz-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.journey-quiz-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.journey-quiz-item {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quiz-q-prompt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #f1f5f9;
+  gap: 8px;
+}
+
+.btn-mini-sound {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #38bdf8;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.btn-mini-sound:hover {
+  background: #38bdf8;
+  color: #0f172a;
+}
+
+.quiz-opts-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 8px;
+}
+
+.journey-quiz-opt {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.journey-quiz-opt:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(244, 63, 94, 0.4);
+}
+
+.journey-quiz-opt.selected {
+  background: rgba(244, 63, 94, 0.2);
+  border-color: #f43f5e;
+  color: #fff;
+}
+
+.journey-quiz-opt.correct {
+  background: rgba(16, 185, 129, 0.2) !important;
+  border-color: #10b981 !important;
+  color: #34d399 !important;
+}
+
+.journey-quiz-opt.wrong {
+  background: rgba(244, 63, 94, 0.2) !important;
+  border-color: #f43f5e !important;
+  color: #fb7185 !important;
+}
+
+.journey-quiz-opt.dimmed {
+  opacity: 0.35;
+}
+
+.quiz-feedback-box {
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  line-height: 1.4;
+}
+
+.quiz-feedback-box.is-correct {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #6ee7b7;
+}
+
+.quiz-feedback-box.is-wrong {
+  background: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.25);
+  color: #fca5a5;
+}
+
+.journey-quiz-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+/* Giai đoạn 4: Màn hình Chiến thắng */
+.journey-victory-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 0;
+  width: 100%;
+}
+
+.journey-victory-card {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  max-width: 500px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 24px rgba(251, 191, 36, 0.15);
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.victory-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fbbf24;
+  margin: 0;
+}
+
+.victory-badge-text {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.victory-summary-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: var(--radius-md);
+  padding: 12px 20px;
+  width: 100%;
+}
+
+.victory-metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.metric-num {
+  font-size: 24px;
+  font-weight: 800;
+  color: #10b981;
+}
+
+.metric-label {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.victory-actions-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+/* =================================================== */
+/* 0.1 TÊN BẠN BẰNG HANGEUL (NAME CARD STAGE)         */
+/* =================================================== */
+.hangeul-name-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.name-intro-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.name-intro-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.name-intro-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.name-search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  max-width: 480px;
+  width: 100%;
+}
+
+.name-search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 13px;
+  width: 100%;
+}
+
+.featured-name-card {
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.15), rgba(99, 102, 241, 0.15));
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  box-shadow: 0 8px 28px rgba(244, 63, 94, 0.18);
+  backdrop-filter: blur(12px);
+}
+
+.featured-name-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.featured-badge-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fb7185;
+}
+
+.featured-name-ko {
+  font-size: 42px;
+  font-weight: 900;
+  color: #fff;
+  font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+  line-height: 1.1;
+  letter-spacing: 2px;
+  text-shadow: 0 0 20px rgba(244, 63, 94, 0.4);
+}
+
+.featured-name-vi {
+  font-size: 14px;
+  color: #e2e8f0;
+}
+
+.featured-name-meaning {
+  font-size: 12.5px;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.featured-name-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-speak-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #f43f5e, #ec4899);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 10px 18px;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(244, 63, 94, 0.35);
+  white-space: nowrap;
+}
+
+.btn-speak-name:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(244, 63, 94, 0.5);
+}
+
+.btn-copy-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-color);
+  color: #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 8px 16px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  justify-content: center;
+}
+
+.btn-copy-name:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.btn-copy-name.copied {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: #10b981;
+  color: #34d399;
+}
+
+.names-directory-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.names-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px;
+}
+
+.name-chip-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.name-chip-item:hover {
+  border-color: rgba(244, 63, 94, 0.4);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.name-chip-item.active {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: #f43f5e;
+}
+
+.name-chip-vi {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.name-chip-ko {
+  font-size: 13px;
+  font-weight: 800;
+  color: #fb7185;
+  font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+}
+
 /* 2. CHẾ ĐỘ 1: BẢNG CHỮ CÁI (CHART) */
 .hangeul-filters-row {
   display: flex;
@@ -1024,6 +1814,52 @@
     align-self: flex-start;
   }
 
+  /* Lộ trình 5 ngày Mobile */
+  .journey-days-selector-bar {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .journey-day-pill {
+    min-width: 105px;
+    flex-shrink: 0;
+  }
+
+  .journey-header-top {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .journey-substage-tabs {
+    overflow-x: auto;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  /* Name Card Mobile */
+  .featured-name-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .featured-name-actions {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .btn-speak-name,
+  .btn-copy-name {
+    flex: 1;
+    justify-content: center;
+  }
+
   .builder-columns-grid {
     grid-template-columns: 1fr;
   }
@@ -1053,6 +1889,37 @@
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   }
 
+  .journey-letters-grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 8px;
+  }
+
+  .journey-letter-card {
+    padding: 12px 8px;
+  }
+
+  .journey-letter-char {
+    font-size: 30px;
+  }
+
+  .journey-words-grid {
+    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+    gap: 8px;
+  }
+
+  .word-hangeul-text {
+    font-size: 22px;
+  }
+
+  .names-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 6px;
+  }
+
+  .featured-name-ko {
+    font-size: 34px;
+  }
+
   .patchim-examples-grid {
     grid-template-columns: 1fr;
   }
@@ -1074,3 +1941,4 @@
     font-size: 12px;
   }
 }
+

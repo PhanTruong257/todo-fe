@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Volume2,
   Sparkles,
@@ -17,6 +17,11 @@ import {
   RefreshCw,
   Sliders,
   Check,
+  Compass,
+  Award,
+  Copy,
+  Search,
+  Lightbulb,
 } from 'lucide-react';
 import { useHangeulView } from './useHangeulView';
 import type { KoreanLetterType } from '../../../types/korean';
@@ -26,14 +31,34 @@ export const HangeulView: React.FC = () => {
   const {
     subTab,
     setSubTab,
+    hideRomanization,
+    toggleHideRomanization,
+    // 1. Lộ trình 5 ngày
+    journeyDays,
+    currentDay,
+    selectJourneyDay,
+    journeyStage,
+    setJourneyStage,
+    completedDays,
+    activeDayLesson,
+    journeyQuizAnswers,
+    journeyQuizChecked,
+    handleSelectQuizAnswer,
+    checkJourneyQuiz,
+    finishCurrentDay,
+    // 2. Viết tên tiếng Việt
+    nameSearch,
+    setNameSearch,
+    filteredNames,
+    selectedNameGuide,
+    setSelectedNameGuide,
+    // 3. Bảng chữ cái tra cứu
     selectedFilter,
     setSelectedFilter,
     selectedLetter,
     setSelectedLetter,
     filteredLetters,
-    hideRomanization,
-    toggleHideRomanization,
-    // Patchim & Pronunciation
+    // 4. Patchim & Pronunciation
     patchimRules,
     selectedPatchim,
     setSelectedPatchim,
@@ -81,6 +106,16 @@ export const HangeulView: React.FC = () => {
     restartQuiz,
   } = useHangeulView();
 
+  const [copiedName, setCopiedName] = useState(false);
+
+  const handleCopyName = (text: string) => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      setCopiedName(true);
+      setTimeout(() => setCopiedName(false), 2000);
+    }
+  };
+
   return (
     <div className="hangeul-container">
       {/* 1. THANH CHUYỂN ĐỔI CHẾ ĐỘ HANGEUL */}
@@ -88,11 +123,27 @@ export const HangeulView: React.FC = () => {
         <div className="hangeul-subtabs">
           <button
             type="button"
+            className={`hangeul-tab-btn ${subTab === 'journey' ? 'active' : ''}`}
+            onClick={() => setSubTab('journey')}
+          >
+            <Compass size={14} />
+            Lộ Trình 5 Ngày (Vỡ Lòng) 🚀
+          </button>
+          <button
+            type="button"
+            className={`hangeul-tab-btn ${subTab === 'name_card' ? 'active' : ''}`}
+            onClick={() => setSubTab('name_card')}
+          >
+            <Award size={14} />
+            Tên Bạn Bằng Hangeul ✍️
+          </button>
+          <button
+            type="button"
             className={`hangeul-tab-btn ${subTab === 'chart' ? 'active' : ''}`}
             onClick={() => setSubTab('chart')}
           >
             <Layers size={14} />
-            Bảng Chữ Cái (40)
+            Bảng Tra Cứu (40)
           </button>
           <button
             type="button"
@@ -148,10 +199,400 @@ export const HangeulView: React.FC = () => {
         </button>
       </div>
 
-      {/* 2. CHẾ ĐỘ 1: BẢNG CHỮ CÁI HANGEUL (CHART) */}
+      {/* ==========================================
+          CHẾ ĐỘ MỚI CỐT LÕI: LỘ TRÌNH 5 NGÀY VỠ LÒNG
+          ========================================== */}
+      {subTab === 'journey' && (
+        <div className="hangeul-journey-stage">
+          {/* Thanh chọn 5 ngày học */}
+          <div className="journey-days-selector-bar">
+            {journeyDays.map((l) => {
+              const isCurrent = l.day === currentDay;
+              const isDone = completedDays.includes(l.day);
+              return (
+                <button
+                  key={l.day}
+                  type="button"
+                  className={`journey-day-pill ${isCurrent ? 'active' : ''} ${isDone ? 'completed' : ''}`}
+                  onClick={() => selectJourneyDay(l.day)}
+                >
+                  <div className="day-number-tag">
+                    {isDone ? <Check size={12} color="#10b981" /> : `Ngày ${l.day}`}
+                  </div>
+                  <div className="day-pill-title">{l.title.split(':')[1]?.trim() || l.title}</div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Header ngày học hiện tại */}
+          <div className="journey-current-header-card">
+            <div className="journey-header-top">
+              <span className="journey-badge-pill">
+                ⭐ {activeDayLesson.title} • Thời lượng: {activeDayLesson.timeEstimate}
+              </span>
+              <div className="journey-substage-tabs">
+                <button
+                  type="button"
+                  className={`substage-btn ${journeyStage === 'letters' ? 'active' : ''}`}
+                  onClick={() => setJourneyStage('letters')}
+                >
+                  1. Học chữ ({activeDayLesson.letters.length})
+                </button>
+                <button
+                  type="button"
+                  className={`substage-btn ${journeyStage === 'words' ? 'active' : ''}`}
+                  onClick={() => setJourneyStage('words')}
+                >
+                  2. Đọc từ thật ({activeDayLesson.realWords.length})
+                </button>
+                <button
+                  type="button"
+                  className={`substage-btn ${journeyStage === 'quiz' ? 'active' : ''}`}
+                  onClick={() => setJourneyStage('quiz')}
+                >
+                  3. Thử thách nhanh ⚡
+                </button>
+              </div>
+            </div>
+            <p className="journey-lesson-desc">{activeDayLesson.subtitle}</p>
+          </div>
+
+          {/* GIAI ĐOẠN 1: HỌC CHỮ CÁI & MẸO NHỚ HÌNH */}
+          {journeyStage === 'letters' && (
+            <div className="journey-letters-section">
+              <div className="journey-letters-grid">
+                {activeDayLesson.letters.map((letItem) => (
+                  <div
+                    key={letItem.char}
+                    className="journey-letter-card"
+                    onClick={() => speakKorean(letItem.audioPrompt || letItem.char)}
+                  >
+                    <div className="journey-letter-char">{letItem.char}</div>
+                    <div className="journey-letter-anchor">
+                      Âm tiếng Việt: <strong>{letItem.vietnameseAnchor}</strong>
+                    </div>
+                    <div className="journey-letter-hint">💡 {letItem.mnemonicHint}</div>
+                    <button
+                      type="button"
+                      className="journey-speak-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        speakKorean(letItem.audioPrompt || letItem.char);
+                      }}
+                      title="Nghe phát âm chuẩn"
+                    >
+                      <Volume2 size={15} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* Mẹo ngữ âm chuyên sâu cho người Việt */}
+              {activeDayLesson.phoneticTips && (
+                <div className="journey-phonetic-banner">
+                  <Lightbulb size={18} color="#f59e0b" style={{ flexShrink: 0, marginTop: 2 }} />
+                  <div>
+                    <strong>Bí quyết sư phạm cho người Việt:</strong>
+                    <div style={{ marginTop: 4, lineHeight: 1.5 }}>{activeDayLesson.phoneticTips}</div>
+                  </div>
+                </div>
+              )}
+
+              {/* Nút chuyển tiếp */}
+              <div className="journey-next-stage-wrap">
+                <button
+                  type="button"
+                  className="btn-journey-primary"
+                  onClick={() => setJourneyStage('words')}
+                >
+                  Đọc Thử Từ Vựng Thật Ngay (Bước 2) <ArrowRight size={15} />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* GIAI ĐOẠN 2: ĐỌC TỪ THẬT & CẢM GIÁC "ĐỌC ĐƯỢC RỒI!" */}
+          {journeyStage === 'words' && (
+            <div className="journey-words-section">
+              <div className="journey-words-intro">
+                ✨ <strong>Không học lý thuyết suông!</strong> Đây là những từ tiếng Hàn có nghĩa thật sự ngoài đời, được ghép từ chính các chữ cái bạn vừa học:
+              </div>
+
+              <div className="journey-words-grid">
+                {activeDayLesson.realWords.map((w, idx) => (
+                  <div
+                    key={idx}
+                    className="journey-word-card"
+                    onClick={() => speakKorean(w.word)}
+                  >
+                    <div className="word-card-top">
+                      <span className="word-icon">{w.icon || '📌'}</span>
+                      <button
+                        type="button"
+                        className="journey-speak-btn small"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          speakKorean(w.word);
+                        }}
+                      >
+                        <Volume2 size={14} />
+                      </button>
+                    </div>
+                    <div className="word-hangeul-text">{w.word}</div>
+                    {!hideRomanization && w.rom && (
+                      <div className="word-rom-text">[{w.rom}]</div>
+                    )}
+                    <div className="word-meaning-text">{w.meaningVi}</div>
+                    {w.breakdownHint && (
+                      <div className="word-breakdown-tag">Cấu tạo: {w.breakdownHint}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Nút chuyển sang thử thách quiz */}
+              <div className="journey-next-stage-wrap">
+                <button
+                  type="button"
+                  className="btn-journey-primary"
+                  onClick={() => setJourneyStage('quiz')}
+                >
+                  Tham Gia Thử Thách 3 Phút (Bước 3) ⚡
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* GIAI ĐOẠN 3: THỬ THÁCH PHẢN XẠ NHANH */}
+          {journeyStage === 'quiz' && (
+            <div className="journey-quiz-section">
+              <div className="journey-quiz-card">
+                <div className="journey-quiz-title">
+                  ⚡ Thử thách phản xạ Ngày {currentDay} ({activeDayLesson.quickQuiz.length} câu)
+                </div>
+
+                <div className="journey-quiz-list">
+                  {activeDayLesson.quickQuiz.map((q, qIdx) => {
+                    const chosen = journeyQuizAnswers[qIdx];
+                    const isCorrect = chosen === q.correctAnswer;
+                    return (
+                      <div key={qIdx} className="journey-quiz-item">
+                        <div className="quiz-q-prompt">
+                          <span>Câu {qIdx + 1}: {q.question}</span>
+                          <button
+                            type="button"
+                            className="btn-mini-sound"
+                            onClick={() => speakKorean(q.targetAudio)}
+                            title="Nghe gợi ý âm thanh"
+                          >
+                            <Volume2 size={14} />
+                          </button>
+                        </div>
+
+                        <div className="quiz-opts-row">
+                          {q.options.map((opt) => {
+                            const isSelected = chosen === opt;
+                            let btnClass = 'journey-quiz-opt';
+                            if (journeyQuizChecked) {
+                              if (opt === q.correctAnswer) btnClass += ' correct';
+                              else if (isSelected) btnClass += ' wrong';
+                              else btnClass += ' dimmed';
+                            } else if (isSelected) {
+                              btnClass += ' selected';
+                            }
+                            return (
+                              <button
+                                key={opt}
+                                type="button"
+                                className={btnClass}
+                                onClick={() => handleSelectQuizAnswer(qIdx, opt)}
+                                disabled={journeyQuizChecked}
+                              >
+                                {opt}
+                              </button>
+                            );
+                          })}
+                        </div>
+
+                        {journeyQuizChecked && (
+                          <div className={`quiz-feedback-box ${isCorrect ? 'is-correct' : 'is-wrong'}`}>
+                            {isCorrect ? (
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                <CheckCircle2 size={15} color="#10b981" />
+                                <span>{q.explanation}</span>
+                              </div>
+                            ) : (
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                <XCircle size={15} color="#f43f5e" />
+                                <span>{q.explanation}</span>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="journey-quiz-actions">
+                  {!journeyQuizChecked ? (
+                    <button
+                      type="button"
+                      className="btn-journey-primary"
+                      onClick={checkJourneyQuiz}
+                      disabled={Object.keys(journeyQuizAnswers).length < activeDayLesson.quickQuiz.length}
+                    >
+                      Kiểm Tra Kết Quả 🎯
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className="btn-journey-primary"
+                      style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}
+                      onClick={finishCurrentDay}
+                    >
+                      Nhận Huy Hiệu Chiến Thắng 🎉
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* GIAI ĐOẠN 4: MÀN HÌNH CHIẾN THẮNG (VICTORY) */}
+          {journeyStage === 'victory' && (
+            <div className="journey-victory-section">
+              <div className="journey-victory-card">
+                <Trophy size={54} color="#fbbf24" />
+                <h3 className="victory-title">🎉 XUẤT SẮC HOÀN THÀNH NGÀY {currentDay}!</h3>
+                <p className="victory-badge-text">{activeDayLesson.victoryRewardBadge}</p>
+
+                <div className="victory-summary-box">
+                  <div className="victory-metric">
+                    <span className="metric-num">+{activeDayLesson.letters.length}</span>
+                    <span className="metric-label">Chữ cái đã thuộc</span>
+                  </div>
+                  <div className="victory-metric">
+                    <span className="metric-num">+{activeDayLesson.realWords.length}</span>
+                    <span className="metric-label">Từ vựng tự đọc được</span>
+                  </div>
+                </div>
+
+                <div className="victory-actions-row">
+                  {currentDay < 5 ? (
+                    <button
+                      type="button"
+                      className="btn-journey-primary"
+                      onClick={() => selectJourneyDay(currentDay + 1)}
+                    >
+                      Tiến Vào Ngày {currentDay + 1} ➔
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className="btn-journey-primary"
+                      style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}
+                      onClick={() => setSubTab('name_card')}
+                    >
+                      Thử Thách: Viết Tên Bạn Bằng Hangeul ✍️
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ==========================================
+          CHẾ ĐỘ MỚI: TÊN BẠN BẰNG HANGEUL (NAME CARD)
+          ========================================== */}
+      {subTab === 'name_card' && (
+        <div className="hangeul-name-stage">
+          <div className="name-intro-card">
+            <h3 className="name-intro-title">✍️ Khám Phá & Tự Viết Tên Bạn Bằng Chữ Hangeul</h3>
+            <p className="name-intro-desc">
+              Tên người Việt khi phiên âm sang tiếng Hàn đều có cách viết chuẩn hóa dựa trên âm Hán-Hàn và ngữ âm tương đương. Tìm tên bạn bên dưới, nghe phát âm và sao chép thiệp tên để chia sẻ!
+            </p>
+
+            <div className="name-search-box">
+              <Search size={16} color="#94a3b8" />
+              <input
+                type="text"
+                placeholder="Gõ tên tiếng Việt của bạn (ví dụ: Trường, Nguyệt, Linh, Minh...)"
+                value={nameSearch}
+                onChange={(e) => setNameSearch(e.target.value)}
+                className="name-search-input"
+              />
+            </div>
+          </div>
+
+          {/* Thẻ Name Card nổi bật */}
+          {selectedNameGuide && (
+            <div className="featured-name-card">
+              <div className="featured-name-left">
+                <div className="featured-badge-label">Tên của bạn bằng tiếng Hàn:</div>
+                <div className="featured-name-ko">{selectedNameGuide.ko}</div>
+                <div className="featured-name-vi">
+                  Tên tiếng Việt: <strong>{selectedNameGuide.vi}</strong> ({selectedNameGuide.hanjaVi})
+                </div>
+                {selectedNameGuide.meaning && (
+                  <div className="featured-name-meaning">Ý nghĩa: {selectedNameGuide.meaning}</div>
+                )}
+              </div>
+
+              <div className="featured-name-actions">
+                <button
+                  type="button"
+                  className="btn-speak-name"
+                  onClick={() => speakKorean(selectedNameGuide.ko)}
+                  title="Nghe phát âm tên"
+                >
+                  <Volume2 size={20} /> Nghe phát âm
+                </button>
+                <button
+                  type="button"
+                  className={`btn-copy-name ${copiedName ? 'copied' : ''}`}
+                  onClick={() => handleCopyName(selectedNameGuide.ko)}
+                >
+                  {copiedName ? <Check size={16} /> : <Copy size={16} />}
+                  <span>{copiedName ? 'Đã sao chép!' : 'Sao chép chữ'}</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Danh bạ các tên tiếng Việt thông dụng */}
+          <div className="names-directory-title">
+            Danh mục tên phổ biến ({filteredNames.length} tên):
+          </div>
+          <div className="names-grid">
+            {filteredNames.map((item) => {
+              const isSelected = selectedNameGuide?.vi === item.vi;
+              return (
+                <div
+                  key={item.vi}
+                  className={`name-chip-item ${isSelected ? 'active' : ''}`}
+                  onClick={() => {
+                    setSelectedNameGuide(item);
+                    speakKorean(item.ko);
+                  }}
+                >
+                  <div className="name-chip-vi">{item.vi}</div>
+                  <div className="name-chip-ko">{item.ko}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ==========================================
+          CHẾ ĐỘ TRA CỨU: BẢNG CHỮ CÁI HANGEUL (CHART)
+          ========================================== */}
       {subTab === 'chart' && (
         <>
-          {/* Hàng bộ lọc nhóm chữ cái */}
           <div className="hangeul-filters-row">
             {[
               { key: 'all', label: 'Tất cả (40 chữ)' },
@@ -171,7 +612,6 @@ export const HangeulView: React.FC = () => {
             ))}
           </div>
 
-          {/* Lưới các thẻ chữ cái */}
           <div className="hangeul-letters-grid">
             {filteredLetters.map((letter) => (
               <div
@@ -204,7 +644,6 @@ export const HangeulView: React.FC = () => {
             ))}
           </div>
 
-          {/* Modal / Card chi tiết ký tự đang chọn */}
           {selectedLetter && (
             <div className="hangeul-detail-drawer" onClick={() => setSelectedLetter(null)}>
               <div className="hangeul-detail-content" onClick={(e) => e.stopPropagation()}>
@@ -252,10 +691,11 @@ export const HangeulView: React.FC = () => {
         </>
       )}
 
-      {/* 3. CHẾ ĐỘ 2: PATCHIM & BIẾN ÂM (PATCHIM) */}
+      {/* ==========================================
+          CHẾ ĐỘ: PATCHIM & BIẾN ÂM (PATCHIM)
+          ========================================== */}
       {subTab === 'patchim' && (
         <div className="hangeul-patchim-stage">
-          {/* Header Giới thiệu Patchim */}
           <div className="patchim-intro-box">
             <h3 className="patchim-intro-title">7 Nhóm Phát Âm Đại Diện Của Patchim (Phụ Âm Cuối)</h3>
             <p className="patchim-intro-desc">
@@ -263,7 +703,6 @@ export const HangeulView: React.FC = () => {
             </p>
           </div>
 
-          {/* Hàng chọn 7 âm đại diện */}
           <div className="patchim-selector-row">
             {patchimRules.map((rule) => {
               const isSelected = selectedPatchim?.id === rule.id;
@@ -281,7 +720,6 @@ export const HangeulView: React.FC = () => {
             })}
           </div>
 
-          {/* Chi tiết nhóm Patchim đang chọn */}
           {selectedPatchim && (
             <div className="patchim-card-detail">
               <div className="patchim-card-header">
@@ -325,7 +763,6 @@ export const HangeulView: React.FC = () => {
 
               <p className="patchim-explanation-text">{selectedPatchim.explanation}</p>
 
-              {/* Các từ ví dụ thực tế */}
               <div className="patchim-examples-grid">
                 {selectedPatchim.examples.map((ex, idx) => (
                   <div key={idx} className="patchim-example-card">
@@ -349,7 +786,6 @@ export const HangeulView: React.FC = () => {
             </div>
           )}
 
-          {/* Sổ tay 4 Quy tắc Biến Âm Sống Còn */}
           <div className="sound-rules-section">
             <h3 className="sound-rules-title">⚡ 4 Quy Tắc Biến Âm Thiết Yếu Người Mới Phải Biết</h3>
             <div className="sound-rules-grid">
@@ -388,7 +824,9 @@ export const HangeulView: React.FC = () => {
         </div>
       )}
 
-      {/* 4. CHẾ ĐỘ MỚI: CẶP ÂM TỐI THIỂU (MINIMAL PAIRS) */}
+      {/* ==========================================
+          CHẾ ĐỘ: CẶP ÂM TỐI THIỂU (MINIMAL PAIRS)
+          ========================================== */}
       {subTab === 'minimal_pairs' && (
         <div className="hangeul-patchim-stage">
           <div className="patchim-intro-box">
@@ -479,7 +917,9 @@ export const HangeulView: React.FC = () => {
         </div>
       )}
 
-      {/* 5. CHẾ ĐỘ 3: GHÉP VẦN KHỐI (BUILDER) */}
+      {/* ==========================================
+          CHẾ ĐỘ: GHÉP VẦN KHỐI (BUILDER)
+          ========================================== */}
       {subTab === 'builder' && (
         <div className="hangeul-builder-stage">
           <div className="builder-display-card">
@@ -501,9 +941,7 @@ export const HangeulView: React.FC = () => {
             </div>
           </div>
 
-          {/* 3 Cột chọn ký tự */}
           <div className="builder-columns-grid">
-            {/* Cột 1: Phụ âm đầu */}
             <div className="builder-col">
               <div className="builder-col-header">1. Phụ âm đầu (초성)</div>
               <div className="builder-keys-list">
@@ -523,7 +961,6 @@ export const HangeulView: React.FC = () => {
               </div>
             </div>
 
-            {/* Cột 2: Nguyên âm giữa */}
             <div className="builder-col">
               <div className="builder-col-header">2. Nguyên âm giữa (중성)</div>
               <div className="builder-keys-list">
@@ -543,7 +980,6 @@ export const HangeulView: React.FC = () => {
               </div>
             </div>
 
-            {/* Cột 3: Phụ âm cuối (Patchim) */}
             <div className="builder-col">
               <div className="builder-col-header">3. Patchim (종성)</div>
               <div className="builder-keys-list">
@@ -573,10 +1009,11 @@ export const HangeulView: React.FC = () => {
         </div>
       )}
 
-      {/* 6. CHẾ ĐỘ 4: BỘ GÕ IME 2-SET TRAINER (KEYBOARD) */}
+      {/* ==========================================
+          CHẾ ĐỘ: BỘ GÕ IME 2-SET (KEYBOARD)
+          ========================================== */}
       {subTab === 'keyboard' && (
         <div className="hangeul-keyboard-stage">
-          {/* Card từ luyện tập */}
           <div className="keyboard-practice-card">
             <div className="kb-card-top">
               <span className="kb-pill-badge">Bài tập gõ {practiceWordIndex + 1}/{practiceWords.length} (Chuẩn IME Khối)</span>
@@ -609,7 +1046,6 @@ export const HangeulView: React.FC = () => {
 
             <div className="kb-hint-text">💡 Cách gõ: {currentPracticeWord.hint}</div>
 
-            {/* Khu vực kết quả đã gõ (Âm tiết khối thực tế) */}
             <div className="kb-typed-display">
               <div className="kb-typed-content">
                 {typedText.length === 0 ? (
@@ -656,7 +1092,6 @@ export const HangeulView: React.FC = () => {
             </div>
           </div>
 
-          {/* Mô phỏng Bàn Phím Ảo 2-Set (Dubeolsik) */}
           <div className="virtual-keyboard-wrap">
             <div className="keyboard-legend">
               <span className="legend-item cons">👈 Tay Trái: Phụ Âm (ㅁㄴㅇㄹ...)</span>
@@ -692,7 +1127,6 @@ export const HangeulView: React.FC = () => {
               ))}
             </div>
 
-            {/* Gợi ý điện thoại */}
             <div style={{
               marginTop: 12,
               padding: '8px 12px',
@@ -708,7 +1142,9 @@ export const HangeulView: React.FC = () => {
         </div>
       )}
 
-      {/* 7. CHẾ ĐỘ 5: MINI QUIZ (QUIZ) */}
+      {/* ==========================================
+          CHẾ ĐỘ: MINI QUIZ (QUIZ)
+          ========================================== */}
       {subTab === 'quiz' && (
         <div className="hangeul-quiz-stage">
           {quizCompleted || !currentQuiz ? (

@@ -109,3 +109,45 @@ export interface KoreanDialogueItem {
   vietnamese: string;
   situation: string;
 }
+
+export interface HangeulDayLetter {
+  char: string;
+  vietnameseAnchor: string;
+  mnemonicHint: string;
+  audioPrompt: string;
+}
+
+export interface HangeulDayWord {
+  word: string;
+  meaningVi: string;
+  rom?: string;
+  breakdownHint?: string;
+  icon?: string;
+}
+
+export interface HangeulDayQuizItem {
+  question: string;
+  targetAudio: string;
+  options: string[];
+  correctAnswer: string;
+  explanation: string;
+}
+
+export interface HangeulDayLesson {
+  day: number;
+  title: string;
+  subtitle: string;
+  timeEstimate: string; // ví dụ: "10-12 phút"
+  letters: HangeulDayLetter[];
+  realWords: HangeulDayWord[];
+  phoneticTips: string;
+  quickQuiz: HangeulDayQuizItem[];
+  victoryRewardBadge: string;
+}
+
+export interface VietnameseNameGuide {
+  vi: string;
+  ko: string;
+  hanjaVi?: string;
+  meaning?: string;
+}

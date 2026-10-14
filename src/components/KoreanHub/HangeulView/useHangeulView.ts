@@ -12,17 +12,39 @@ import {
   KEYBOARD_PRACTICE_WORDS,
   MINIMAL_PAIRS,
 } from '../../../constants/koreanData';
+import {
+  HANGEUL_5DAY_JOURNEY,
+  VIETNAMESE_NAMES_KOREAN,
+} from '../../../constants/hangeulJourneyData';
 import { HangulImeAutomata, PHYSICAL_KEY_MAP } from '../../../utils/hangulIme';
-import type { HangeulLetter, KoreanLetterType, PatchimRule, MinimalPair } from '../../../types/korean';
+import type {
+  HangeulLetter,
+  KoreanLetterType,
+  PatchimRule,
+  MinimalPair,
+  HangeulDayLesson,
+  VietnameseNameGuide,
+} from '../../../types/korean';
 
 const ROMAN_KEY = 'korean_hide_romanization';
+const JOURNEY_COMPLETED_KEY = 'korean_journey_completed_days';
+const CURRENT_DAY_KEY = 'korean_journey_current_day';
 
-export type HangeulSubTab = 'chart' | 'patchim' | 'minimal_pairs' | 'builder' | 'keyboard' | 'quiz';
+export type HangeulSubTab =
+  | 'journey'
+  | 'chart'
+  | 'patchim'
+  | 'minimal_pairs'
+  | 'name_card'
+  | 'builder'
+  | 'keyboard'
+  | 'quiz';
+
+export type JourneyStage = 'letters' | 'words' | 'quiz' | 'victory';
 
 export function useHangeulView() {
-  const [subTab, setSubTab] = useState<HangeulSubTab>('chart');
-  const [selectedFilter, setSelectedFilter] = useState<'all' | KoreanLetterType>('all');
-  const [selectedLetter, setSelectedLetter] = useState<HangeulLetter | null>(null);
+  // Mặc định mở Lộ trình 5 ngày cho người mới bắt đầu
+  const [subTab, setSubTab] = useState<HangeulSubTab>('journey');
 
   // Romanization Toggle
   const [hideRomanization, setHideRomanization] = useState<boolean>(() => {
@@ -42,22 +64,123 @@ export function useHangeulView() {
     });
   }, []);
 
-  // Patchim Tab State
-  const [selectedPatchim, setSelectedPatchim] = useState<PatchimRule | null>(PATCHIM_RULES[0]);
+  // ==========================================
+  // 1. STATE LỘ TRÌNH 5 NGÀY VỠ LÒNG (JOURNEY)
+  // ==========================================
+  const [currentDay, setCurrentDay] = useState<number>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(CURRENT_DAY_KEY);
+      return saved ? parseInt(saved, 10) || 1 : 1;
+    }
+    return 1;
+  });
 
-  // Minimal Pairs State
+  const [journeyStage, setJourneyStage] = useState<JourneyStage>('letters');
+
+  const [completedDays, setCompletedDays] = useState<number[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(JOURNEY_COMPLETED_KEY);
+      return saved ? JSON.parse(saved) : [];
+    }
+    return [];
+  });
+
+  // Quiz của ngày
+  const [journeyQuizAnswers, setJourneyQuizAnswers] = useState<Record<number, string>>({});
+  const [journeyQuizChecked, setJourneyQuizChecked] = useState<boolean>(false);
+
+  const activeDayLesson = useMemo<HangeulDayLesson>(() => {
+    return (
+      HANGEUL_5DAY_JOURNEY.find((l) => l.day === currentDay) ||
+      HANGEUL_5DAY_JOURNEY[0]
+    );
+  }, [currentDay]);
+
+  const selectJourneyDay = useCallback((day: number) => {
+    setCurrentDay(day);
+    setJourneyStage('letters');
+    setJourneyQuizAnswers({});
+    setJourneyQuizChecked(false);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(CURRENT_DAY_KEY, String(day));
+    }
+  }, []);
+
+  const handleSelectQuizAnswer = useCallback((qIndex: number, option: string) => {
+    setJourneyQuizAnswers((prev) => ({
+      ...prev,
+      [qIndex]: option,
+    }));
+  }, []);
+
+  const checkJourneyQuiz = useCallback(() => {
+    setJourneyQuizChecked(true);
+  }, []);
+
+  const finishCurrentDay = useCallback(() => {
+    setCompletedDays((prev) => {
+      const next = prev.includes(currentDay) ? prev : [...prev, currentDay];
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(JOURNEY_COMPLETED_KEY, JSON.stringify(next));
+      }
+      return next;
+    });
+    setJourneyStage('victory');
+  }, [currentDay]);
+
+  // ==========================================
+  // 2. STATE VIẾT TÊN TIẾNG VIỆT (NAME CARD)
+  // ==========================================
+  const [nameSearch, setNameSearch] = useState<string>('');
+  const [selectedNameGuide, setSelectedNameGuide] = useState<VietnameseNameGuide | null>(
+    VIETNAMESE_NAMES_KOREAN[0]
+  );
+  const [customNameInput, setCustomNameInput] = useState<string>('');
+
+  const filteredNames = useMemo<VietnameseNameGuide[]>(() => {
+    if (!nameSearch.trim()) return VIETNAMESE_NAMES_KOREAN.slice(0, 24);
+    const q = nameSearch.toLowerCase().trim();
+    return VIETNAMESE_NAMES_KOREAN.filter(
+      (n) => n.vi.toLowerCase().includes(q) || n.ko.includes(q)
+    );
+  }, [nameSearch]);
+
+  // ==========================================
+  // 3. STATE BẢNG TRA CỨU 40 CHỮ CÁI (CHART)
+  // ==========================================
+  const [selectedFilter, setSelectedFilter] = useState<'all' | KoreanLetterType>('all');
+  const [selectedLetter, setSelectedLetter] = useState<HangeulLetter | null>(null);
+
+  const filteredLetters = useMemo(() => {
+    if (selectedFilter === 'all') return HANGEUL_LETTERS;
+    return HANGEUL_LETTERS.filter((l) => l.type === selectedFilter);
+  }, [selectedFilter]);
+
+  // ==========================================
+  // 4. STATE PATCHIM & CẶP ÂM TỐI THIỂU
+  // ==========================================
+  const [selectedPatchim, setSelectedPatchim] = useState<PatchimRule | null>(PATCHIM_RULES[0]);
   const [pairCategory, setPairCategory] = useState<'all' | 'consonant_trio' | 'vowel_confusion'>('all');
+
   const filteredMinimalPairs = useMemo<MinimalPair[]>(() => {
     if (pairCategory === 'all') return MINIMAL_PAIRS;
     return MINIMAL_PAIRS.filter((p) => p.category === pairCategory);
   }, [pairCategory]);
 
-  // Syllable Builder State
+  // ==========================================
+  // 5. STATE GHÉP VẦN KHỐI (BUILDER)
+  // ==========================================
   const [initialConsonant, setInitialConsonant] = useState('ㄱ');
   const [medialVowel, setMedialVowel] = useState('ㅏ');
   const [finalConsonant, setFinalConsonant] = useState('');
 
-  // Keyboard Trainer State (Hangul Automata IME)
+  const composedChar = useMemo(() => {
+    return composeHangeul(initialConsonant, medialVowel, finalConsonant);
+  }, [initialConsonant, medialVowel, finalConsonant]);
+
+  // ==========================================
+  // 6. STATE BỘ GÕ IME 2-SET (KEYBOARD)
+  // ==========================================
   const imeRef = useRef<HangulImeAutomata>(new HangulImeAutomata());
   const [typedText, setTypedText] = useState<string>('');
   const [activeKey, setActiveKey] = useState<string | null>(null);
@@ -65,25 +188,6 @@ export function useHangeulView() {
   const [practiceWordIndex, setPracticeWordIndex] = useState<number>(0);
   const [isWordMatched, setIsWordMatched] = useState<boolean>(false);
 
-  // Quiz State
-  const [quizIndex, setQuizIndex] = useState(0);
-  const [score, setScore] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-  const [isAnswerChecked, setIsAnswerChecked] = useState(false);
-  const [quizCompleted, setQuizCompleted] = useState(false);
-
-  // Lọc danh sách chữ cái
-  const filteredLetters = useMemo(() => {
-    if (selectedFilter === 'all') return HANGEUL_LETTERS;
-    return HANGEUL_LETTERS.filter((l) => l.type === selectedFilter);
-  }, [selectedFilter]);
-
-  // Khối chữ được ghép trong Syllable Builder
-  const composedChar = useMemo(() => {
-    return composeHangeul(initialConsonant, medialVowel, finalConsonant);
-  }, [initialConsonant, medialVowel, finalConsonant]);
-
-  // Keyboard Trainer Logic
   const currentPracticeWord = KEYBOARD_PRACTICE_WORDS[practiceWordIndex] || KEYBOARD_PRACTICE_WORDS[0];
 
   const handleInputKoChar = useCallback((char: string, keyName?: string) => {
@@ -106,7 +210,6 @@ export function useHangeulView() {
     setIsWordMatched(false);
   }, []);
 
-  // Kiểm tra hoàn thành từ đang gõ
   useEffect(() => {
     if (typedText && currentPracticeWord && typedText.trim() === currentPracticeWord.word.trim()) {
       setIsWordMatched(true);
@@ -123,7 +226,7 @@ export function useHangeulView() {
     }
   }, [typedText, currentPracticeWord]);
 
-  // Bắt phím vật lý khi đang ở tab Keyboard dùng event.code (tránh lỗi Telex / IME ngoài)
+  // Bắt phím vật lý
   useEffect(() => {
     if (subTab !== 'keyboard') return;
 
@@ -152,7 +255,7 @@ export function useHangeulView() {
       const map = PHYSICAL_KEY_MAP[e.code];
       if (map) {
         e.preventDefault();
-        const char = (e.shiftKey && map.shift) ? map.shift : map.normal;
+        const char = e.shiftKey && map.shift ? map.shift : map.normal;
         const keyChar = e.code.replace('Key', '').toLowerCase();
         handleInputKoChar(char, keyChar);
       }
@@ -172,7 +275,15 @@ export function useHangeulView() {
     };
   }, [subTab, handleBackspace, handleInputKoChar]);
 
-  // Bộ 10 câu hỏi trắc nghiệm
+  // ==========================================
+  // 7. STATE QUIZ PHẢN XẠ CHỮ CÁI
+  // ==========================================
+  const [quizIndex, setQuizIndex] = useState(0);
+  const [score, setScore] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+  const [isAnswerChecked, setIsAnswerChecked] = useState(false);
+  const [quizCompleted, setQuizCompleted] = useState(false);
+
   const quizQuestions = useMemo(() => {
     const shuffled = [...HANGEUL_LETTERS].sort(() => Math.random() - 0.5).slice(0, 10);
     return shuffled.map((item) => {
@@ -225,23 +336,44 @@ export function useHangeulView() {
   return {
     subTab,
     setSubTab,
+    hideRomanization,
+    toggleHideRomanization,
+    // 1. Lộ trình 5 ngày
+    journeyDays: HANGEUL_5DAY_JOURNEY,
+    currentDay,
+    selectJourneyDay,
+    journeyStage,
+    setJourneyStage,
+    completedDays,
+    activeDayLesson,
+    journeyQuizAnswers,
+    journeyQuizChecked,
+    handleSelectQuizAnswer,
+    checkJourneyQuiz,
+    finishCurrentDay,
+    // 2. Viết tên tiếng Việt
+    nameSearch,
+    setNameSearch,
+    filteredNames,
+    selectedNameGuide,
+    setSelectedNameGuide,
+    customNameInput,
+    setCustomNameInput,
+    // 3. Bảng chữ cái
     selectedFilter,
     setSelectedFilter,
     selectedLetter,
     setSelectedLetter,
     filteredLetters,
-    hideRomanization,
-    toggleHideRomanization,
-    // Patchim & Pronunciation
+    // 4. Patchim & Minimal Pairs
     patchimRules: PATCHIM_RULES,
     selectedPatchim,
     setSelectedPatchim,
     pronunciationRules: ESSENTIAL_PRONUNCIATION_RULES,
-    // Minimal Pairs
     pairCategory,
     setPairCategory,
     filteredMinimalPairs,
-    // Syllable Builder
+    // 5. Syllable Builder
     initialConsonant,
     setInitialConsonant,
     medialVowel,
@@ -253,7 +385,7 @@ export function useHangeulView() {
     MEDIAL_VOWELS,
     FINAL_CONSONANTS,
     speakKorean,
-    // Keyboard Trainer (Automata IME)
+    // 6. Keyboard Trainer
     keyboardLayout: KEYBOARD_2SET_LAYOUT,
     practiceWords: KEYBOARD_PRACTICE_WORDS,
     currentPracticeWord,
@@ -267,7 +399,7 @@ export function useHangeulView() {
     handleInputKoChar,
     handleBackspace,
     handleClearTyped,
-    // Quiz
+    // 7. Quiz
     currentQuiz,
     quizIndex,
     totalQuiz: quizQuestions.length,

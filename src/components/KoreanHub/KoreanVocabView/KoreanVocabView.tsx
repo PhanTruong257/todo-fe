@@ -22,6 +22,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { useKoreanVocab } from './useKoreanVocab';
+import { SinoKoreanView } from './SinoKoreanView/SinoKoreanView';
 import './KoreanVocabView.css';
 
 export const KoreanVocabView: React.FC = () => {
@@ -102,6 +103,14 @@ export const KoreanVocabView: React.FC = () => {
             {dueQueue.length > 0 && (
               <span className="kr-badge-count">{dueQueue.length}</span>
             )}
+          </button>
+          <button
+            type="button"
+            className={`kr-mode-btn ${activeSubTab === 'sino' ? 'active' : ''}`}
+            onClick={() => setActiveSubTab('sino')}
+          >
+            <Sparkles size={14} />
+            Gốc Hán-Hàn 🌳
           </button>
           <button
             type="button"
@@ -950,6 +959,9 @@ export const KoreanVocabView: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* 5. GỐC HÁN-HÀN (HỌC 1 BIẾT 10) */}
+      {activeSubTab === 'sino' && <SinoKoreanView />}
     </div>
   );
 };

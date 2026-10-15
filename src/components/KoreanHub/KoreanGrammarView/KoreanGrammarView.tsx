@@ -10,12 +10,16 @@ import {
   XCircle,
   HelpCircle,
   Sparkles,
+  Zap,
 } from 'lucide-react';
 import { KOREAN_GRAMMAR_LIST, speakKorean } from '../../../constants/koreanData';
 import type { GrammarExercise } from '../../../types/korean';
+import { SentenceBuilderView } from './SentenceBuilderView/SentenceBuilderView';
+import { VerbConjugatorView } from './VerbConjugatorView/VerbConjugatorView';
 import './KoreanGrammarView.css';
 
 export const KoreanGrammarView: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<'handbook' | 'sentence' | 'conjugator'>('handbook');
   // Mặc định mở 2 bài đầu
   const [expandedIds, setExpandedIds] = useState<string[]>(['g-1', 'g-2']);
   const [searchQuery, setSearchQuery] = useState('');
@@ -59,8 +63,40 @@ export const KoreanGrammarView: React.FC = () => {
 
   return (
     <div className="kr-grammar-container">
-      {/* Header */}
-      <div className="kr-grammar-header">
+      {/* 1. THANH CHUYỂN SUBTABS NGỮ PHÁP */}
+      <div className="kr-grammar-subtabs-toolbar">
+        <div className="kr-grammar-subtabs-pill">
+          <button
+            type="button"
+            className={`kr-subtab-btn ${activeTab === 'handbook' ? 'active' : ''}`}
+            onClick={() => setActiveTab('handbook')}
+          >
+            <BookMarked size={14} />
+            Sổ Tay 16 Bài Học 📐
+          </button>
+          <button
+            type="button"
+            className={`kr-subtab-btn ${activeTab === 'sentence' ? 'active' : ''}`}
+            onClick={() => setActiveTab('sentence')}
+          >
+            <Sparkles size={14} />
+            Lắp Ráp Câu SOV 🧩
+          </button>
+          <button
+            type="button"
+            className={`kr-subtab-btn ${activeTab === 'conjugator' ? 'active' : ''}`}
+            onClick={() => setActiveTab('conjugator')}
+          >
+            <Zap size={14} />
+            Chia Động Từ ⚡
+          </button>
+        </div>
+      </div>
+
+      {activeTab === 'handbook' && (
+        <>
+          {/* Header */}
+          <div className="kr-grammar-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <BookMarked size={20} color="#f43f5e" />
           <span style={{ fontSize: 16, fontWeight: 800, color: '#fff' }}>
@@ -245,6 +281,14 @@ export const KoreanGrammarView: React.FC = () => {
           })
         )}
       </div>
+      </>
+      )}
+
+      {/* 2. LẮP RÁP CÂU SOV */}
+      {activeTab === 'sentence' && <SentenceBuilderView />}
+
+      {/* 3. BẢNG TRA CỨU & LUYỆN CHIA ĐỘNG TỪ */}
+      {activeTab === 'conjugator' && <VerbConjugatorView />}
     </div>
   );
 };

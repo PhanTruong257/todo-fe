@@ -210,6 +210,10 @@
   white-space: nowrap;
 }
 
+.substage-text-short {
+  display: none;
+}
+
 .substage-btn:hover {
   color: var(--text-main);
 }
@@ -1799,47 +1803,184 @@
 
 /* MOBILE RESPONSIVE OPTIMIZATION */
 @media (max-width: 768px) {
-  .hangeul-nav-bar {
-    flex-direction: column;
-    align-items: stretch;
+  .hangeul-container {
     gap: 8px;
+  }
+
+  /* 1. THANH CHUYỂN CHẾ ĐỘ HANGEUL (Row 1 dòng siêu gọn 30px) */
+  .hangeul-nav-bar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+    flex-wrap: nowrap;
+    width: 100%;
+    margin: 0;
   }
 
   .hangeul-subtabs {
+    flex: 1;
+    min-width: 0;
     overflow-x: auto;
     flex-wrap: nowrap;
-    padding: 3px 2px;
+    gap: 3px;
+    padding: 2px 4px;
+    border-radius: var(--radius-full);
+    background: rgba(13, 17, 28, 0.7);
+    border: 1px solid var(--border-color);
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .hangeul-subtabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hangeul-tab-btn {
+    padding: 4px 10px;
+    font-size: 11px;
+    min-height: 26px;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+    flex-shrink: 0;
+    gap: 4px;
   }
 
   .hangeul-roman-toggle-btn {
-    align-self: flex-start;
+    flex-shrink: 0;
+    height: 30px;
+    min-width: 30px;
+    padding: 0 8px;
+    border-radius: var(--radius-full);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
   }
 
-  /* Lộ trình 5 ngày Mobile */
+  .hangeul-roman-toggle-btn span {
+    display: none !important;
+  }
+
+  /* 2. LỘ TRÌNH 5 NGÀY (Row pills phẳng 28px) */
+  .hangeul-journey-stage {
+    gap: 6px;
+  }
+
   .journey-days-selector-bar {
     display: flex;
+    flex-direction: row;
     overflow-x: auto;
-    gap: 8px;
-    padding-bottom: 6px;
+    gap: 4px;
+    padding: 2px 0;
+    margin: 0;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
+    scrollbar-width: none;
+    width: 100%;
+  }
+
+  .journey-days-selector-bar::-webkit-scrollbar {
+    display: none;
   }
 
   .journey-day-pill {
-    min-width: 105px;
+    flex: 1;
+    min-width: 60px;
+    max-width: none;
     flex-shrink: 0;
+    padding: 4px 8px;
+    border-radius: var(--radius-full);
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 28px;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: none;
+  }
+
+  .journey-day-pill.active {
+    background: linear-gradient(135deg, rgba(244, 63, 94, 0.4), rgba(236, 72, 153, 0.35));
+    border-color: #f43f5e;
+    box-shadow: 0 2px 8px rgba(244, 63, 94, 0.3);
+  }
+
+  .day-number-tag {
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .day-pill-title {
+    display: none !important;
+  }
+
+  /* 3. CARD HEADER NGÀY HIỆN TẠI (Tối giản còn 32px) */
+  .journey-current-header-card {
+    padding: 4px 6px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(244, 63, 94, 0.2);
+    border-radius: 10px;
+    gap: 0;
+    margin: 0;
   }
 
   .journey-header-top {
     flex-direction: column;
     align-items: stretch;
-    gap: 10px;
+    gap: 0;
+    width: 100%;
+  }
+
+  .journey-badge-pill {
+    display: none !important;
   }
 
   .journey-substage-tabs {
-    overflow-x: auto;
     width: 100%;
-    justify-content: flex-start;
+    display: flex;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-full);
+    padding: 2px;
+    gap: 2px;
+  }
+
+  .substage-btn {
+    flex: 1;
+    padding: 5px 4px;
+    font-size: 11px;
+    min-height: 28px;
+    text-align: center;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+  }
+
+  .substage-text-full {
+    display: none !important;
+  }
+
+  .substage-text-short {
+    display: inline !important;
+  }
+
+  .journey-lesson-desc {
+    display: none !important;
+  }
+
+  .journey-phonetic-banner {
+    padding: 8px 10px;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .journey-phonetic-banner p {
+    font-size: 11px;
+    line-height: 1.35;
   }
 
   /* Name Card Mobile */

@@ -237,21 +237,24 @@ export const HangeulView: React.FC = () => {
                   className={`substage-btn ${journeyStage === 'letters' ? 'active' : ''}`}
                   onClick={() => setJourneyStage('letters')}
                 >
-                  1. Học chữ ({activeDayLesson.letters.length})
+                  <span className="substage-text-full">1. Học chữ ({activeDayLesson.letters.length})</span>
+                  <span className="substage-text-short">1. Chữ cái ({activeDayLesson.letters.length})</span>
                 </button>
                 <button
                   type="button"
                   className={`substage-btn ${journeyStage === 'words' ? 'active' : ''}`}
                   onClick={() => setJourneyStage('words')}
                 >
-                  2. Đọc từ thật ({activeDayLesson.realWords.length})
+                  <span className="substage-text-full">2. Đọc từ thật ({activeDayLesson.realWords.length})</span>
+                  <span className="substage-text-short">2. Từ thật ({activeDayLesson.realWords.length})</span>
                 </button>
                 <button
                   type="button"
                   className={`substage-btn ${journeyStage === 'quiz' ? 'active' : ''}`}
                   onClick={() => setJourneyStage('quiz')}
                 >
-                  3. Thử thách nhanh ⚡
+                  <span className="substage-text-full">3. Thử thách nhanh ⚡</span>
+                  <span className="substage-text-short">3. Thử thách ⚡</span>
                 </button>
               </div>
             </div>

@@ -1539,14 +1539,67 @@
 
 /* MOBILE RESPONSIVE OPTIMIZATION */
 @media (max-width: 768px) {
-  .kr-vocab-toolbar {
-    flex-direction: column;
-    align-items: stretch;
+  .kr-vocab-container {
     gap: 8px;
   }
 
-  .kr-toolbar-right {
+  .kr-vocab-toolbar {
+    flex-direction: row;
+    align-items: center;
     justify-content: space-between;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+
+  .kr-mode-tabs {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+    gap: 3px;
+    padding: 2px 4px;
+    background: rgba(13, 17, 28, 0.7);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .kr-mode-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .kr-mode-btn {
+    padding: 4px 10px;
+    font-size: 11px;
+    min-height: 26px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .kr-toolbar-right {
+    flex-shrink: 0;
+    gap: 4px;
+  }
+
+  .kr-roman-toggle-btn {
+    height: 30px;
+    min-width: 30px;
+    padding: 0 8px;
+    border-radius: var(--radius-full);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .kr-roman-toggle-btn span {
+    display: none !important;
   }
 
   /* Roadmap Responsive */
@@ -1584,11 +1637,16 @@
   .kr-card-stage,
   .kr-card-inner,
   .kr-card-face {
-    min-height: 400px;
+    min-height: 260px;
+  }
+
+  .kr-front-center {
+    margin: 4px 0;
+    gap: 4px;
   }
 
   .kr-hangeul-title {
-    font-size: 30px;
+    font-size: 28px;
   }
 
   .kr-quiz-grid {
@@ -1598,6 +1656,13 @@
 
   .kr-rating-row {
     grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .kr-rating-btn {
+    min-height: 44px;
+    padding: 8px 10px;
   }
 
   .kr-words-grid {
@@ -1666,8 +1731,8 @@
   .kr-card-stage,
   .kr-card-inner,
   .kr-card-face {
-    min-height: 420px;
-    padding: 16px 12px;
+    min-height: 270px;
+    padding: 12px 10px;
   }
 }
 

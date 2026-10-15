@@ -115,7 +115,7 @@ export function useKoreanVocab() {
   const PLAN_DAY_KEY = 'korean_current_plan_day';
   const COMPLETED_PLAN_DAYS_KEY = 'korean_completed_plan_days';
 
-  const [activeSubTab, setActiveSubTab] = useState<'roadmap' | 'study' | 'library'>('roadmap');
+  const [activeSubTab, setActiveSubTab] = useState<'roadmap' | 'study' | 'sino' | 'library'>('roadmap');
   const [currentPlanDay, setCurrentPlanDay] = useState<number>(() => {
     if (typeof window !== 'undefined') {
       const val = localStorage.getItem(PLAN_DAY_KEY);

@@ -1,0 +1,435 @@
+/* =================================================== */
+/* SENTENCE BUILDER VIEW (TRÌNH LẮP RÁP CÂU SOV)       */
+/* =================================================== */
+
+.sentence-builder-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.sb-header-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 12px 18px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.sb-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sb-main-title {
+  font-size: 15.5px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.sb-sub-title {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.sb-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sb-score-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  color: #fbbf24;
+  font-size: 11.5px;
+  font-weight: 800;
+  border-radius: var(--radius-full);
+  padding: 3px 10px;
+}
+
+.sb-progress-badge {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-color);
+  color: #38bdf8;
+  font-size: 11.5px;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  padding: 3px 10px;
+}
+
+/* Prompt Card */
+.sb-prompt-card {
+  background: linear-gradient(145deg, #181d33, #0f1322);
+  border: 1px solid rgba(244, 63, 94, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.sb-prompt-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sb-prompt-vietnamese {
+  font-size: 22px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+}
+
+.sb-grammar-point-pill {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #7dd3fc;
+  font-size: 11.5px;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  padding: 3px 12px;
+  margin-top: 4px;
+}
+
+/* Slots Board */
+.sb-slots-board {
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px dashed rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 120px;
+  transition: all 0.25s;
+}
+
+.sb-slots-board.correct {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.sb-slots-board.incorrect {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.sb-slots-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.sb-clear-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  color: #fb7185;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sb-slots-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  min-height: 48px;
+}
+
+.sb-slots-placeholder {
+  font-size: 12.5px;
+  color: var(--text-subtle);
+  font-style: italic;
+  padding: 8px 0;
+}
+
+.sb-placed-chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  background: #181d31;
+  border: 1.5px solid #f43f5e;
+  border-radius: 12px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: transform 0.15s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.sb-placed-chip:hover {
+  transform: translateY(-2px);
+}
+
+.sb-placed-chip .chip-text {
+  font-size: 17px;
+  font-weight: 900;
+  color: #fff;
+}
+
+.sb-placed-chip .chip-rom {
+  font-size: 9.5px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+/* Banners */
+.sb-correct-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-top: 4px;
+}
+
+.banner-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #34d399;
+}
+
+.sb-listen-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #10b981;
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 4px 10px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sb-incorrect-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #fca5a5;
+  line-height: 1.4;
+}
+
+/* Pool Section */
+.sb-pool-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sb-pool-title {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #cbd5e1;
+}
+
+.sb-pool-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-height: 52px;
+}
+
+.sb-source-chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid var(--border-color);
+  border-radius: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: all 0.18s;
+  min-height: 44px;
+}
+
+.sb-source-chip:hover {
+  transform: translateY(-2px);
+  border-color: #f43f5e;
+  background: rgba(244, 63, 94, 0.15);
+}
+
+.source-chip-text {
+  font-size: 17px;
+  font-weight: 900;
+  color: #fff;
+}
+
+.source-chip-rom {
+  font-size: 9.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.sb-pool-empty-text {
+  font-size: 12px;
+  color: #10b981;
+  font-style: italic;
+  padding: 12px 0;
+}
+
+/* Actions Row */
+.sb-actions-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.sb-btn-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  background: linear-gradient(135deg, #f43f5e, #ec4899);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 48px;
+  box-shadow: 0 4px 14px rgba(244, 63, 94, 0.35);
+}
+
+.sb-btn-check:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.sb-btn-retry {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  border-radius: var(--radius-full);
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.sb-btn-next {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex: 1.5;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 10px;
+  font-size: 13.5px;
+  font-weight: 800;
+  cursor: pointer;
+  min-height: 44px;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+
+/* Explanation Card */
+.sb-explanation-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.exp-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.exp-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #fbbf24;
+}
+
+.exp-content-text {
+  font-size: 12.5px;
+  color: #e2e8f0;
+  line-height: 1.5;
+}
+
+.exp-formula-box {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13.5px;
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .sb-header-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sb-prompt-vietnamese {
+    font-size: 18px;
+  }
+
+  .sb-source-chip,
+  .sb-placed-chip {
+    padding: 8px 10px;
+  }
+
+  .source-chip-text,
+  .chip-text {
+    font-size: 15px;
+  }
+}

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { KOREAN_DIALOGUES, speakKorean } from '../../../constants/koreanData';
 import type { KoreanVocabWord } from '../../../types/korean';
+import { RoleplayView } from './RoleplayView/RoleplayView';
 import './KoreanDialogueView.css';
 
 const ROMAN_KEY = 'korean_hide_romanization';
@@ -29,7 +30,7 @@ const CATEGORIES = [
 ];
 
 export const KoreanDialogueView: React.FC = () => {
-  const [subTab, setSubTab] = useState<'dialogue' | 'translator'>('dialogue');
+  const [subTab, setSubTab] = useState<'dialogue' | 'roleplay' | 'translator'>('dialogue');
   const [selectedCat, setSelectedCat] = useState('all');
 
   // Romanization Toggle
@@ -156,6 +157,14 @@ export const KoreanDialogueView: React.FC = () => {
           >
             <MessageSquare size={14} />
             Mẫu Câu Sống Còn ({KOREAN_DIALOGUES.length})
+          </button>
+          <button
+            type="button"
+            className={`kr-dl-tab-btn ${subTab === 'roleplay' ? 'active' : ''}`}
+            onClick={() => setSubTab('roleplay')}
+          >
+            <Sparkles size={14} />
+            Nhập Vai Tình Huống 🎭
           </button>
           <button
             type="button"
@@ -348,6 +357,9 @@ export const KoreanDialogueView: React.FC = () => {
           )}
         </div>
       )}
+
+      {/* 3. CHẾ ĐỘ 3: NHẬP VAI TÌNH HUỐNG THỰC CHIẾN */}
+      {subTab === 'roleplay' && <RoleplayView hideRomanization={hideRomanization} />}
 
       {/* 4. MODAL XÁC NHẬN LƯU VÀO FLASHCARD [BẢN DỊCH MÁY ⚠️] */}
       {showSaveModal && (

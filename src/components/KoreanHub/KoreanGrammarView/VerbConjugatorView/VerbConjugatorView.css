@@ -1,0 +1,536 @@
+/* =================================================== */
+/* VERB CONJUGATOR VIEW (TRA CỨU & LUYỆN CHIA ĐỘNG TỪ) */
+/* =================================================== */
+
+.verb-conj-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.verb-conj-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+}
+
+.verb-tabs-pill {
+  display: flex;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  gap: 4px;
+}
+
+.verb-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 36px;
+}
+
+.verb-tab-btn.active {
+  background: linear-gradient(135deg, #f43f5e, #ec4899);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(244, 63, 94, 0.3);
+}
+
+.verb-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 4px 12px;
+  flex: 1;
+  max-width: 340px;
+}
+
+.verb-search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 12px;
+  width: 100%;
+}
+
+.verb-search-input::placeholder {
+  color: var(--text-subtle);
+}
+
+/* Layout 2 cột */
+.verb-lookup-layout {
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+/* Cột Trái */
+.verb-list-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.verb-filter-tabs {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.verb-filter-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.verb-filter-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 3px 8px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.verb-filter-chip.active {
+  background: rgba(244, 63, 94, 0.2);
+  border-color: #f43f5e;
+  color: #fda4af;
+}
+
+.verbs-scroll-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.verb-select-card {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.18s;
+}
+
+.verb-select-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(244, 63, 94, 0.35);
+}
+
+.verb-select-card.active {
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.22), rgba(236, 72, 153, 0.12));
+  border-color: #f43f5e;
+}
+
+.card-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.verb-root-text {
+  font-size: 16px;
+  font-weight: 900;
+  color: #fff;
+}
+
+.verb-select-card.active .verb-root-text {
+  color: #fb7185;
+}
+
+.verb-meaning-text {
+  font-size: 12px;
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+.card-type-label {
+  font-size: 10.5px;
+  color: var(--text-muted);
+}
+
+/* Cột Phải */
+.verb-detail-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.verb-hero-card {
+  background: linear-gradient(145deg, #181d33, #0f1322);
+  border: 1px solid rgba(244, 63, 94, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.hero-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hero-root-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(244, 63, 94, 0.15);
+  border: 1.5px solid rgba(244, 63, 94, 0.4);
+  border-radius: 16px;
+  padding: 8px 16px;
+}
+
+.hero-root-korean {
+  font-size: 28px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+.hero-audio-btn {
+  background: #f43f5e;
+  border: none;
+  color: #fff;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.hero-audio-btn:hover {
+  transform: scale(1.1);
+}
+
+.hero-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hero-meaning {
+  font-size: 15px;
+  color: #fff;
+}
+
+.hero-meaning strong {
+  color: #fbbf24;
+}
+
+.hero-rule-tag {
+  font-size: 11.5px;
+  color: #6ee7b7;
+  background: rgba(16, 185, 129, 0.15);
+  border-radius: var(--radius-full);
+  padding: 2px 8px;
+  display: inline-block;
+  width: fit-content;
+}
+
+/* Forms Grid */
+.conjugation-forms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.form-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.form-card.highlight {
+  border-color: rgba(244, 63, 94, 0.4);
+  background: linear-gradient(145deg, rgba(244, 63, 94, 0.08), rgba(15, 23, 42, 0.6));
+}
+
+.form-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.form-grammar-tag {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #fda4af;
+  background: rgba(244, 63, 94, 0.15);
+  border-radius: var(--radius-full);
+  padding: 1px 7px;
+}
+
+.form-result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-korean {
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+}
+
+.form-audio-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  color: var(--text-muted);
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.form-audio-btn:hover {
+  background: rgba(244, 63, 94, 0.25);
+  color: #fb7185;
+}
+
+.form-usage-hint {
+  font-size: 11px;
+  color: var(--text-subtle);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 6px;
+}
+
+/* Rule Explanation Box */
+.verb-rule-explanation-box {
+  background: rgba(251, 191, 36, 0.06);
+  border: 1px dashed rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rule-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rule-title {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #fbbf24;
+}
+
+.rule-desc-text {
+  font-size: 12px;
+  color: #e2e8f0;
+  line-height: 1.45;
+}
+
+/* Drill Card */
+.drill-card-wrap {
+  background: var(--bg-card);
+  border: 1px solid rgba(244, 63, 94, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.drill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 10px;
+}
+
+.drill-score-badge {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  border-radius: var(--radius-full);
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.drill-question-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.drill-verb-badge {
+  background: rgba(244, 63, 94, 0.15);
+  color: #fb7185;
+  border: 1px solid rgba(244, 63, 94, 0.35);
+  border-radius: var(--radius-full);
+  padding: 4px 14px;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.drill-prompt-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.drill-options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.drill-opt-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 48px;
+}
+
+.drill-opt-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #f43f5e;
+}
+
+.drill-opt-btn.correct {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: #10b981;
+  color: #6ee7b7;
+}
+
+.drill-opt-btn.incorrect {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: #ef4444;
+  color: #fca5a5;
+}
+
+.opt-hangeul {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.drill-feedback-box {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.drill-exp-text {
+  font-size: 12px;
+  color: #e2e8f0;
+  line-height: 1.45;
+}
+
+.drill-next-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #f43f5e, #ec4899);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  min-height: 42px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 820px) {
+  .verb-lookup-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .verbs-scroll-grid {
+    max-height: 180px;
+  }
+
+  .hero-left {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .drill-options-grid {
+    grid-template-columns: 1fr;
+  }
+}

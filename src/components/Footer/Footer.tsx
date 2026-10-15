@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUp, BookOpen, Layers, Sparkles, CheckCircle2, Heart } from 'lucide-react';
+import { ArrowUp, BookOpen, Layers, Sparkles, CheckCircle2, Heart, Lightbulb } from 'lucide-react';
 import { KOREAN_STAGES } from '../Header/Header';
 import type { KoreanStage } from '../Header/Header';
 import './Footer.css';
@@ -9,6 +9,7 @@ interface FooterProps {
   onSelectStage?: (stage: KoreanStage) => void;
   activeTab?: 'korean' | 'flashcards';
   onTabChange?: (tab: 'korean' | 'flashcards') => void;
+  onOpenAdvice?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -16,6 +17,7 @@ export const Footer: React.FC<FooterProps> = ({
   onSelectStage,
   activeTab = 'korean',
   onTabChange,
+  onOpenAdvice,
 }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -42,7 +44,7 @@ export const Footer: React.FC<FooterProps> = ({
           <div className="footer-brand-info">
             <div className="footer-brand-title">
               <strong>TaskFlow Korean</strong>
-              <span className="footer-version-tag">v1.0.14 • TOPIK 1</span>
+              <span className="footer-version-tag">v1.0.15 • TOPIK 1</span>
             </div>
             <p className="footer-brand-desc">
               Hệ thống tự học tiếng Hàn thông minh từ con số 0 dành riêng cho người Việt.
@@ -123,6 +125,17 @@ export const Footer: React.FC<FooterProps> = ({
             <div className="quote-sub">
               Mỗi ngày 15 phút kiên trì tích lũy từng âm tiết Hangeul và từ vựng TOPIK 1 để tạo nền móng vững chắc nhất.
             </div>
+            {onOpenAdvice && (
+              <button
+                type="button"
+                className="btn-footer-open-advice"
+                onClick={onOpenAdvice}
+                title="Mở Cẩm Nang Bí Quyết & Lời Khuyên Học Tốt"
+              >
+                <Lightbulb size={13} color="#fbbf24" />
+                <span>16 Bí Quyết & Động Lực Học</span>
+              </button>
+            )}
           </div>
         </div>
       </div>

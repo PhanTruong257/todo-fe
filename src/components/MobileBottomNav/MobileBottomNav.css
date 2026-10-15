@@ -1,0 +1,128 @@
+/* =================================================== */
+/* MOBILE BOTTOM NAVIGATION BAR (CHUYÊN BIỆT CHO MOBILE) */
+/* =================================================== */
+
+.mobile-bottom-nav {
+  display: none; /* Ẩn mặc định trên Desktop */
+}
+
+@media (max-width: 820px) {
+  .mobile-bottom-nav {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9998;
+    background: rgba(13, 17, 28, 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(244, 63, 94, 0.25);
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.65), 0 -1px 12px rgba(244, 63, 94, 0.15);
+    padding: 6px 10px calc(6px + env(safe-area-inset-bottom, 0px)) 10px;
+    box-sizing: border-box;
+  }
+
+  .mobile-bottom-nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    max-width: 500px;
+    margin: 0 auto;
+    gap: 4px;
+  }
+
+  .mob-nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    padding: 6px 4px;
+    border-radius: 12px;
+    color: #94a3b8;
+    cursor: pointer;
+    flex: 1;
+    min-height: 48px;
+    touch-action: manipulation;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    user-select: none;
+  }
+
+  .mob-nav-btn:active {
+    transform: scale(0.92);
+  }
+
+  .mob-nav-btn.active {
+    color: #ffffff;
+    background: linear-gradient(180deg, rgba(244, 63, 94, 0.18), rgba(236, 72, 153, 0.08));
+    border: 1px solid rgba(244, 63, 94, 0.3);
+  }
+
+  .mob-nav-icon-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+  }
+
+  .mob-nav-icon {
+    font-size: 19px;
+    line-height: 1;
+    transition: transform 0.2s ease;
+  }
+
+  .mob-nav-btn.active .mob-nav-icon {
+    transform: translateY(-1px) scale(1.1);
+  }
+
+  .mob-nav-glow {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(244, 63, 94, 0.35);
+    filter: blur(8px);
+    z-index: -1;
+  }
+
+  .mob-nav-label {
+    font-size: 10px;
+    font-weight: 700;
+    margin-top: 3px;
+    white-space: nowrap;
+    letter-spacing: -0.2px;
+  }
+
+  .mob-nav-btn.active .mob-nav-label {
+    color: #fda4af;
+    font-weight: 800;
+  }
+
+  .mob-nav-btn.quest-btn {
+    color: #fbbf24;
+  }
+
+  .mob-nav-streak-badge {
+    position: absolute;
+    top: -4px;
+    right: -8px;
+    background: linear-gradient(135deg, #f97316, #ef4444);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 900;
+    border-radius: 999px;
+    padding: 0 4px;
+    height: 14px;
+    min-width: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+    border: 1px solid #111;
+  }
+}

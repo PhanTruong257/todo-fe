@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Layers, ChevronDown, Check, Sparkles } from 'lucide-react';
+import { Layers, ChevronDown, Check, Sparkles, Lightbulb } from 'lucide-react';
 import './Header.css';
 
 export type KoreanStage = 'hangeul' | 'vocab' | 'grammar' | 'dialogue';
@@ -58,6 +58,9 @@ interface HeaderProps {
   onTabChange: (tab: 'korean' | 'flashcards') => void;
   koreanStage?: KoreanStage;
   onKoreanStageChange?: (stage: KoreanStage) => void;
+  onOpenQuests?: () => void;
+  onOpenAdvice?: () => void;
+  streakDays?: number;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -65,6 +68,9 @@ export const Header: React.FC<HeaderProps> = ({
   onTabChange,
   koreanStage = 'hangeul',
   onKoreanStageChange,
+  onOpenQuests,
+  onOpenAdvice,
+  streakDays = 3,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -104,7 +110,9 @@ export const Header: React.FC<HeaderProps> = ({
           <span style={{ fontSize: 20 }}>🇰🇷</span>
         </div>
         <div className="header-brand-titles">
-          <h2>TaskFlow Korean</h2>
+          <h2>
+            <span>TaskFlow</span> <span className="header-brand-tag">Korean</span>
+          </h2>
           <span className="header-brand-sub">Lộ trình học tiếng Hàn từ con số 0</span>
         </div>
       </div>
@@ -168,24 +176,48 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         )}
 
+        {/* Nút Bí Quyết & Lời Khuyên Học Tập (Động Lực) */}
+        <button
+          type="button"
+          className="header-advice-pill"
+          onClick={onOpenAdvice}
+          title="Bí Quyết Sư Phạm & Lời Khuyên Học Tốt (Động Lực)"
+        >
+          <Lightbulb size={13} className="advice-pill-icon" />
+          <span className="advice-pill-text">Lời Khuyên</span>
+        </button>
+
+        {/* Nút Streak & Nhiệm Vụ Hàng Ngày */}
+        <button
+          type="button"
+          className="header-streak-pill"
+          onClick={onOpenQuests}
+          title="Xem Chuỗi Ngày & Nhiệm Vụ Hàng Ngày"
+        >
+          <span style={{ fontSize: 13 }}>🔥</span>
+          <span>{streakDays} ngày</span>
+        </button>
+
         {/* Tab chuyển đổi Tiếng Hàn / Flashcard Tiếng Anh */}
         <nav className="header-nav-tabs">
           <button
             type="button"
             className={`nav-tab-btn ${activeTab === 'korean' ? 'active' : ''}`}
             onClick={() => onTabChange('korean')}
+            title="Học Tiếng Hàn"
           >
             <span style={{ fontSize: 14 }}>🇰🇷</span>
-            <span>Tiếng Hàn</span>
+            <span className="nav-tab-text">Tiếng Hàn</span>
           </button>
 
           <button
             type="button"
             className={`nav-tab-btn ${activeTab === 'flashcards' ? 'active' : ''}`}
             onClick={() => onTabChange('flashcards')}
+            title="Từ Vựng Tiếng Anh"
           >
             <Layers size={14} />
-            <span>Tiếng Anh 🎴</span>
+            <span className="nav-tab-text">Tiếng Anh 🎴</span>
           </button>
         </nav>
       </div>

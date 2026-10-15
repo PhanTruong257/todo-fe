@@ -449,3 +449,32 @@
   box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4);
 }
 
+@media (max-width: 768px) {
+  .kr-dialogue-container {
+    gap: 8px;
+  }
+  .kr-dl-toolbar {
+    background: transparent;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+    width: 100%;
+  }
+  .kr-dl-subtabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+    padding: 2px 4px;
+    gap: 3px;
+    width: 100%;
+  }
+  .kr-dl-tab-btn {
+    padding: 4px 10px;
+    font-size: 11px;
+    min-height: 28px;
+    white-space: nowrap;
+    flex: 1;
+    justify-content: center;
+  }
+}
+

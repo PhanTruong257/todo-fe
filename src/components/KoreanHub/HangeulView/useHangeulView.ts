@@ -65,7 +65,7 @@ export function useHangeulView() {
   }, []);
 
   // ==========================================
-  // 1. STATE LỘ TRÌNH 5 NGÀY VỠ LÒNG (JOURNEY)
+  // 1. STATE LỘ TRÌNH 5 NGÀY (JOURNEY)
   // ==========================================
   const [currentDay, setCurrentDay] = useState<number>(() => {
     if (typeof window !== 'undefined') {

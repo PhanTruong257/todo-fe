@@ -238,7 +238,7 @@ export const MINIMAL_PAIRS: MinimalPair[] = [
     id: 'mp-5',
     title: 'Cặp phụ âm môi: 방 - 빵 (방 / 빵)',
     category: 'consonant_trio',
-    description: 'Thường (방: căn phòng) ➔ Căng đanh (빵: bánh mì).',
+    description: 'Thường (방: căn phòng) ➔ Căng (빵: bánh mì).',
     pairs: [
       { word: '방', soundType: 'Thường (ㅂ)', rom: 'bang', meaningVi: 'Căn phòng' },
       { word: '빵', soundType: 'Căng (ㅃ)', rom: 'ppang', meaningVi: 'Bánh mì' },
@@ -312,7 +312,7 @@ export const ESSENTIAL_PRONUNCIATION_RULES: PronunciationRule[] = [
     id: 'pr-3',
     title: 'Quy tắc Căng Âm (Tensification)',
     koreanName: '경음화',
-    explanation: 'Khi các Patchim tắc (ㄱ, ㄷ, ㅂ) gặp các phụ âm thường (ㄱ, ㄷ, ㅂ, ㅅ, ㅈ), các phụ âm sau sẽ phải phát âm căng đanh (ㄲ, ㄸ, ㅃ, ㅆ, ㅉ).',
+    explanation: 'Khi các Patchim tắc (ㄱ, ㄷ, ㅂ) gặp các phụ âm thường (ㄱ, ㄷ, ㅂ, ㅅ, ㅈ), các phụ âm sau sẽ phát âm căng (ㄲ, ㄸ, ㅃ, ㅆ, ㅉ).',
     formula: 'ㄱ, ㄷ, ㅂ + ㄱ, ㄷ, ㅂ, ㅅ, ㅈ ➔ ㄲ, ㄸ, ㅃ, ㅆ, ㅉ',
     examples: [
       { original: '식당', spoken: '[식땅]', meaningVi: 'Nhà hàng (ㄷ biến thành ㄸ)' },

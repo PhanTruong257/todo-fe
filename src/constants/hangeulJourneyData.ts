@@ -1,14 +1,14 @@
 import type { HangeulDayLesson, VietnameseNameGuide } from '../types/korean';
 
 // ==========================================
-// LỘ TRÌNH 5 NGÀY VỠ LÒNG HANGEUL (DỄ NHẤT CHO NGƯỜI VIỆT)
+// LỘ TRÌNH 5 NGÀY HANGEUL CƠ BẢN DÀNH CHO NGƯỜI VIỆT
 // ==========================================
 export const HANGEUL_5DAY_JOURNEY: HangeulDayLesson[] = [
   // --- NGÀY 1 ---
   {
     day: 1,
-    title: 'Ngày 1: 3 Từ Đầu Đời & 9 Ký Tự Nền Tảng',
-    subtitle: 'Chỉ sau 5 phút là tự đọc được từ thật: Em bé, Dưa leo, Cây cối...',
+    title: 'Ngày 1: 9 Ký Tự Nền Tảng & 7 Từ Vựng Đầu Tiên',
+    subtitle: 'Chỉ sau 5 phút là tự đọc được các từ quen thuộc: Em bé, Dưa leo, Cây cối...',
     timeEstimate: '10 phút',
     letters: [
       { char: 'ㅣ', vietnameseAnchor: 'i', mnemonicHint: 'Người đứng thẳng (Nhân trong trời đất)', audioPrompt: '이' },
@@ -55,7 +55,7 @@ export const HANGEUL_5DAY_JOURNEY: HangeulDayLesson[] = [
         explanation: 'Tuyệt vời! 오이 đọc là "o-i" nghĩa là quả dưa chuột.',
       },
     ],
-    victoryRewardBadge: '🎓 Khởi Đầu Hoàn Hảo: Đọc Được 3 Từ Tiếng Hàn Đầu Tiên!',
+    victoryRewardBadge: '🎓 Khởi Đầu Hoàn Hảo: Tự Đọc Được Các Từ Tiếng Hàn Đầu Tiên!',
   },
 
   // --- NGÀY 2 ---
@@ -137,7 +137,7 @@ export const HANGEUL_5DAY_JOURNEY: HangeulDayLesson[] = [
       { word: '포도', meaningVi: 'Quả nho', rom: 'po-do', breakdownHint: 'ㅍ+ㅗ + ㄷ+ㅗ', icon: '🍇' },
     ],
     phoneticTips:
-      '📄 Thử nghiệm tờ giấy thần kỳ: Đặt một mảnh giấy nhỏ trước miệng. Khi đọc chữ thường ㅂ (ba) giấy hầu như không động đậy; nhưng khi đọc âm bật hơi ㅍ (pha) luồng hơi mạnh sẽ thổi tờ giấy bay phần phật! Hãy thử ngay với từ 커피 (cà phê)!',
+      '📄 Mẹo nhỏ với tờ giấy mỏng: Đặt một mảnh giấy nhỏ trước miệng. Khi đọc chữ thường ㅂ (ba) giấy hầu như không động đậy; nhưng khi đọc âm bật hơi ㅍ (pha) luồng hơi mạnh sẽ thổi tờ giấy bay phần phật! Hãy thử ngay với từ 커피 (cà phê)!',
     quickQuiz: [
       {
         question: 'Từ "커피" mượn từ tiếng Anh có nghĩa là gì?',
@@ -167,15 +167,15 @@ export const HANGEUL_5DAY_JOURNEY: HangeulDayLesson[] = [
   // --- NGÀY 4 ---
   {
     day: 4,
-    title: 'Ngày 4: Âm Căng Đanh & Gọi Tên Gia Đình Thân Thương',
+    title: 'Ngày 4: Phụ Âm Căng & Từ Vựng Gia Đình',
     subtitle: 'Nén hơi ở cổ họng & Học cách gọi Ba, Anh trai, Con thỏ...',
     timeEstimate: '12 phút',
     letters: [
-      { char: 'ㄲ', vietnameseAnchor: 'kk căng đanh', mnemonicHint: 'Nhân đôi ㄱ: ngậm họng phát âm đanh', audioPrompt: '끄' },
-      { char: 'ㄸ', vietnameseAnchor: 'tt căng đanh', mnemonicHint: 'Nhân đôi ㄷ: cắn lưỡi nén hơi đanh', audioPrompt: '뜨' },
-      { char: 'ㅃ', vietnameseAnchor: 'pp căng đanh', mnemonicHint: 'Nhân đôi ㅂ: ngậm chặt môi bật ra', audioPrompt: '쁘' },
-      { char: 'ㅆ', vietnameseAnchor: 'ss căng sắc', mnemonicHint: 'Nhân đôi ㅅ: siết chặt răng rít âm', audioPrompt: '쓰' },
-      { char: 'ㅉ', vietnameseAnchor: 'jj căng đanh', mnemonicHint: 'Nhân đôi ㅈ: cắn họng phát âm ch chắc', audioPrompt: '쯔' },
+      { char: 'ㄲ', vietnameseAnchor: 'kk (âm căng)', mnemonicHint: 'Nhân đôi ㄱ: ngậm họng phát âm đanh', audioPrompt: '끄' },
+      { char: 'ㄸ', vietnameseAnchor: 'tt (âm căng)', mnemonicHint: 'Nhân đôi ㄷ: cắn lưỡi nén hơi đanh', audioPrompt: '뜨' },
+      { char: 'ㅃ', vietnameseAnchor: 'pp (âm căng)', mnemonicHint: 'Nhân đôi ㅂ: ngậm chặt môi bật ra', audioPrompt: '쁘' },
+      { char: 'ㅆ', vietnameseAnchor: 'ss (âm căng)', mnemonicHint: 'Nhân đôi ㅅ: siết chặt răng rít âm', audioPrompt: '쓰' },
+      { char: 'ㅉ', vietnameseAnchor: 'jj (âm căng)', mnemonicHint: 'Nhân đôi ㅈ: cắn họng phát âm ch chắc', audioPrompt: '쯔' },
       { char: 'ㅐ', vietnameseAnchor: 'e mở (ae)', mnemonicHint: 'ㅏ + ㅣ = âm e mở rộng miệng', audioPrompt: '애' },
       { char: 'ㅔ', vietnameseAnchor: 'ê khép (e)', mnemonicHint: 'ㅓ + ㅣ = âm ê nhẹ nhàng', audioPrompt: '에' },
     ],
@@ -196,7 +196,7 @@ export const HANGEUL_5DAY_JOURNEY: HangeulDayLesson[] = [
         targetAudio: '오빠',
         options: ['ㅃ (Ssang-bieup)', 'ㅂ (Bieup)', 'ㅍ (Phieup)', 'ㅁ (Mieum)'],
         correctAnswer: 'ㅃ (Ssang-bieup)',
-        explanation: 'Chính xác! 오빠 có chữ ㅃ là âm P căng đanh, tạo nên tiếng gọi "Oppa" rất đặc trưng.',
+        explanation: 'Chính xác! 오빠 có chữ ㅃ là phụ âm P căng, tạo nên tiếng gọi "Oppa" rất đặc trưng.',
       },
       {
         question: 'Từ nào có nghĩa là "Con thỏ"?',
@@ -240,10 +240,10 @@ export const HANGEUL_5DAY_JOURNEY: HangeulDayLesson[] = [
       { word: '강', meaningVi: 'Dòng sông', rom: 'gang', breakdownHint: 'ㄱ+ㅏ+ㅇ = cang (Sông)', icon: '🏞️' },
       { word: '한국', meaningVi: 'Hàn Quốc', rom: 'han-guk', breakdownHint: '한(Hàn) + 국(Quốc)', icon: '🇰🇷' },
       { word: '안녕', meaningVi: 'Xin chào, an lành', rom: 'an-nyeong', breakdownHint: '안(An) + 녕(Ninh)', icon: '👋' },
-      { word: '안녕하세요', meaningVi: 'Xin chào (lịch sự thông dụng)', rom: 'an-nyeong-ha-se-yo', breakdownHint: 'ĐÍCH ĐẾN: Câu chào thần thánh!', icon: '✨' },
+      { word: '안녕하세요', meaningVi: 'Xin chào (lịch sự thông dụng)', rom: 'an-nyeong-ha-se-yo', breakdownHint: 'ĐÍCH ĐẾN: Câu chào thông dụng nhất!', icon: '✨' },
     ],
     phoneticTips:
-      '🇻🇳 Lợi thế độc quyền của người Việt: Tiếng Anh không có vần ngậm hơi, nhưng tiếng Việt lại có phụ âm cuối y hệt tiếng Hàn! Ví dụ: 学 (Học) ➔ 학 (nghe như hạc), 飯 (Cơm) ➔ 밥 (nghe như bấp). Chỉ cần nhớ 6 vần (-c, -t, -p, -m, -n, -ng), bạn đã làm chủ 95% cách đánh vần tiếng Hàn!',
+      '🇻🇳 Lợi thế phát âm của người Việt: Tiếng Anh không có vần ngậm hơi, nhưng tiếng Việt lại có phụ âm cuối y hệt tiếng Hàn! Ví dụ: 学 (Học) ➔ 학 (nghe như hạc), 飯 (Cơm) ➔ 밥 (nghe như bấp). Chỉ cần nhớ 6 vần (-c, -t, -p, -m, -n, -ng), bạn đã làm chủ 95% cách đánh vần tiếng Hàn!',
     quickQuiz: [
       {
         question: 'Từ "밥" (Cơm) có phụ âm cuối (patchim) đọc tương đương vần nào trong tiếng Việt?',
@@ -260,7 +260,7 @@ export const HANGEUL_5DAY_JOURNEY: HangeulDayLesson[] = [
         explanation: 'Đúng rồi! 책 nghĩa là cuốn sách (patchim ㄱ đọc như vần -c).',
       },
       {
-        question: 'Hãy chọn câu chào thần thánh mà bạn vừa mở khóa:',
+        question: 'Hãy chọn câu chào lịch sự thông dụng mà bạn vừa học:',
         targetAudio: '안녕하세요',
         options: ['안녕하세요', '감사합니다', '안녕히 가세요', '죄송합니다'],
         correctAnswer: '안녕하세요',

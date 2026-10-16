@@ -55,7 +55,7 @@ export const STUDY_ADVICE_LIST: StudyAdviceItem[] = [
     category: 'mindset',
     categoryLabel: 'Tâm Lý & Động Lực',
     icon: '🔥',
-    title: 'Tạo Cơn Mưa Dopamine: Ăn Mừng Từng Tiến Độ Nhỏ',
+    title: 'Nuôi Dưỡng Động Lực: Ghi Nhận Từng Tiến Bộ Nhỏ',
     shortSnippet: 'Tự hào ngay cả khi bạn vừa nhận ra 1 chữ cái trên biển hiệu hay bài hát.',
     proverbKo: '티끌 모아 태산',
     proverbVi: 'Tích tiểu thành đại (Gom từng hạt cát thành núi Thái Sơn)',
@@ -108,7 +108,7 @@ export const STUDY_ADVICE_LIST: StudyAdviceItem[] = [
     title: 'Mẹo Khẩu Hình Học: Nét Đứng Đứng Cạnh, Nét Ngang Nằm Dưới',
     shortSnippet: 'Quy luật hình học của Vua Sejong giúp bạn không bao giờ xếp nhầm vị trí chữ.',
     proverbKo: '호랑이에게 물려가도 정신만 차리면 산다',
-    proverbVi: 'Dù bị hổ cắp, chỉ cần bình tĩnh tỉnh táo là vẫn sống sót',
+    proverbVi: 'Dù gặp khó khăn đến đâu, chỉ cần giữ bình tĩnh là sẽ vượt qua',
     audioText: '호랑이에게 물려가도 정신만 차리면 산다',
     coreAdvice:
       'Hangeul là bảng chữ cái duy nhất được thiết kế theo triết lý Âm Dương Ngũ Hành và khẩu hình học: Nguyên âm có nét chính thẳng đứng dài (ㅏ, ㅓ, ㅣ, ㅐ, ㅔ) tượng trưng cho Con người đứng thẳng, LUÔN đứng bên phải phụ âm. Nguyên âm có nét ngang dài (ㅗ, ㅜ, ㅡ) tượng trưng cho Mặt đất, LUÔN nằm bên dưới phụ âm.',
@@ -148,7 +148,7 @@ export const STUDY_ADVICE_LIST: StudyAdviceItem[] = [
       'Người Việt có siêu năng lực học từ vựng tiếng Hàn nhờ kho từ Hán-Việt khổng lồ. Chỉ cần học 1 gốc "학" (Học), bạn tự động suy luận ra hàng chục từ ghép: 학생 (Học sinh), 학교 (Học hiệu/Trường học), 학자 (Học giả), 학비 (Học phí), 유학 (Du học). Nắm chắc 15 gốc Hán cốt lõi là bạn đã mở khóa hơn 200 từ vựng TOPIK!',
     actionItem:
       'Mở tab "Gốc Hán-Hàn 🌳" trong mục Từ Vựng TOPIK 1, xem sơ đồ cây phả hệ và chơi thử Mini-Game ghép 2 gốc chữ sinh từ mới.',
-    badge: 'Siêu năng lực người Việt',
+    badge: 'Lợi thế tiếng Việt',
   },
   {
     id: 'vocab-active-recall-technique',
@@ -211,7 +211,7 @@ export const STUDY_ADVICE_LIST: StudyAdviceItem[] = [
     proverbVi: 'Càng vội vàng càng phải đi đường vòng (Chậm mà chắc chắn)',
     audioText: '급할수록 돌아가라',
     coreAdvice:
-      'Người Việt có thói quen vừa nghĩ vừa nói động từ ngay sau chủ ngữ. Trong tiếng Hàn, ĐỘNG TỪ LÀ ÔNG VUA CHỐT HẠ. Bạn phải gom hết: Ai (Chủ ngữ) + Khi nào (Thời gian) + Ở đâu (Địa điểm) + Cái gì (Tân ngữ) rồi cuối cùng mới bung ra Động từ. Hãy rèn thói quen nhịn nói động từ cho đến tận cuối câu!',
+      'Người Việt có thói quen vừa nghĩ vừa nói động từ ngay sau chủ ngữ. Trong tiếng Hàn, động từ luôn là thành phần chốt hạ ở cuối câu. Bạn phải gom hết: Ai (Chủ ngữ) + Khi nào (Thời gian) + Ở đâu (Địa điểm) + Cái gì (Tân ngữ) rồi cuối cùng mới đưa ra Động từ. Hãy rèn thói quen hoàn thiện các thành phần phụ trước khi kết câu bằng động từ!',
     actionItem:
       'Thực hành 3 câu trong tab "Lắp Ráp Câu SOV 🧩" để não quen với phản xạ trật tự câu đảo ngược.',
     badge: 'Tư duy SOV',
@@ -237,13 +237,13 @@ export const STUDY_ADVICE_LIST: StudyAdviceItem[] = [
     category: 'grammar',
     categoryLabel: 'Ngữ Pháp & Phản Xạ',
     icon: '🎧',
-    title: 'Kỹ Thuật Shadowing: Nhại Giọng Đồng Thời Đỉnh Cao',
-    shortSnippet: 'Vũ khí bí mật của các thông dịch viên đồng thời để có giọng đọc tự nhiên.',
+    title: 'Kỹ Thuật Shadowing: Đọc Đuổi Cùng Lúc Với Người Bản Xứ',
+    shortSnippet: 'Phương pháp hiệu quả của các thông dịch viên để rèn luyện ngữ điệu tự nhiên.',
     proverbKo: '원숭이도 나무에서 떨어진다',
-    proverbVi: 'Khỉ giỏi leo trèo cũng có lúc sẩy chân (Đừng sợ ngọng, cứ nhại theo)',
+    proverbVi: 'Khỉ giỏi leo trèo cũng có lúc sẩy chân (Đừng sợ phát âm chưa chuẩn, hãy cứ luyện tập)',
     audioText: '원숭이도 나무에서 떨어진다',
     coreAdvice:
-      'Bật phát âm giọng đọc bản xứ và nói nhại theo cùng một lúc, với độ trễ chỉ khoảng 0.5 giây. Không cần nhìn chữ, chỉ cần bắt chước y hệt độ trầm bổng, hơi thở, điểm ngắt câu. Cơ miệng và vòm họng của bạn sẽ hình thành phản xạ cơ bắp (muscle memory), xoá sạch giọng ngọng tiếng Việt.',
+      'Bật phát âm giọng đọc bản xứ và đọc đuổi theo cùng một lúc, với độ trễ chỉ khoảng 0.5 giây. Không cần nhìn chữ, chỉ cần bắt chước ngữ điệu, hơi thở và điểm ngắt câu. Khẩu hình và cơ miệng của bạn sẽ hình thành phản xạ cơ bắp (muscle memory), giúp ngữ điệu nói tự nhiên và trôi chảy hơn.',
     actionItem:
       'Trong phần "Hội Thoại Tình Huống", bấm nghe từng câu của người bản xứ và nhại theo 3 lần liên tiếp trước khi bấm câu tiếp theo.',
     badge: 'Phản xạ bản xứ',

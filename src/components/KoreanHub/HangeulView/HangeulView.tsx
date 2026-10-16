@@ -127,7 +127,7 @@ export const HangeulView: React.FC = () => {
             onClick={() => setSubTab('journey')}
           >
             <Compass size={14} />
-            Lộ Trình 5 Ngày (Vỡ Lòng) 🚀
+            Lộ Trình 5 Ngày 🚀
           </button>
           <button
             type="button"
@@ -200,7 +200,7 @@ export const HangeulView: React.FC = () => {
       </div>
 
       {/* ==========================================
-          CHẾ ĐỘ MỚI CỐT LÕI: LỘ TRÌNH 5 NGÀY VỠ LÒNG
+          LỘ TRÌNH 5 NGÀY HANGEUL
           ========================================== */}
       {subTab === 'journey' && (
         <div className="hangeul-journey-stage">

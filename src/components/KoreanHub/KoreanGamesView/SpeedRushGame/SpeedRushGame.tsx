@@ -177,6 +177,12 @@ export const SpeedRushGame: React.FC<SpeedRushGameProps> = ({ onOpenCardModal })
                 );
               })}
             </div>
+
+            {isAnswerLocked && currentQuestion.explanation && (
+              <div className="sr-explanation-banner">
+                <span>💡 {currentQuestion.explanation}</span>
+              </div>
+            )}
           </div>
         </div>
       )}

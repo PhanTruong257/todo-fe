@@ -473,3 +473,133 @@
     padding: 0.65rem 0.8rem;
   }
 }
+
+.kc-waiting-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #475569;
+  animation: kcPulse 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes kcPulse {
+  0% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+/* =================================================== */
+/* DARK THEME SUPPORT                                  */
+/* =================================================== */
+[data-theme='dark'] .kc-header-banner {
+  background: linear-gradient(135deg, #121826 0%, #1e1b2e 100%);
+  border-color: rgba(244, 63, 94, 0.2);
+}
+
+[data-theme='dark'] .kc-banner-title {
+  color: #f8fafc;
+}
+
+[data-theme='dark'] .kc-banner-desc {
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .kc-scenario-tab-btn {
+  background: #121826;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .kc-scenario-tab-btn:hover {
+  background: rgba(244, 63, 94, 0.12);
+  border-color: rgba(244, 63, 94, 0.3);
+}
+
+[data-theme='dark'] .kc-scenario-tab-btn.active {
+  background: linear-gradient(135deg, #181e2e 0%, #2a1f33 100%);
+  border-color: #f43f5e;
+}
+
+[data-theme='dark'] .kc-tab-name {
+  color: #f8fafc;
+}
+
+[data-theme='dark'] .kc-phone-frame {
+  background: #854d0e;
+  border-color: #ca8a04;
+}
+
+[data-theme='dark'] .kc-phone-header {
+  background: #121826;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .kc-partner-name {
+  color: #f8fafc;
+}
+
+[data-theme='dark'] .kc-partner-avatar {
+  background: #1e1b2e;
+  border-color: rgba(244, 63, 94, 0.3);
+}
+
+[data-theme='dark'] .kc-affinity-pill {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: rgba(244, 63, 94, 0.3);
+  color: #fda4af;
+}
+
+[data-theme='dark'] .kc-chat-stream {
+  background: #172033; /* Dark Kakao Blue */
+}
+
+[data-theme='dark'] .kc-speech-bubble.npc {
+  background: #1e293b;
+  color: #f8fafc;
+}
+
+[data-theme='dark'] .kc-msg-sender-name {
+  color: #cbd5e1;
+}
+
+[data-theme='dark'] .kc-typing-row {
+  background: rgba(30, 41, 59, 0.9);
+  color: #cbd5e1;
+}
+
+[data-theme='dark'] .kc-waiting-banner {
+  background: #181e2e;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .kc-reply-tray {
+  background: #121826;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .btn-kc-reply-choice {
+  background: #181e2e;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .btn-kc-reply-choice:hover:not(:disabled) {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: rgba(244, 63, 94, 0.35);
+}
+
+[data-theme='dark'] .kc-reply-ko {
+  color: #f8fafc;
+}
+
+[data-theme='dark'] .kc-reply-vi {
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .kc-completed-title {
+  color: #f8fafc;
+}

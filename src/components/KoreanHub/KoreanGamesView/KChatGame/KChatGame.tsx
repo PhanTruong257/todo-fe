@@ -17,6 +17,7 @@ export const KChatGame: React.FC = () => {
     affinity,
     isTyping,
     isScenarioFinished,
+    isWaitingForNextStep,
     availableOptions,
     chatStreamRef,
     initScenario,
@@ -150,6 +151,13 @@ export const KChatGame: React.FC = () => {
 
         {/* Khay Tùy Chọn Phản Hồi Dưới Đáy */}
         <div className="kc-reply-tray">
+          {!isScenarioFinished && (isTyping || isWaitingForNextStep) && (
+            <div className="kc-waiting-banner">
+              <span className="kc-waiting-dot">💬</span>
+              <span>Đang chờ {activeScenario.partnerName} phản hồi...</span>
+            </div>
+          )}
+
           {!isScenarioFinished && availableOptions.length > 0 && (
             <>
               <span className="kc-tray-label">Chọn câu phản hồi tiếng Hàn của bạn:</span>

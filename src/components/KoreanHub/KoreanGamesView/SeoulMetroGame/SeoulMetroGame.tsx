@@ -4,6 +4,7 @@ import {
   MapPin,
   Volume2,
   Award,
+  RotateCcw,
 } from 'lucide-react';
 import { SEOUL_METRO_MISSIONS } from '../gamesData';
 import { useSeoulMetro } from './useSeoulMetro';
@@ -20,6 +21,7 @@ export const SeoulMetroGame: React.FC = () => {
     isCurrentStationCompleted,
     handleSelectStation,
     handleAnswerOption,
+    handleRetryCurrentStation,
     handleSpeakCurrentStation,
   } = useSeoulMetro();
 
@@ -97,7 +99,7 @@ export const SeoulMetroGame: React.FC = () => {
               <p className="sm-station-title-vi">{currentMission.stationNameVi}</p>
             </div>
           </div>
-          <span className="sc-banner-badge" style={{ background: '#10b981' }}>
+          <span className="sm-banner-badge">
             Ga Số {currentMission.stationNumber}
           </span>
         </div>
@@ -143,16 +145,28 @@ export const SeoulMetroGame: React.FC = () => {
         {/* Phản Hồi Khi Đã Trả Lời */}
         {feedbackText && (
           <div className="sm-feedback-card">
-            <div>
-              <strong style={{ display: 'block', fontSize: '0.88rem', color: '#065f46' }}>
+            <div style={{ flex: 1 }}>
+              <strong style={{ display: 'block', fontSize: '0.88rem', color: isCurrentStationCompleted ? '#065f46' : '#991b1b' }}>
                 {isCurrentStationCompleted ? '🎉 Bạn Đã Xử Lý Tuyệt Vời!' : '💡 Gợi Ý Thử Lại:'}
               </strong>
-              <span style={{ fontSize: '0.8rem', color: '#047857' }}>{feedbackText}</span>
+              <span style={{ fontSize: '0.8rem', color: isCurrentStationCompleted ? '#047857' : '#b91c1c' }}>
+                {feedbackText}
+              </span>
             </div>
-            {isCurrentStationCompleted && (
+            {isCurrentStationCompleted ? (
               <div className="sm-stamp-badge">
                 <div className="sm-stamp-seal">💮</div>
               </div>
+            ) : (
+              <button
+                type="button"
+                className="btn-tool-icon"
+                onClick={handleRetryCurrentStation}
+                style={{ background: '#ffffff', borderColor: '#fecdd3', color: '#e11d48', flexShrink: 0 }}
+              >
+                <RotateCcw size={14} />
+                <span>Thử Lại</span>
+              </button>
             )}
           </div>
         )}

@@ -436,3 +436,89 @@
     padding: 1rem;
   }
 }
+
+/* =================================================== */
+/* DARK THEME SUPPORT                                  */
+/* =================================================== */
+[data-theme='dark'] .sm-header-banner {
+  background: linear-gradient(135deg, #121826 0%, #064e3b 100%);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+[data-theme='dark'] .sm-banner-title {
+  color: #f8fafc;
+}
+
+[data-theme='dark'] .sm-banner-desc {
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .sm-map-card,
+[data-theme='dark'] .sm-mission-card,
+[data-theme='dark'] .sm-passport-shelf {
+  background: #121826;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .sm-node-circle {
+  background: #0f172a;
+  color: #10b981;
+}
+
+[data-theme='dark'] .sm-node-name-ko,
+[data-theme='dark'] .sm-station-title-ko,
+[data-theme='dark'] .sm-question-title,
+[data-theme='dark'] .sm-shelf-title {
+  color: #f8fafc;
+}
+
+[data-theme='dark'] .sm-station-big-icon {
+  background: #1e1b2e;
+  border-color: rgba(244, 63, 94, 0.3);
+}
+
+[data-theme='dark'] .sm-scenario-box {
+  background: #181e2e;
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme='dark'] .sm-scenario-text {
+  color: #cbd5e1;
+}
+
+[data-theme='dark'] .btn-sm-choice {
+  background: #181e2e;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .btn-sm-choice:hover:not(:disabled) {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.35);
+}
+
+[data-theme='dark'] .sm-choice-ko {
+  color: #f8fafc;
+}
+
+[data-theme='dark'] .sm-choice-vi {
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .sm-feedback-card {
+  background: #064e3b;
+  border-color: #059669;
+}
+
+[data-theme='dark'] .sm-stamp-slot {
+  background: #181e2e;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .sm-stamp-slot.collected {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: rgba(244, 63, 94, 0.35);
+}
+
+[data-theme='dark'] .sm-slot-title {
+  color: #e2e8f0;
+}

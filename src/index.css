@@ -148,7 +148,8 @@ button {
 [data-theme='blossom'] .vocab-subtabs-wrap,
 [data-theme='blossom'] .grammar-subtabs,
 [data-theme='blossom'] .kr-dl-subtabs,
-[data-theme='blossom'] .kr-categories-bar {
+[data-theme='blossom'] .kr-categories-bar,
+[data-theme='blossom'] .kr-games-subnav-wrap {
   background: rgba(255, 228, 235, 0.65) !important;
   border-color: rgba(244, 63, 94, 0.2) !important;
 }
@@ -157,7 +158,8 @@ button {
 [data-theme='blossom'] .vocab-tab-btn,
 [data-theme='blossom'] .grammar-tab-btn,
 [data-theme='blossom'] .kr-dl-tab-btn,
-[data-theme='blossom'] .kr-cat-pill {
+[data-theme='blossom'] .kr-cat-pill,
+[data-theme='blossom'] .kr-game-tab-btn {
   color: #5e526d !important;
 }
 
@@ -165,7 +167,8 @@ button {
 [data-theme='blossom'] .vocab-tab-btn:hover,
 [data-theme='blossom'] .grammar-tab-btn:hover,
 [data-theme='blossom'] .kr-dl-tab-btn:hover,
-[data-theme='blossom'] .kr-cat-pill:hover {
+[data-theme='blossom'] .kr-cat-pill:hover,
+[data-theme='blossom'] .kr-game-tab-btn:hover {
   color: #1f1635 !important;
 }
 
@@ -173,7 +176,8 @@ button {
 [data-theme='blossom'] .vocab-tab-btn.active,
 [data-theme='blossom'] .grammar-tab-btn.active,
 [data-theme='blossom'] .kr-dl-tab-btn.active,
-[data-theme='blossom'] .kr-cat-pill.active {
+[data-theme='blossom'] .kr-cat-pill.active,
+[data-theme='blossom'] .kr-game-tab-btn.active {
   background: linear-gradient(135deg, #f43f5e, #ec4899) !important;
   color: #ffffff !important;
   box-shadow: 0 4px 14px rgba(244, 63, 94, 0.28) !important;

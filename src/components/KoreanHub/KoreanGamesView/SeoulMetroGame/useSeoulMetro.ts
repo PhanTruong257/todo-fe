@@ -69,6 +69,11 @@ export function useSeoulMetro() {
     }
   };
 
+  const handleRetryCurrentStation = () => {
+    setIsAnswerLocked(false);
+    setSelectedOptionIndex(null);
+  };
+
   const handleSpeakCurrentStation = () => {
     speakKorean(currentMission.stationNameKo);
   };
@@ -85,6 +90,7 @@ export function useSeoulMetro() {
     isCurrentStationCompleted,
     handleSelectStation,
     handleAnswerOption,
+    handleRetryCurrentStation,
     handleSpeakCurrentStation,
   };
 }

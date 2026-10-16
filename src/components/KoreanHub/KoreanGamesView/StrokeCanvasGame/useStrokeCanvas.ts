@@ -9,13 +9,13 @@ export function useStrokeCanvas() {
   const [showGuide, setShowGuide] = useState(true);
   const [strokeColor, setStrokeColor] = useState('#0f172a'); // Default Korean Obsidian Ink
   const [strokeWidth, setStrokeWidth] = useState(10);
-  const [drawnPoints, setDrawnPoints] = useState<{ x: number; y: number }[]>([]);
   const [accuracy, setAccuracy] = useState<number | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const petalsCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const isDrawingRef = useRef(false);
   const lastPointRef = useRef<{ x: number; y: number } | null>(null);
+  const pointsRef = useRef<{ x: number; y: number }[]>([]);
 
   const currentChar: StrokeCharacter = STROKE_CHARACTERS[selectedCharIndex] || STROKE_CHARACTERS[0];
 
@@ -26,7 +26,7 @@ export function useStrokeCanvas() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    setDrawnPoints([]);
+    pointsRef.current = [];
     setAccuracy(null);
   }, []);
 
@@ -34,18 +34,29 @@ export function useStrokeCanvas() {
     clearCanvas();
   }, [currentChar, clearCanvas]);
 
-  // Adjust canvas size for high-DPI displays
+  // Adjust canvas size for high-DPI displays and keep synced with ResizeObserver
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    const ctx = canvas.getContext('2d');
-    if (ctx) {
-      ctx.scale(dpr, dpr);
-    }
+    const parent = canvas.parentElement;
+    if (!parent) return;
+
+    const syncSize = () => {
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.scale(dpr, dpr);
+      }
+    };
+
+    syncSize();
+    const ro = new ResizeObserver(syncSize);
+    ro.observe(parent);
+    return () => ro.disconnect();
   }, []);
 
   // Cherry blossoms celebratory effect
@@ -102,7 +113,7 @@ export function useStrokeCanvas() {
   const calculateAccuracy = useCallback(
     (points: { x: number; y: number }[]) => {
       const canvas = canvasRef.current;
-      if (!canvas || points.length < 8) return;
+      if (!canvas || points.length < 2) return;
       const rect = canvas.getBoundingClientRect();
       const w = rect.width;
       const h = rect.height;
@@ -118,7 +129,7 @@ export function useStrokeCanvas() {
       if (targetCheckpoints.length === 0) return;
 
       // Check how many target checkpoints have at least 1 user point close to them (within tolerance)
-      const tolerance = 42; // pixels
+      const tolerance = 48; // pixels
       let hitCount = 0;
 
       targetCheckpoints.forEach((target) => {
@@ -146,7 +157,11 @@ export function useStrokeCanvas() {
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    canvas.setPointerCapture(e.pointerId);
+    try {
+      canvas.setPointerCapture(e.pointerId);
+    } catch {
+      // ignore
+    }
 
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -154,8 +169,8 @@ export function useStrokeCanvas() {
 
     isDrawingRef.current = true;
     lastPointRef.current = { x, y };
+    pointsRef.current.push({ x, y });
 
-    setDrawnPoints((prev) => [...prev, { x, y }]);
     soundEffects.playBrushStroke();
 
     const ctx = canvas.getContext('2d');
@@ -193,7 +208,7 @@ export function useStrokeCanvas() {
     ctx.stroke();
 
     lastPointRef.current = { x, y };
-    setDrawnPoints((prev) => [...prev, { x, y }]);
+    pointsRef.current.push({ x, y });
   };
 
   const handlePointerUp = (e: React.PointerEvent<HTMLCanvasElement>) => {
@@ -206,8 +221,8 @@ export function useStrokeCanvas() {
       // ignore
     }
 
-    // Trigger score calculation
-    calculateAccuracy(drawnPoints);
+    // Trigger score calculation using the synchronous points array
+    calculateAccuracy(pointsRef.current);
   };
 
   const handleSpeakChar = () => {

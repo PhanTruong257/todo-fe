@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { KoreanStage } from '../Header/Header';
 import { HangeulView } from './HangeulView/HangeulView';
 import { KoreanVocabView } from './KoreanVocabView/KoreanVocabView';
@@ -19,6 +19,10 @@ export const KoreanHubView: React.FC<KoreanHubViewProps> = ({
 }) => {
   const [internalStage] = useState<KoreanStage>('hangeul');
   const activeStage = controlledStage ?? internalStage;
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [activeStage]);
 
   return (
     <div className="korean-hub-container">

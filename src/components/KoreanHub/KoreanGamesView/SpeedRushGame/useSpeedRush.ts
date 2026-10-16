@@ -206,7 +206,7 @@ export function useSpeedRush(onOpenCardModal?: (score: number) => void) {
       soundEffects.playIncorrect();
     }
 
-    // Auto advance to next question after 450ms
+    // Auto advance to next question (450ms if correct, 800ms if wrong to read explanation)
     setTimeout(() => {
       setSelectedAnswer(null);
       setIsAnswerLocked(false);
@@ -219,7 +219,7 @@ export function useSpeedRush(onOpenCardModal?: (score: number) => void) {
         }
         return next;
       });
-    }, 450);
+    }, isCorrect ? 450 : 800);
   };
 
   const currentQuestion = shuffledQuestions[currentQuestionIndex] || SPEED_RUSH_QUESTIONS[0];

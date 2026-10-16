@@ -21,6 +21,7 @@ export function useKChat() {
   const [chatHistory, setChatHistory] = useState<ChatFeedItem[]>([]);
   const [affinity, setAffinity] = useState(60);
   const [isTyping, setIsTyping] = useState(false);
+  const [isWaitingForNextStep, setIsWaitingForNextStep] = useState(false);
   const [isScenarioFinished, setIsScenarioFinished] = useState(false);
 
   const activeScenario: KChatScenario = KCHAT_SCENARIOS[activeScenarioIndex] || KCHAT_SCENARIOS[0];
@@ -34,6 +35,7 @@ export function useKChat() {
     setCurrentStepIndex(0);
     setAffinity(60);
     setIsTyping(false);
+    setIsWaitingForNextStep(false);
     setIsScenarioFinished(false);
 
     // Initial message from NPC
@@ -64,7 +66,7 @@ export function useKChat() {
 
   // Handle user response click
   const handleSelectOption = (option: KChatOption) => {
-    if (isTyping) return;
+    if (isTyping || isWaitingForNextStep) return;
 
     const timeStr = '오후 ' + new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
 
@@ -84,8 +86,9 @@ export function useKChat() {
     soundEffects.playCorrect();
     setAffinity((prev) => Math.min(100, prev + option.affinityDelta));
 
-    // 2. Partner typing indicator
+    // 2. Partner typing indicator and wait for reply
     setIsTyping(true);
+    setIsWaitingForNextStep(true);
 
     setTimeout(() => {
       setIsTyping(false);
@@ -112,12 +115,36 @@ export function useKChat() {
       // Check next step
       const nextStep = currentStepIndex + 1;
       if (nextStep < activeScenario.steps.length) {
-        setCurrentStepIndex(nextStep);
+        const nextStepData = activeScenario.steps[nextStep];
+        // If next step has an introductory question message, send it as a follow-up
+        if (nextStepData && nextStepData.messageKo) {
+          setIsTyping(true);
+          setTimeout(() => {
+            setIsTyping(false);
+            setIsWaitingForNextStep(false);
+            const nextQuestionMsg: ChatFeedItem = {
+              id: `step_${nextStep}_${Date.now()}`,
+              senderName: activeScenario.partnerName,
+              senderAvatar: activeScenario.partnerAvatar,
+              isNpc: true,
+              messageKo: nextStepData.messageKo,
+              messageVi: nextStepData.messageVi,
+              timestamp: '오후 ' + new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
+            };
+            setChatHistory((prev) => [...prev, nextQuestionMsg]);
+            soundEffects.playKatalkMessage();
+            setCurrentStepIndex(nextStep);
+          }, 800);
+        } else {
+          setIsWaitingForNextStep(false);
+          setCurrentStepIndex(nextStep);
+        }
       } else {
+        setIsWaitingForNextStep(false);
         setIsScenarioFinished(true);
         soundEffects.playCelebration();
       }
-    }, 1200);
+    }, 1000);
   };
 
   const handleSpeak = (text: string) => {
@@ -125,7 +152,8 @@ export function useKChat() {
   };
 
   const currentStep = activeScenario.steps[currentStepIndex];
-  const availableOptions = !isScenarioFinished ? currentStep?.options || [] : [];
+  const availableOptions =
+    !isScenarioFinished && !isWaitingForNextStep && !isTyping ? currentStep?.options || [] : [];
 
   return {
     activeScenario,
@@ -133,6 +161,7 @@ export function useKChat() {
     chatHistory,
     affinity,
     isTyping,
+    isWaitingForNextStep,
     isScenarioFinished,
     availableOptions,
     chatStreamRef,

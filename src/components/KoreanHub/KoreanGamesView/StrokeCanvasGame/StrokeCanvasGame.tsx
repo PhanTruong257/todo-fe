@@ -86,7 +86,10 @@ export const StrokeCanvasGame: React.FC = () => {
               <div className="sc-guide-overlay">
                 <span
                   style={{
-                    fontSize: '11rem',
+                    fontSize:
+                      currentChar.char.length > 1
+                        ? 'clamp(4rem, 16vw, 6.5rem)'
+                        : 'clamp(5.5rem, 24vw, 9.5rem)',
                     fontWeight: 900,
                     color: 'rgba(244, 63, 94, 0.16)',
                     lineHeight: 1,
@@ -153,6 +156,13 @@ export const StrokeCanvasGame: React.FC = () => {
                 style={{ background: '#f43f5e' }}
                 onClick={() => setStrokeColor('#f43f5e')}
                 title="Mực Đỏ Son K-Pastel (붉은 먹)"
+              />
+              <button
+                type="button"
+                className={`sc-color-dot ${strokeColor === '#0284c7' ? 'active' : ''}`}
+                style={{ background: '#0284c7' }}
+                onClick={() => setStrokeColor('#0284c7')}
+                title="Mực Lam Cung Đình (청묵)"
               />
             </div>
           </div>

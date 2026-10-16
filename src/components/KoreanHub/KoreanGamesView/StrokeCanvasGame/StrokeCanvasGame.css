@@ -452,3 +452,111 @@
     max-width: 320px;
   }
 }
+
+/* =================================================== */
+/* DARK THEME SUPPORT                                  */
+/* =================================================== */
+[data-theme='dark'] .sc-header-banner {
+  background: linear-gradient(135deg, #121826 0%, #1e1b2e 100%);
+  border-color: rgba(244, 63, 94, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme='dark'] .sc-banner-title {
+  color: #f8fafc;
+}
+
+[data-theme='dark'] .sc-banner-desc {
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .sc-char-selector-wrap {
+  background: #121826;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .sc-char-pill-btn {
+  background: #181e2e;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
+}
+
+[data-theme='dark'] .sc-char-pill-btn:hover {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: rgba(244, 63, 94, 0.3);
+  color: #fda4af;
+}
+
+[data-theme='dark'] .sc-canvas-card {
+  background: #121826;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Nền khung giấy vẽ Hanji trên dark mode */
+[data-theme='dark'] .sc-canvas-container {
+  background: #0d111c;
+  border-color: rgba(244, 63, 94, 0.3);
+}
+
+[data-theme='dark'] .sc-crosshair-v,
+[data-theme='dark'] .sc-crosshair-h {
+  background: rgba(244, 63, 94, 0.2);
+}
+
+[data-theme='dark'] .btn-tool-icon {
+  background: #181e2e;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+}
+
+[data-theme='dark'] .btn-tool-icon:hover {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: rgba(244, 63, 94, 0.3);
+  color: #fda4af;
+}
+
+[data-theme='dark'] .btn-tool-icon.active {
+  background: rgba(244, 63, 94, 0.2);
+  border-color: #f43f5e;
+  color: #ffffff;
+}
+
+[data-theme='dark'] .sc-char-header-card,
+[data-theme='dark'] .sc-stroke-steps-card {
+  background: #121826;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .sc-big-char {
+  color: #f8fafc;
+}
+
+[data-theme='dark'] .btn-speak-char {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: rgba(244, 63, 94, 0.3);
+  color: #fda4af;
+}
+
+[data-theme='dark'] .sc-char-meta-name,
+[data-theme='dark'] .sc-steps-title {
+  color: #f8fafc;
+}
+
+[data-theme='dark'] .sc-step-item {
+  background: #181e2e;
+  border-color: rgba(255, 255, 255, 0.06);
+  color: #cbd5e1;
+}
+
+[data-theme='dark'] .sc-accuracy-box {
+  background: rgba(244, 63, 94, 0.12);
+  border-color: rgba(244, 63, 94, 0.25);
+}
+
+[data-theme='dark'] .sc-acc-label {
+  color: #fda4af;
+}
+
+[data-theme='dark'] .sc-acc-val {
+  color: #f43f5e;
+}

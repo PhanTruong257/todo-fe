@@ -3,6 +3,51 @@ import { X, Download, Share2, Sparkles } from 'lucide-react';
 import { AESTHETIC_KOREAN_QUOTES } from '../gamesData';
 import './AestheticStoryCardModal.css';
 
+function wrapText(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  x: number,
+  y: number,
+  maxWidth: number,
+  lineHeight: number
+) {
+  const words = text.split(' ');
+  let line = '';
+  let curY = y;
+  for (let n = 0; n < words.length; n++) {
+    const testLine = line + words[n] + ' ';
+    const metrics = ctx.measureText(testLine);
+    if (metrics.width > maxWidth && n > 0) {
+      ctx.fillText(line.trim(), x, curY);
+      line = words[n] + ' ';
+      curY += lineHeight;
+    } else {
+      line = testLine;
+    }
+  }
+  ctx.fillText(line.trim(), x, curY);
+}
+
+function safeRoundRect(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  r: number
+) {
+  if (typeof ctx.roundRect === 'function') {
+    ctx.roundRect(x, y, w, h, r);
+  } else {
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+}
+
 interface AestheticStoryCardModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -77,7 +122,7 @@ export const AestheticStoryCardModal: React.FC<AestheticStoryCardModalProps> = (
     ctx.shadowBlur = 30;
     ctx.shadowOffsetY = 15;
     ctx.beginPath();
-    ctx.roundRect(80, 200, 560, 680, 24);
+    safeRoundRect(ctx, 80, 200, 560, 680, 24);
     ctx.fill();
     ctx.shadowColor = 'transparent'; // reset shadow
 
@@ -85,7 +130,7 @@ export const AestheticStoryCardModal: React.FC<AestheticStoryCardModalProps> = (
     ctx.strokeStyle = '#ffe4e6';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.roundRect(80, 200, 560, 680, 24);
+    safeRoundRect(ctx, 80, 200, 560, 680, 24);
     ctx.stroke();
 
     // Visual Icon Circle
@@ -114,7 +159,7 @@ export const AestheticStoryCardModal: React.FC<AestheticStoryCardModalProps> = (
     // Stat 1: Speed Rush
     ctx.fillStyle = '#fcfbfb';
     ctx.beginPath();
-    ctx.roundRect(115, 500, 230, 120, 16);
+    safeRoundRect(ctx, 115, 500, 230, 120, 16);
     ctx.fill();
     ctx.strokeStyle = '#f1f5f9';
     ctx.lineWidth = 2;
@@ -131,7 +176,7 @@ export const AestheticStoryCardModal: React.FC<AestheticStoryCardModalProps> = (
     // Stat 2: Metro Stamps
     ctx.fillStyle = '#fcfbfb';
     ctx.beginPath();
-    ctx.roundRect(375, 500, 230, 120, 16);
+    safeRoundRect(ctx, 375, 500, 230, 120, 16);
     ctx.fill();
     ctx.strokeStyle = '#f1f5f9';
     ctx.lineWidth = 2;
@@ -160,7 +205,7 @@ export const AestheticStoryCardModal: React.FC<AestheticStoryCardModalProps> = (
 
     ctx.fillStyle = '#64748b';
     ctx.font = 'italic 500 20px -apple-system, BlinkMacSystemFont, sans-serif';
-    ctx.fillText(activeQuote.vietnamese, 360, 775);
+    wrapText(ctx, activeQuote.vietnamese, 360, 775, 500, 28);
 
     // 5. Bottom Stamp & Stickers
     ctx.fillStyle = '#e11d48';

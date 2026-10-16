@@ -22,8 +22,8 @@ export const KOREAN_STAGES: StageInfo[] = [
     icon: '🔤',
     shortTitle: 'GĐ 1: Bảng Chữ Cái',
     fullTitle: 'Giai Đoạn 1: Bảng Chữ Cái Hangeul',
-    badge: 'Lộ trình 5 ngày • 40 chữ',
-    desc: 'Lộ trình 5 ngày, viết tên tiếng Việt, bộ gõ IME & quiz phản xạ',
+    badge: '5 Bước Nền Tảng • 40 Ký Tự',
+    desc: '5 bước nền tảng, viết tên tiếng Việt, bộ gõ IME & quiz phản xạ',
   },
   {
     id: 'vocab',

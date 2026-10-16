@@ -1,13 +1,13 @@
 import type { HangeulDayLesson, VietnameseNameGuide } from '../types/korean';
 
 // ==========================================
-// LỘ TRÌNH 5 NGÀY HANGEUL CƠ BẢN DÀNH CHO NGƯỜI VIỆT
+// 5 BƯỚC NỀN TẢNG HANGEUL DÀNH CHO NGƯỜI VIỆT
 // ==========================================
 export const HANGEUL_5DAY_JOURNEY: HangeulDayLesson[] = [
-  // --- NGÀY 1 ---
+  // --- BƯỚC 1 ---
   {
     day: 1,
-    title: 'Ngày 1: 9 Ký Tự Nền Tảng & 7 Từ Vựng Đầu Tiên',
+    title: 'Bước 1: 9 Ký Tự Nền Tảng & 7 Từ Vựng Đầu Tiên',
     subtitle: 'Chỉ sau 5 phút là tự đọc được các từ quen thuộc: Em bé, Dưa leo, Cây cối...',
     timeEstimate: '10 phút',
     letters: [
@@ -58,10 +58,10 @@ export const HANGEUL_5DAY_JOURNEY: HangeulDayLesson[] = [
     victoryRewardBadge: '🎓 Khởi Đầu Hoàn Hảo: Tự Đọc Được Các Từ Tiếng Hàn Đầu Tiên!',
   },
 
-  // --- NGÀY 2 ---
+  // --- BƯỚC 2 ---
   {
     day: 2,
-    title: 'Ngày 2: 7 Phụ Âm Khẩu Hình & Đọc Tên Đồ Vật',
+    title: 'Bước 2: 7 Phụ Âm Khẩu Hình & Đọc Tên Đồ Vật',
     subtitle: 'Mô phỏng cơ quan phát âm (Răng, Môi, Lưỡi, Họng) & Đọc tên sư tử, thịt, mũ, chuối...',
     timeEstimate: '12 phút',
     letters: [
@@ -111,10 +111,10 @@ export const HANGEUL_5DAY_JOURNEY: HangeulDayLesson[] = [
     victoryRewardBadge: '🦁 Thợ Săn Từ Vựng: Mở Khóa 8 Danh Từ Đời Sống!',
   },
 
-  // --- NGÀY 3 ---
+  // --- BƯỚC 3 ---
   {
     day: 3,
-    title: 'Ngày 3: Bí Mật Vua Sejong & Giải Mã Konglish',
+    title: 'Bước 3: Bí Mật Vua Sejong & Giải Mã Konglish',
     subtitle: 'Thêm 1 nét = Bật hơi mạnh hơn & Tự giải mã các từ mượn tiếng Anh quen thuộc',
     timeEstimate: '12 phút',
     letters: [
@@ -164,10 +164,10 @@ export const HANGEUL_5DAY_JOURNEY: HangeulDayLesson[] = [
     victoryRewardBadge: '☕ Thám Tử Giải Mã: Đọc Hiểu Toàn Bộ Từ Mượn Konglish!',
   },
 
-  // --- NGÀY 4 ---
+  // --- BƯỚC 4 ---
   {
     day: 4,
-    title: 'Ngày 4: Phụ Âm Căng & Từ Vựng Gia Đình',
+    title: 'Bước 4: Phụ Âm Căng & Từ Vựng Gia Đình',
     subtitle: 'Nén hơi ở cổ họng & Học cách gọi Ba, Anh trai, Con thỏ...',
     timeEstimate: '12 phút',
     letters: [
@@ -216,10 +216,10 @@ export const HANGEUL_5DAY_JOURNEY: HangeulDayLesson[] = [
     victoryRewardBadge: '🐰 Bậc Thầy Âm Căng: Gọi Tên Ba, Anh Trai & Con Thỏ!',
   },
 
-  // --- NGÀY 5 ---
+  // --- BƯỚC 5 ---
   {
     day: 5,
-    title: 'Ngày 5: Đánh Vần Patchim ➔ Chinh Phục 안녕하세요!',
+    title: 'Bước 5: Đánh Vần Patchim ➔ Chinh Phục 안녕하세요!',
     subtitle: 'Dùng 6 vần tiếng Việt (-c, -t, -p, -m, -n, -ng) để đọc mọi phụ âm cuối dễ như trở bàn tay',
     timeEstimate: '15 phút',
     letters: [

@@ -127,7 +127,7 @@ export const HangeulView: React.FC = () => {
             onClick={() => setSubTab('journey')}
           >
             <Compass size={14} />
-            Lộ Trình 5 Ngày 🚀
+            5 Bước Nền Tảng ⭐
           </button>
           <button
             type="button"
@@ -194,17 +194,17 @@ export const HangeulView: React.FC = () => {
           onClick={toggleHideRomanization}
           title={hideRomanization ? 'Đang ẩn phiên âm Latin' : 'Đang hiện phiên âm Latin'}
         >
-          {hideRomanization ? <EyeOff size={13} color="#f43f5e" /> : <Eye size={13} color="#38bdf8" />}
+          {hideRomanization ? <EyeOff size={13} color="#f43f5e" /> : <Eye size={13} color="#e11d48" />}
           <span>{hideRomanization ? 'Ẩn Phiên Âm' : 'Hiện Phiên Âm'}</span>
         </button>
       </div>
 
       {/* ==========================================
-          LỘ TRÌNH 5 NGÀY HANGEUL
+          5 BƯỚC NỀN TẢNG HANGEUL
           ========================================== */}
       {subTab === 'journey' && (
         <div className="hangeul-journey-stage">
-          {/* Thanh chọn 5 ngày học */}
+          {/* Thanh chọn 5 bước học */}
           <div className="journey-days-selector-bar">
             {journeyDays.map((l) => {
               const isCurrent = l.day === currentDay;
@@ -217,7 +217,7 @@ export const HangeulView: React.FC = () => {
                   onClick={() => selectJourneyDay(l.day)}
                 >
                   <div className="day-number-tag">
-                    {isDone ? <Check size={12} color="#10b981" /> : `Ngày ${l.day}`}
+                    {isDone ? <Check size={12} color="#10b981" /> : `Bước ${l.day}`}
                   </div>
                   <div className="day-pill-title">{l.title.split(':')[1]?.trim() || l.title}</div>
                 </button>

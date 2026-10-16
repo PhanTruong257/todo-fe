@@ -3,24 +3,24 @@
   --theme-mode: light;
   --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   
-  /* Color Palette - Sáng Trong Trẻo Tone Hồng Hoa Anh Đào (K-Pastel Blossom) */
-  --bg-dark: #fff0f3;
+  /* Color Palette - Sáng Dịu Mắt Tone Hồng Hoa Anh Đào (K-Pastel Blossom) */
+  --bg-dark: #fff5f7;
   --bg-body-gradient: 
-    radial-gradient(at 0% 0%, rgba(255, 209, 220, 0.75) 0px, transparent 55%),
-    radial-gradient(at 100% 0%, rgba(254, 215, 226, 0.7) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(255, 228, 235, 0.8) 0px, transparent 65%);
-  --bg-card: rgba(255, 255, 255, 0.92);
-  --bg-card-hover: rgba(255, 255, 255, 0.98);
-  --bg-input: rgba(255, 241, 245, 0.95);
-  --bg-subtle: rgba(255, 228, 235, 0.75);
+    radial-gradient(at 0% 0%, rgba(254, 205, 211, 0.5) 0px, transparent 55%),
+    radial-gradient(at 100% 0%, rgba(253, 230, 238, 0.45) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(255, 241, 245, 0.7) 0px, transparent 65%);
+  --bg-card: #ffffff;
+  --bg-card-hover: #ffffff;
+  --bg-input: #ffffff;
+  --bg-subtle: #fff1f4;
   
-  --border-color: rgba(244, 63, 94, 0.18);
-  --border-highlight: rgba(244, 63, 94, 0.45);
+  --border-color: rgba(244, 63, 94, 0.16);
+  --border-highlight: rgba(244, 63, 94, 0.4);
   
   --primary: #f43f5e;
   --primary-hover: #e11d48;
-  --primary-light: rgba(244, 63, 94, 0.12);
-  --primary-glow: rgba(244, 63, 94, 0.25);
+  --primary-light: rgba(244, 63, 94, 0.1);
+  --primary-glow: rgba(244, 63, 94, 0.2);
   
   /* Sắc độ hồng Hàn Quốc (K-Pastel Accents) */
   --blossom-pink: #f43f5e;
@@ -29,10 +29,10 @@
   --blossom-cream: #fff5f7;
   --blossom-soft: #ffe4e6;
   
-  /* Chữ tương phản cao trên nền sáng */
-  --text-main: #1f1635;
-  --text-muted: #5e526d;
-  --text-subtle: #8e7f9e;
+  /* Chữ tương phản cao chuẩn WCAG AAA trên nền sáng */
+  --text-main: #1e1b4b; /* Deep Indigo Charcoal - siêu rõ nét và sang trọng */
+  --text-muted: #4b5563; /* Slate 600 - dễ đọc, không mờ mắt */
+  --text-subtle: #9ca3af; /* Gray 400 */
   
   --priority-high: #f43f5e;
   --priority-high-bg: rgba(244, 63, 94, 0.12);
@@ -48,9 +48,9 @@
   --radius-lg: 18px;
   --radius-full: 9999px;
   
-  --shadow-sm: 0 2px 10px rgba(244, 63, 94, 0.08);
-  --shadow-md: 0 8px 24px rgba(244, 63, 94, 0.1), 0 2px 6px rgba(0, 0, 0, 0.04);
-  --shadow-glow: 0 0 25px rgba(244, 63, 94, 0.22);
+  --shadow-sm: 0 2px 10px rgba(244, 63, 94, 0.06);
+  --shadow-md: 0 8px 24px -4px rgba(244, 63, 94, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03);
+  --shadow-glow: 0 0 25px rgba(244, 63, 94, 0.2);
 }
 
 /* ==========================================

@@ -44,7 +44,7 @@ export const Footer: React.FC<FooterProps> = ({
           <div className="footer-brand-info">
             <div className="footer-brand-title">
               <strong>TaskFlow Korean</strong>
-              <span className="footer-version-tag">v1.0.17 • TOPIK 1</span>
+              <span className="footer-version-tag">v1.0.18 • TOPIK 1</span>
             </div>
             <p className="footer-brand-desc">
               Hệ thống tự học tiếng Hàn thông minh từ con số 0 dành riêng cho người Việt.

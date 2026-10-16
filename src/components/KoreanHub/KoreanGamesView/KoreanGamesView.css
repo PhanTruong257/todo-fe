@@ -1,0 +1,133 @@
+/* =================================================== */
+/* KOREAN GAMES & ARCADE VIEW (GIAI ĐOẠN 5)            */
+/* Strawberry Milk & Snow Design System                */
+/* =================================================== */
+
+.korean-games-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 0.5rem 0.75rem 2.5rem 0.75rem;
+}
+
+/* Thanh Tabs Chọn Trò Chơi Phía Trên */
+.kr-games-subnav-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: #ffffff;
+  border: 1px solid #ffe4e6;
+  border-radius: 18px;
+  padding: 0.6rem 0.8rem;
+  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.06);
+  flex-wrap: wrap;
+}
+
+.kr-games-tabs-list {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 2px;
+  scrollbar-width: none;
+  flex: 1;
+}
+
+.kr-games-tabs-list::-webkit-scrollbar {
+  display: none;
+}
+
+.kr-game-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fcfbfb;
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  padding: 0.65rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 42px;
+  touch-action: manipulation;
+}
+
+.kr-game-tab-btn:hover {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #e11d48;
+}
+
+.kr-game-tab-btn.active {
+  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+  border-color: #e11d48;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(244, 63, 94, 0.28);
+}
+
+.kr-game-tab-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.btn-open-kcard-story {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #fff1f2;
+  border: 1.5px solid #fecdd3;
+  color: #e11d48;
+  border-radius: 12px;
+  padding: 0.65rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  min-height: 42px;
+  flex-shrink: 0;
+}
+
+.btn-open-kcard-story:hover {
+  background: #ffe4e6;
+  border-color: #f43f5e;
+  transform: translateY(-1px);
+}
+
+/* Vùng Nội Dung Game Đang Chọn */
+.kr-game-content-panel {
+  width: 100%;
+}
+
+/* =================================================== */
+/* RESPONSIVE DESIGN (RULE 7)                          */
+/* =================================================== */
+@media (max-width: 768px) {
+  .korean-games-view {
+    padding: 0.25rem 0.4rem 2rem 0.4rem;
+    gap: 1rem;
+  }
+
+  .kr-games-subnav-wrap {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.5rem;
+  }
+
+  .kr-games-tabs-list {
+    width: 100%;
+  }
+
+  .btn-open-kcard-story {
+    justify-content: center;
+    width: 100%;
+  }
+}

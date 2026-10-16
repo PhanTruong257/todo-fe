@@ -4,6 +4,7 @@ import { HangeulView } from './HangeulView/HangeulView';
 import { KoreanVocabView } from './KoreanVocabView/KoreanVocabView';
 import { KoreanGrammarView } from './KoreanGrammarView/KoreanGrammarView';
 import { KoreanDialogueView } from './KoreanDialogueView/KoreanDialogueView';
+import { KoreanGamesView } from './KoreanGamesView/KoreanGamesView';
 import './KoreanHubView.css';
 
 export type { KoreanStage };
@@ -27,6 +28,7 @@ export const KoreanHubView: React.FC<KoreanHubViewProps> = ({
         {activeStage === 'vocab' && <KoreanVocabView />}
         {activeStage === 'grammar' && <KoreanGrammarView />}
         {activeStage === 'dialogue' && <KoreanDialogueView />}
+        {activeStage === 'games' && <KoreanGamesView />}
       </div>
     </div>
   );

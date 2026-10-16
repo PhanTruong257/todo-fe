@@ -3,7 +3,7 @@ import { Layers, ChevronDown, Check, Sparkles, Lightbulb } from 'lucide-react';
 import { useTheme } from '../../hooks/useTheme';
 import './Header.css';
 
-export type KoreanStage = 'hangeul' | 'vocab' | 'grammar' | 'dialogue';
+export type KoreanStage = 'hangeul' | 'vocab' | 'grammar' | 'dialogue' | 'games';
 
 export interface StageInfo {
   id: KoreanStage;
@@ -51,6 +51,15 @@ export const KOREAN_STAGES: StageInfo[] = [
     fullTitle: 'Giai Đoạn 4: Hội Thoại, K-Drama, K-Pop & Thử Thách',
     badge: 'K-Pop, Phim & Uốn lưỡi',
     desc: 'Lời bài hát K-Pop, câu thoại phim Hàn, nhập vai roleplay, thử thách uốn lưỡi micro & dịch 2 chiều',
+  },
+  {
+    id: 'games',
+    stageNum: 5,
+    icon: '🎮',
+    shortTitle: 'GĐ 5: Trò Chơi K-Play',
+    fullTitle: 'Giai Đoạn 5: Đấu Trường Trò Chơi & Phản Xạ (K-Play)',
+    badge: '4 Trò Chơi Sáng Tạo',
+    desc: 'Đấu trường 60s, đồ nét thư pháp, chat KakaoTalk, tàu điện Seoul & tạo thẻ K-Card',
   },
 ];
 

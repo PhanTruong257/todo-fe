@@ -1,0 +1,454 @@
+/* =================================================== */
+/* STROKE CANVAS GAME (TẬP ĐỒ NÉT THƯ PHÁP HANGEUL)     */
+/* Strawberry Milk & Snow Design System                */
+/* =================================================== */
+
+.stroke-canvas-game {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 820px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Banner */
+.sc-header-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #ffffff 0%, #fff1f2 100%);
+  border: 1px solid #ffe4e6;
+  border-radius: 18px;
+  padding: 1.1rem 1.4rem;
+  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.08);
+  gap: 1rem;
+}
+
+.sc-banner-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.sc-banner-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.sc-banner-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #f43f5e;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.sc-banner-desc {
+  font-size: 0.86rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Thanh Chọn Ký Tự Trượt Ngang */
+.sc-char-selector-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: #ffffff;
+  border: 1px solid #ffe4e6;
+  border-radius: 16px;
+  padding: 0.85rem 1rem;
+  box-shadow: 0 2px 10px rgba(244, 63, 94, 0.04);
+}
+
+.sc-selector-label {
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.sc-char-pills-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+}
+
+.sc-char-pills-row::-webkit-scrollbar {
+  height: 4px;
+}
+
+.sc-char-pills-row::-webkit-scrollbar-thumb {
+  background: #fecdd3;
+  border-radius: 999px;
+}
+
+.sc-char-pill-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  height: 52px;
+  border-radius: 12px;
+  border: 1px solid #f1f5f9;
+  background: #fcfbfb;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  touch-action: manipulation;
+}
+
+.sc-char-pill-btn:hover {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #e11d48;
+}
+
+.sc-char-pill-btn.active {
+  background: linear-gradient(135deg, #f43f5e, #e11d48);
+  border-color: #e11d48;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.25);
+}
+
+.sc-pill-han {
+  font-size: 1.25rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.sc-pill-rom {
+  font-size: 0.65rem;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+/* Vùng Vẽ Thư Pháp Chính (Canvas Area) */
+.sc-drawing-stage {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.sc-canvas-card {
+  background: #ffffff;
+  border: 1px solid #ffe4e6;
+  border-radius: 20px;
+  padding: 1.25rem;
+  box-shadow: 0 8px 24px rgba(244, 63, 94, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
+
+.sc-canvas-container {
+  width: 100%;
+  max-width: 380px;
+  aspect-ratio: 1 / 1;
+  background: #ffffff;
+  border: 2px dashed #fecdd3;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 2px 10px rgba(244, 63, 94, 0.03);
+  touch-action: none; /* Rất quan trọng: chặn cuộn màn hình trên mobile khi đang vẽ */
+}
+
+/* Nét chữ bóng mờ làm mẫu */
+.sc-guide-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Vạch kẻ ô giấy kẻ truyền thống (원고지) */
+.sc-crosshair-v,
+.sc-crosshair-h {
+  position: absolute;
+  background: rgba(244, 63, 94, 0.12);
+  pointer-events: none;
+}
+
+.sc-crosshair-v {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+}
+
+.sc-crosshair-h {
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+}
+
+.sc-canvas-element {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: crosshair;
+}
+
+/* Cánh hoa anh đào rơi */
+.sc-cherry-petals-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Thanh Điều Khiển Bút Vẽ */
+.sc-canvas-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sc-tool-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-tool-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #fcfbfb;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 38px;
+}
+
+.btn-tool-icon:hover {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #e11d48;
+}
+
+.btn-tool-icon.active {
+  background: #fff1f2;
+  border-color: #f43f5e;
+  color: #e11d48;
+}
+
+.sc-color-picker {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.sc-color-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.sc-color-dot.active {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 2px #f43f5e;
+}
+
+/* Cột Phải: Hướng Dẫn Thứ Tự Nét (Stroke Order Guide) */
+.sc-info-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sc-char-header-card {
+  background: #ffffff;
+  border: 1px solid #ffe4e6;
+  border-radius: 18px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.sc-char-head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sc-big-char {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1;
+}
+
+.btn-speak-char {
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  color: #e11d48;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-speak-char:hover {
+  background: #ffe4e6;
+  transform: scale(1.05);
+}
+
+.sc-char-meta-name {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.sc-char-meta-desc {
+  font-size: 0.8rem;
+  color: #64748b;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.sc-stroke-steps-card {
+  background: #ffffff;
+  border: 1px solid #ffe4e6;
+  border-radius: 18px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sc-steps-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.sc-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sc-step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  background: #fcfbfb;
+  border: 1px solid #f1f5f9;
+  border-radius: 10px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.78rem;
+  color: #334155;
+  line-height: 1.35;
+}
+
+.sc-step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #f43f5e;
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+/* Thang Đo Độ Chuẩn Xác */
+.sc-accuracy-box {
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sc-acc-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #9f1239;
+}
+
+.sc-acc-val {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #e11d48;
+}
+
+/* =================================================== */
+/* RESPONSIVE DESIGN (RULE 7)                          */
+/* =================================================== */
+@media (max-width: 768px) {
+  .sc-drawing-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .sc-canvas-container {
+    max-width: 320px;
+  }
+}

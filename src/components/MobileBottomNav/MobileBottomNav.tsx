@@ -45,6 +45,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
                 {stage.id === 'vocab' && 'Từ Vựng'}
                 {stage.id === 'grammar' && 'Ngữ Pháp'}
                 {stage.id === 'dialogue' && 'Hội Thoại'}
+                {stage.id === 'games' && 'Trò Chơi'}
               </span>
             </button>
           );

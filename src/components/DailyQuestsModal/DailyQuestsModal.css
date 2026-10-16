@@ -23,14 +23,14 @@
 }
 
 .daily-quests-sheet {
-  background: #101423;
-  border: 1px solid rgba(244, 63, 94, 0.35);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 20px;
   width: 100%;
   max-width: 520px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 32px rgba(244, 63, 94, 0.2);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12), 0 0 32px rgba(244, 63, 94, 0.15);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -38,6 +38,12 @@
   box-sizing: border-box;
   position: relative;
   animation: questsSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme='dark'] .daily-quests-sheet {
+  background: #101423;
+  border-color: rgba(244, 63, 94, 0.35);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 32px rgba(244, 63, 94, 0.2);
 }
 
 @keyframes questsSlideUp {
@@ -55,7 +61,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--border-color);
   padding-bottom: 12px;
 }
 
@@ -68,8 +74,12 @@
 .quests-sheet-title {
   font-size: 16px;
   font-weight: 800;
-  color: #fff;
+  color: var(--text-main);
   letter-spacing: -0.2px;
+}
+
+[data-theme='dark'] .quests-sheet-title {
+  color: #fff;
 }
 
 .quests-sheet-sub {
@@ -79,7 +89,7 @@
 }
 
 .quests-close-btn {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--bg-subtle);
   border: 1px solid var(--border-color);
   border-radius: 50%;
   width: 32px;
@@ -87,15 +97,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #94a3b8;
+  color: var(--text-muted);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .quests-close-btn:hover {
-  background: rgba(244, 63, 94, 0.2);
-  color: #fff;
-  border-color: #f43f5e;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-color: var(--primary);
 }
 
 /* Summary Banner */
@@ -156,6 +166,10 @@
 .streak-title {
   font-size: 13.5px;
   font-weight: 800;
+  color: var(--text-main);
+}
+
+[data-theme='dark'] .streak-title {
   color: #fff;
 }
 
@@ -193,13 +207,18 @@
 
 /* Heatmap Section */
 .quests-heatmap-section {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
   border-radius: 14px;
   padding: 12px 14px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+[data-theme='dark'] .quests-heatmap-section {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 .heatmap-header {
@@ -211,6 +230,10 @@
 .heatmap-title {
   font-size: 12px;
   font-weight: 700;
+  color: var(--text-main);
+}
+
+[data-theme='dark'] .heatmap-title {
   color: #cbd5e1;
 }
 
@@ -243,18 +266,28 @@
 }
 
 .heatmap-cell.studied {
-  background: rgba(16, 185, 129, 0.7);
+  background: rgba(16, 185, 129, 0.8);
   color: #fff;
   border: 1px solid #10b981;
 }
 
 .heatmap-cell.rest {
+  background: var(--bg-card);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+[data-theme='dark'] .heatmap-cell.rest {
   background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.05);
   color: #64748b;
-  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .heatmap-cell.today {
+  box-shadow: 0 0 0 2px var(--primary);
+}
+
+[data-theme='dark'] .heatmap-cell.today {
   box-shadow: 0 0 0 2px #38bdf8;
 }
 
@@ -268,6 +301,10 @@
 .quests-list-title {
   font-size: 13px;
   font-weight: 800;
+  color: var(--text-main);
+}
+
+[data-theme='dark'] .quests-list-title {
   color: #fff;
 }
 
@@ -281,11 +318,18 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 12px;
+  box-shadow: var(--shadow-sm);
   transition: all 0.2s;
+}
+
+[data-theme='dark'] .quest-card {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: none;
 }
 
 .quest-card.completed {
@@ -298,11 +342,17 @@
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+
+[data-theme='dark'] .quest-icon-badge {
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
 }
 
 .quest-info {
@@ -322,17 +372,25 @@
 .quest-title {
   font-size: 13px;
   font-weight: 700;
+  color: var(--text-main);
+}
+
+[data-theme='dark'] .quest-title {
   color: #fff;
 }
 
 .quest-xp {
   font-size: 10.5px;
   font-weight: 800;
-  color: #fbbf24;
-  background: rgba(251, 191, 36, 0.12);
+  color: #d97706;
+  background: rgba(251, 191, 36, 0.15);
   padding: 1px 6px;
   border-radius: 999px;
   flex-shrink: 0;
+}
+
+[data-theme='dark'] .quest-xp {
+  color: #fbbf24;
 }
 
 .quest-desc {
@@ -343,10 +401,14 @@
 .quest-progress-track {
   width: 100%;
   height: 5px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-subtle);
   border-radius: 999px;
   overflow: hidden;
   margin-top: 4px;
+}
+
+[data-theme='dark'] .quest-progress-track {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .quest-progress-fill {
@@ -375,21 +437,32 @@
 }
 
 .status-doing-badge {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+[data-theme='dark'] .status-doing-badge {
   color: #38bdf8;
 }
 
 /* Quote */
 .quests-quote-box {
-  background: rgba(251, 191, 36, 0.08);
-  border: 1px dashed rgba(251, 191, 36, 0.25);
+  background: #fefce8;
+  border: 1px dashed rgba(245, 158, 11, 0.4);
   border-radius: 12px;
   padding: 10px 14px;
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 11.5px;
-  color: #fde047;
+  color: #b45309;
   line-height: 1.4;
+}
+
+[data-theme='dark'] .quests-quote-box {
+  background: rgba(251, 191, 36, 0.08);
+  border-color: rgba(251, 191, 36, 0.25);
+  color: #fde047;
 }
 
 /* Mobile Bottom Sheet adjustments */

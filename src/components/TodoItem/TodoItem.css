@@ -13,22 +13,22 @@
   align-items: stretch;
   gap: 12px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--shadow-sm);
   margin-bottom: 0;
 }
 
 .report-card:hover {
   transform: translateY(-1px);
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+  border-color: var(--border-highlight);
+  box-shadow: var(--shadow-md);
 }
 
 .report-card.border-truong {
-  border-left: 3.5px solid #6366f1;
+  border-left: 3.5px solid #3b82f6;
 }
 
 .report-card.border-nguyet {
-  border-left: 3.5px solid #ec4899;
+  border-left: 3.5px solid var(--primary);
 }
 
 .report-content {
@@ -73,18 +73,36 @@
 }
 
 .badge-truong {
+  background: rgba(59, 130, 246, 0.1);
+  color: #1d4ed8;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+[data-theme='dark'] .badge-truong {
   background: linear-gradient(135deg, rgba(79, 70, 229, 0.3), rgba(59, 130, 246, 0.3));
   color: #93c5fd;
   border: 1px solid rgba(147, 197, 253, 0.4);
 }
 
 .badge-nguyet {
+  background: rgba(244, 63, 94, 0.1);
+  color: #e11d48;
+  border: 1px solid rgba(244, 63, 94, 0.3);
+}
+
+[data-theme='dark'] .badge-nguyet {
   background: linear-gradient(135deg, rgba(236, 72, 153, 0.3), rgba(244, 63, 94, 0.3));
   color: #fbcfe8;
   border: 1px solid rgba(251, 207, 232, 0.4);
 }
 
 .badge-other {
+  background: rgba(14, 165, 233, 0.12);
+  color: #0284c7;
+  border: 1px solid rgba(14, 165, 233, 0.3);
+}
+
+[data-theme='dark'] .badge-other {
   background: rgba(14, 165, 233, 0.2);
   color: #7dd3fc;
   border: 1px solid rgba(125, 211, 252, 0.4);
@@ -96,7 +114,7 @@
   gap: 7px;
   font-size: 14px;
   font-weight: 700;
-  color: #f8fafc;
+  color: var(--text-main);
   min-width: 0;
 }
 
@@ -107,8 +125,12 @@
 }
 
 .report-title svg {
-  color: #818cf8;
+  color: var(--primary);
   flex-shrink: 0;
+}
+
+[data-theme='dark'] .report-title svg {
+  color: #818cf8;
 }
 
 .report-right-group {
@@ -133,12 +155,13 @@
 }
 
 .meta-item.time {
-  color: #cbd5e1;
+  color: var(--text-muted);
+  font-weight: 600;
 }
 
 .duration-pill {
-  color: #38bdf8;
-  font-weight: 600;
+  color: var(--primary);
+  font-weight: 700;
 }
 
 /* Nút bấm hành động Sửa / Xóa */
@@ -162,13 +185,13 @@
 }
 
 .action-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background: var(--primary-light);
+  color: var(--primary);
 }
 
 .action-btn.delete:hover {
-  background: rgba(239, 68, 68, 0.2);
-  color: #f87171;
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
 }
 
 /* ==========================================================================
@@ -177,11 +200,11 @@
 
 .lesson-content-inline {
   font-size: 12.5px;
-  color: #94a3b8;
-  padding: 3px 8px;
-  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-muted);
+  padding: 4px 10px;
+  background: var(--bg-subtle);
   border-radius: var(--radius-sm);
-  border-left: 2px solid rgba(255, 255, 255, 0.15);
+  border-left: 2px solid var(--border-highlight);
   margin: 1px 0 0 0;
   line-height: 1.4;
   word-break: break-word;
@@ -224,25 +247,26 @@
 }
 
 .btn-sm-save {
-  background: #6366f1;
+  background: var(--primary);
   color: #fff;
   border: none;
   padding: 7px 16px;
   border-radius: var(--radius-sm);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 12px;
   cursor: pointer;
+  box-shadow: 0 2px 8px var(--primary-glow);
   transition: all 0.2s ease;
 }
 
 .btn-sm-save:hover {
-  background: #4f46e5;
+  background: var(--primary-hover);
 }
 
 .btn-sm-cancel {
-  background: rgba(255, 255, 255, 0.08);
-  color: #cbd5e1;
-  border: none;
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
   padding: 7px 14px;
   border-radius: var(--radius-sm);
   font-size: 12px;
@@ -251,6 +275,11 @@
 }
 
 .btn-sm-cancel:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-main);
+}
+
+[data-theme='dark'] .btn-sm-cancel:hover {
   background: rgba(255, 255, 255, 0.15);
   color: #ffffff;
 }
@@ -283,7 +312,7 @@
     justify-content: space-between;
     width: 100%;
     padding-top: 5px;
-    border-top: 1px dashed rgba(255, 255, 255, 0.06);
+    border-top: 1px dashed var(--border-color);
     gap: 8px;
   }
 

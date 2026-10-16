@@ -47,17 +47,25 @@
   font-size: 14.5px;
   font-weight: 800;
   letter-spacing: -0.3px;
-  color: #ffffff;
+  color: var(--text-main);
   line-height: 1.2;
+}
+
+[data-theme='dark'] .mobile-brand-text h1 {
+  color: #ffffff;
 }
 
 .mobile-nav-tabs {
   display: flex;
-  background: rgba(13, 17, 28, 0.8);
+  background: var(--bg-subtle);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-full);
   padding: 2px;
   gap: 2px;
+}
+
+[data-theme='dark'] .mobile-nav-tabs {
+  background: rgba(13, 17, 28, 0.8);
 }
 
 .mobile-tab-btn {
@@ -74,8 +82,13 @@
 }
 
 .mobile-tab-btn.active {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  background: linear-gradient(135deg, #f43f5e, #fb7185);
   color: #ffffff;
+  box-shadow: 0 2px 10px rgba(244, 63, 94, 0.35);
+}
+
+[data-theme='dark'] .mobile-tab-btn.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
 }
 
@@ -103,14 +116,21 @@
   gap: 6px;
   padding: 6px 11px;
   border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   font-size: 12px;
   font-weight: 600;
   color: var(--text-muted);
   flex-shrink: 0;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+[data-theme='dark'] .mobile-student-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: none;
 }
 
 .mobile-student-chip .chip-icon {
@@ -124,11 +144,18 @@
 .mobile-student-chip .chip-count {
   font-size: 10px;
   font-weight: 700;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
   padding: 2px 6px;
   border-radius: var(--radius-full);
-  color: var(--text-main);
+  color: var(--text-muted);
   line-height: 1;
+}
+
+[data-theme='dark'] .mobile-student-chip .chip-count {
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  color: var(--text-main);
 }
 
 .chip-streak-pill {
@@ -136,16 +163,28 @@
   font-weight: 800;
   padding: 1px 5px;
   border-radius: var(--radius-full);
-  background: rgba(249, 115, 22, 0.22);
-  border: 1px solid rgba(249, 115, 22, 0.4);
-  color: #fb923c;
+  background: rgba(249, 115, 22, 0.15);
+  border: 1px solid rgba(249, 115, 22, 0.35);
+  color: #ea580c;
   display: inline-flex;
   align-items: center;
   line-height: 1;
 }
 
+[data-theme='dark'] .chip-streak-pill {
+  background: rgba(249, 115, 22, 0.22);
+  color: #fb923c;
+}
+
 /* Active States */
 .mobile-student-chip.chip-truong.active {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #1d4ed8;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+}
+
+[data-theme='dark'] .mobile-student-chip.chip-truong.active {
   background: rgba(59, 130, 246, 0.2);
   border-color: #60a5fa;
   color: #93c5fd;
@@ -153,11 +192,19 @@
 }
 
 .mobile-student-chip.chip-truong.active .chip-count {
-  background: rgba(59, 130, 246, 0.4);
+  background: #3b82f6;
   color: #ffffff;
+  border: none;
 }
 
 .mobile-student-chip.chip-nguyet.active {
+  background: #fff1f4;
+  border-color: #f43f5e;
+  color: #e11d48;
+  box-shadow: 0 2px 8px rgba(244, 63, 94, 0.2);
+}
+
+[data-theme='dark'] .mobile-student-chip.chip-nguyet.active {
   background: rgba(236, 72, 153, 0.2);
   border-color: #f472b6;
   color: #fbcfe8;
@@ -165,16 +212,23 @@
 }
 
 .mobile-student-chip.chip-nguyet.active .chip-count {
-  background: rgba(236, 72, 153, 0.4);
+  background: #f43f5e;
   color: #ffffff;
+  border: none;
 }
 
 .mobile-student-chip.chip-all.active,
 .mobile-student-chip.chip-other.active {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: var(--text-main);
+}
+
+[data-theme='dark'] .mobile-student-chip.chip-all.active,
+[data-theme='dark'] .mobile-student-chip.chip-other.active {
   background: rgba(255, 255, 255, 0.14);
   border-color: rgba(255, 255, 255, 0.35);
   color: #ffffff;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
 }
 
 .chip-avatar-letter {
@@ -194,8 +248,8 @@
   gap: 4px;
   padding: 6px 10px;
   border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px dashed rgba(255, 255, 255, 0.18);
+  background: var(--bg-card);
+  border: 1px dashed var(--border-color);
   font-size: 11px;
   font-weight: 600;
   color: var(--text-subtle);
@@ -205,9 +259,9 @@
 }
 
 .mobile-chip-add:hover {
-  color: var(--text-main);
+  color: var(--primary);
   border-color: var(--primary);
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--primary-light);
 }
 
 .mobile-inline-add-form {
@@ -361,9 +415,9 @@
   width: 36px;
   height: 36px;
   border-radius: var(--radius-full);
-  background: rgba(99, 102, 241, 0.15);
-  border: 1px solid rgba(99, 102, 241, 0.35);
-  color: #a5b4fc;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #d97706;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -373,6 +427,18 @@
 }
 
 .mobile-btn-timer-circle.active {
+  background: #f59e0b;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
+[data-theme='dark'] .mobile-btn-timer-circle {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.35);
+  color: #a5b4fc;
+}
+
+[data-theme='dark'] .mobile-btn-timer-circle.active {
   background: #6366f1;
   color: #ffffff;
   box-shadow: 0 0 12px rgba(99, 102, 241, 0.5);
@@ -382,7 +448,7 @@
   width: 36px;
   height: 36px;
   border-radius: var(--radius-full);
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  background: linear-gradient(135deg, #f43f5e, #fb7185);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -390,8 +456,13 @@
   border: none;
   cursor: pointer;
   flex-shrink: 0;
-  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 3px 12px rgba(244, 63, 94, 0.35);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme='dark'] .mobile-btn-add-circle {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.4);
 }
 
 .mobile-btn-add-circle:hover {
@@ -399,7 +470,13 @@
 }
 
 .mobile-btn-add-circle.active {
-  background: rgba(255, 255, 255, 0.14);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
   color: var(--text-muted);
   box-shadow: none;
+}
+
+[data-theme='dark'] .mobile-btn-add-circle.active {
+  background: rgba(255, 255, 255, 0.14);
+  border: none;
 }

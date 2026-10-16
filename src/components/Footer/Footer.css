@@ -1,18 +1,23 @@
 /* TASKFLOW KOREAN MODERN FOOTER */
 .taskflow-footer {
   margin-top: 64px;
-  background: linear-gradient(180deg, rgba(18, 24, 38, 0.75) 0%, rgba(10, 14, 23, 0.95) 100%);
+  background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: 32px 36px 24px;
   display: flex;
   flex-direction: column;
   gap: 28px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  box-shadow: var(--shadow-sm);
   backdrop-filter: blur(16px);
   position: relative;
   width: 100%;
   box-sizing: border-box;
+}
+
+[data-theme='dark'] .taskflow-footer {
+  background: linear-gradient(180deg, rgba(18, 24, 38, 0.75) 0%, rgba(10, 14, 23, 0.95) 100%);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
 }
 
 /* 1. TOP ROW */
@@ -22,7 +27,7 @@
   justify-content: space-between;
   gap: 16px;
   padding-bottom: 22px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid var(--border-color);
   flex-wrap: wrap;
 }
 
@@ -67,18 +72,28 @@
 .footer-brand-title strong {
   font-size: 17px;
   font-weight: 800;
-  color: #fff;
+  color: var(--text-main);
   letter-spacing: -0.2px;
+}
+
+[data-theme='dark'] .footer-brand-title strong {
+  color: #fff;
 }
 
 .footer-version-tag {
   font-size: 10.5px;
   font-weight: 800;
-  background: rgba(244, 63, 94, 0.15);
-  border: 1px solid rgba(244, 63, 94, 0.35);
-  color: #fda4af;
+  background: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  color: #e11d48;
   border-radius: var(--radius-full);
   padding: 1px 8px;
+}
+
+[data-theme='dark'] .footer-version-tag {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: rgba(244, 63, 94, 0.35);
+  color: #fda4af;
 }
 
 .footer-brand-desc {
@@ -91,7 +106,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-full);
   padding: 8px 16px;
@@ -101,13 +116,24 @@
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-footer-scroll-top:hover {
-  background: rgba(244, 63, 94, 0.15);
+  background: var(--primary-light);
   border-color: rgba(244, 63, 94, 0.4);
-  color: #fff;
+  color: var(--primary);
   transform: translateY(-2px);
+}
+
+[data-theme='dark'] .btn-footer-scroll-top {
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: none;
+}
+
+[data-theme='dark'] .btn-footer-scroll-top:hover {
+  background: rgba(244, 63, 94, 0.15);
+  color: #fff;
 }
 
 /* 2. THREE COLUMN GRID */
@@ -129,14 +155,18 @@
   gap: 8px;
   font-size: 13.5px;
   font-weight: 800;
-  color: #f1f5f9;
+  color: var(--text-main);
   letter-spacing: 0.3px;
   text-transform: uppercase;
   margin: 0;
 }
 
+[data-theme='dark'] .footer-col-title {
+  color: #f1f5f9;
+}
+
 .col-icon {
-  color: #fb7185;
+  color: var(--primary);
 }
 
 /* Cột 1: Stage Links */
@@ -155,8 +185,8 @@
   gap: 10px;
   width: 100%;
   padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid transparent;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   color: var(--text-muted);
   font-size: 12.5px;
@@ -167,17 +197,34 @@
 }
 
 .footer-stage-link:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.12);
-  color: #fff;
+  background: var(--primary-light);
+  border-color: rgba(244, 63, 94, 0.3);
+  color: var(--primary);
   transform: translateX(4px);
 }
 
+[data-theme='dark'] .footer-stage-link {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: transparent;
+}
+
+[data-theme='dark'] .footer-stage-link:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
 .footer-stage-link.active {
+  background: rgba(244, 63, 94, 0.1);
+  border-color: #f43f5e;
+  color: #e11d48;
+  font-weight: 700;
+}
+
+[data-theme='dark'] .footer-stage-link.active {
   background: linear-gradient(135deg, rgba(244, 63, 94, 0.18), rgba(236, 72, 153, 0.12));
   border-color: rgba(244, 63, 94, 0.35);
   color: #fff;
-  font-weight: 700;
 }
 
 .stage-link-icon {
@@ -209,8 +256,8 @@
 }
 
 .footer-chip {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
   border-radius: var(--radius-full);
   padding: 5px 10px;
   font-size: 11.5px;
@@ -219,10 +266,15 @@
   line-height: 1.35;
 }
 
+[data-theme='dark'] .footer-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
 /* Cột 3: Quote Box */
 .footer-quote-box {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.06));
-  border: 1px solid rgba(99, 102, 241, 0.25);
+  background: linear-gradient(135deg, #fff1f4 0%, #ffe4e9 100%);
+  border: 1px solid rgba(244, 63, 94, 0.25);
   border-radius: var(--radius-md);
   padding: 14px 16px;
   display: flex;
@@ -230,19 +282,32 @@
   gap: 6px;
 }
 
+[data-theme='dark'] .footer-quote-box {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.06));
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
 .quote-korean {
   font-size: 14px;
   font-weight: 800;
-  color: #c7d2fe;
+  color: #e11d48;
   font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
   letter-spacing: 0.5px;
+}
+
+[data-theme='dark'] .quote-korean {
+  color: #c7d2fe;
 }
 
 .quote-vietnamese {
   font-size: 12px;
   font-weight: 700;
-  color: #e2e8f0;
+  color: var(--text-main);
   font-style: italic;
+}
+
+[data-theme='dark'] .quote-vietnamese {
+  color: #e2e8f0;
 }
 
 .quote-sub {
@@ -264,10 +329,14 @@
   padding: 7px 14px;
   font-size: 11.5px;
   font-weight: 700;
-  color: #fde68a;
+  color: #b45309;
   cursor: pointer;
   transition: all 0.2s;
   width: 100%;
+}
+
+[data-theme='dark'] .btn-footer-open-advice {
+  color: #fde68a;
 }
 
 .btn-footer-open-advice:hover {
@@ -285,7 +354,7 @@
   justify-content: space-between;
   gap: 14px;
   padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--border-color);
   font-size: 11.5px;
   color: var(--text-subtle);
   flex-wrap: wrap;

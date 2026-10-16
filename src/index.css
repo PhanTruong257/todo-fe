@@ -3,43 +3,43 @@
   --theme-mode: light;
   --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   
-  /* Color Palette - Sáng Dịu Mắt Tone Hồng Hoa Anh Đào (K-Pastel Blossom) */
-  --bg-dark: #fff5f7;
+  /* Color Palette - Strawberry Milk & Crisp Snow (Trắng Sứ 60% & Điểm Nhấn Hồng Dâu 10%) */
+  --bg-dark: #fcfbfb;
   --bg-body-gradient: 
-    radial-gradient(at 0% 0%, rgba(254, 205, 211, 0.5) 0px, transparent 55%),
-    radial-gradient(at 100% 0%, rgba(253, 230, 238, 0.45) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(255, 241, 245, 0.7) 0px, transparent 65%);
+    radial-gradient(at 0% 0%, rgba(254, 226, 232, 0.35) 0px, transparent 45%),
+    radial-gradient(at 100% 5%, rgba(255, 228, 235, 0.25) 0px, transparent 40%),
+    radial-gradient(at 50% 100%, rgba(253, 242, 248, 0.35) 0px, transparent 60%);
   --bg-card: #ffffff;
   --bg-card-hover: #ffffff;
-  --bg-input: #ffffff;
-  --bg-subtle: #fff1f4;
+  --bg-input: #f8fafc;
+  --bg-subtle: #f8f6f8;
   
-  --border-color: rgba(244, 63, 94, 0.16);
+  --border-color: rgba(226, 232, 240, 0.85);
   --border-highlight: rgba(244, 63, 94, 0.4);
   
   --primary: #f43f5e;
   --primary-hover: #e11d48;
-  --primary-light: rgba(244, 63, 94, 0.1);
+  --primary-light: rgba(244, 63, 94, 0.08);
   --primary-glow: rgba(244, 63, 94, 0.2);
   
-  /* Sắc độ hồng Hàn Quốc (K-Pastel Accents) */
+  /* Sắc độ hồng dâu chuẩn K-Design */
   --blossom-pink: #f43f5e;
-  --blossom-rose: #ec4899;
+  --blossom-rose: #fb7185;
   --blossom-petal: #fda4af;
-  --blossom-cream: #fff5f7;
-  --blossom-soft: #ffe4e6;
+  --blossom-cream: #ffffff;
+  --blossom-soft: #fff1f4;
   
-  /* Chữ tương phản cao chuẩn WCAG AAA trên nền sáng */
-  --text-main: #1e1b4b; /* Deep Indigo Charcoal - siêu rõ nét và sang trọng */
-  --text-muted: #4b5563; /* Slate 600 - dễ đọc, không mờ mắt */
-  --text-subtle: #9ca3af; /* Gray 400 */
+  /* Chữ sắc nét đỉnh cao chuẩn Notion / Apple (WCAG AAA 16:1) */
+  --text-main: #0f172a; /* Deep Slate 900 - siêu nét, sạch bóng */
+  --text-muted: #475569; /* Slate 600 - dễ đọc, thanh thoát */
+  --text-subtle: #94a3b8; /* Slate 400 */
   
   --priority-high: #f43f5e;
-  --priority-high-bg: rgba(244, 63, 94, 0.12);
+  --priority-high-bg: rgba(244, 63, 94, 0.1);
   --priority-med: #ea580c;
-  --priority-med-bg: rgba(234, 88, 12, 0.12);
+  --priority-med-bg: rgba(234, 88, 12, 0.1);
   --priority-low: #059669;
-  --priority-low-bg: rgba(5, 150, 105, 0.12);
+  --priority-low-bg: rgba(5, 150, 105, 0.1);
   
   --success: #10b981;
   --danger: #ef4444;
@@ -48,9 +48,9 @@
   --radius-lg: 18px;
   --radius-full: 9999px;
   
-  --shadow-sm: 0 2px 10px rgba(244, 63, 94, 0.06);
-  --shadow-md: 0 8px 24px -4px rgba(244, 63, 94, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03);
-  --shadow-glow: 0 0 25px rgba(244, 63, 94, 0.2);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 6px 20px -2px rgba(0, 0, 0, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+  --shadow-glow: 0 0 20px rgba(244, 63, 94, 0.18);
 }
 
 /* ==========================================

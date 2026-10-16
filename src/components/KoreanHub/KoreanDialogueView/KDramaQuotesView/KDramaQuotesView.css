@@ -1,0 +1,527 @@
+.kdrama-quotes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  animation: fadeInKd 0.25s ease-out;
+  box-sizing: border-box;
+}
+
+@keyframes fadeInKd {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 1. HERO BANNER */
+.kdrama-hero-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-sm);
+}
+
+.kdrama-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(244, 63, 94, 0.12);
+  border: 1px solid rgba(244, 63, 94, 0.25);
+  font-size: 11px;
+  font-weight: 700;
+  color: #f43f5e;
+  width: fit-content;
+}
+
+.kdrama-hero-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.3px;
+  margin: 0;
+}
+
+.kdrama-hero-desc {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.kdrama-hero-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 6px;
+  border-top: 1px solid var(--border-color);
+}
+
+.kdrama-search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  flex: 1;
+  min-width: 220px;
+}
+
+.kdrama-search-box .search-icon {
+  color: var(--text-subtle);
+  flex-shrink: 0;
+}
+
+.kdrama-search-input {
+  border: none;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 12.5px;
+  width: 100%;
+  outline: none;
+}
+
+.kdrama-search-input::placeholder {
+  color: var(--text-subtle);
+}
+
+.kdrama-filter-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.kdrama-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s;
+  min-height: 36px;
+}
+
+.kdrama-filter-btn:hover {
+  color: var(--text-main);
+  border-color: var(--border-highlight);
+}
+
+.kdrama-filter-btn.active {
+  background: linear-gradient(135deg, #f43f5e, #ec4899);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.25);
+}
+
+/* 2. GRID CÂU TRÍCH DẪN */
+.kdrama-quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.kdrama-quote-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.kdrama-quote-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(244, 63, 94, 0.4);
+  box-shadow: 0 10px 24px rgba(244, 63, 94, 0.12);
+}
+
+/* Header Thẻ */
+.quote-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.quote-card-source {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.source-badge-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.source-titles {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.source-title-main {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.source-artist {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.quote-category-tag {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.quote-category-tag.kpop {
+  background: rgba(236, 72, 153, 0.12);
+  color: #ec4899;
+  border: 1px solid rgba(236, 72, 153, 0.25);
+}
+
+.quote-category-tag.kdrama {
+  background: rgba(99, 102, 241, 0.12);
+  color: #818cf8;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+}
+
+/* Thân Câu */
+.quote-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.quote-korean-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.quote-korean-text {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.45;
+  letter-spacing: -0.2px;
+}
+
+.btn-quote-speak {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(244, 63, 94, 0.12);
+  color: #f43f5e;
+  border: 1px solid rgba(244, 63, 94, 0.25);
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.btn-quote-speak:hover {
+  background: #f43f5e;
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+.quote-roman-text {
+  font-size: 11.5px;
+  color: #f43f5e;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.quote-vietnamese-text {
+  font-size: 13px;
+  color: var(--text-main);
+  font-weight: 600;
+  line-height: 1.4;
+  padding-left: 8px;
+  border-left: 2px solid #f43f5e;
+}
+
+.quote-context-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  background: var(--bg-input);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  line-height: 1.4;
+}
+
+.quote-context-box .heart-icon {
+  color: #f43f5e;
+  flex-shrink: 0;
+}
+
+/* Accordion Bóc Tách */
+.quote-breakdown-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.btn-toggle-breakdown {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--bg-input);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  transition: all 0.2s;
+  min-height: 36px;
+}
+
+.btn-toggle-breakdown:hover {
+  color: var(--text-main);
+  border-color: #f43f5e;
+}
+
+.quote-breakdown-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  background: var(--bg-input);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  animation: fadeInKd 0.2s ease-out;
+}
+
+.breakdown-words-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px;
+}
+
+.breakdown-word-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
+.chip-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.chip-word {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #f43f5e;
+}
+
+.btn-chip-audio {
+  color: var(--text-subtle);
+  display: flex;
+  align-items: center;
+  padding: 2px;
+}
+
+.btn-chip-audio:hover {
+  color: #f43f5e;
+}
+
+.chip-meaning {
+  font-size: 11px;
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.chip-role {
+  font-size: 9.5px;
+  color: var(--text-muted);
+}
+
+.breakdown-grammar-tip {
+  padding: 8px 10px;
+  background: rgba(244, 63, 94, 0.08);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid #f43f5e;
+}
+
+.grammar-tip-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #f43f5e;
+  margin-bottom: 2px;
+}
+
+.grammar-tip-text {
+  font-size: 11px;
+  color: var(--text-main);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Footer Thẻ */
+.quote-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-color);
+}
+
+.btn-quote-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  flex: 1;
+  min-height: 36px;
+  transition: all 0.2s;
+}
+
+.btn-quote-action:hover {
+  color: var(--text-main);
+  border-color: var(--border-highlight);
+}
+
+.btn-quote-action.save-card {
+  background: rgba(244, 63, 94, 0.1);
+  color: #f43f5e;
+  border-color: rgba(244, 63, 94, 0.25);
+}
+
+.btn-quote-action.save-card:hover {
+  background: #f43f5e;
+  color: #ffffff;
+}
+
+.btn-quote-action.saved {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.kdrama-empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.kdrama-empty-state span {
+  font-size: 32px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* ==========================================
+   MOBILE RESPONSIVE (RULE 7)
+   ========================================== */
+@media (max-width: 768px) {
+  .kdrama-quotes-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .kdrama-hero-card {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+
+  .kdrama-hero-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .kdrama-filter-tabs {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .kdrama-filter-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 6px 8px;
+    font-size: 11px;
+    min-height: 36px;
+  }
+
+  .kdrama-quote-card {
+    padding: 12px 14px;
+  }
+
+  .quote-korean-text {
+    font-size: 15px;
+  }
+
+  .breakdown-words-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .breakdown-words-grid {
+    grid-template-columns: 1fr;
+  }
+}

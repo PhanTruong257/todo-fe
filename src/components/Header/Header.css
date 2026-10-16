@@ -353,6 +353,42 @@
   color: #fbbf24;
 }
 
+/* Nút Đổi Giao Diện: 🌸 Hồng Hoa Anh Đào / 🌙 Đêm */
+.header-theme-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 6px 12px;
+  color: var(--text-main);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 36px;
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+}
+
+.header-theme-pill:hover {
+  background: rgba(244, 63, 94, 0.12);
+  border-color: #f43f5e;
+  transform: translateY(-1px);
+}
+
+[data-theme='blossom'] .header-theme-pill {
+  background: rgba(255, 228, 235, 0.9);
+  border-color: rgba(244, 63, 94, 0.25);
+  color: #e11d48;
+}
+
+[data-theme='blossom'] .header-theme-pill:hover {
+  background: rgba(255, 215, 225, 1);
+  border-color: #e11d48;
+}
+
 /* =================================================== */
 /* MOBILE RESPONSIVE OPTIMIZATION (TUÂN THỦ RULE 7)    */
 /* =================================================== */
@@ -420,6 +456,17 @@
   }
 
   .advice-pill-text {
+    display: none !important;
+  }
+
+  .header-theme-pill {
+    padding: 2px 6px !important;
+    font-size: 10.5px !important;
+    min-height: 26px !important;
+    gap: 2px !important;
+  }
+
+  .theme-pill-text {
     display: none !important;
   }
 

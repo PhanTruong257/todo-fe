@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Layers, ChevronDown, Check, Sparkles, Lightbulb } from 'lucide-react';
+import { useTheme } from '../../hooks/useTheme';
 import './Header.css';
 
 export type KoreanStage = 'hangeul' | 'vocab' | 'grammar' | 'dialogue';
@@ -46,10 +47,10 @@ export const KOREAN_STAGES: StageInfo[] = [
     id: 'dialogue',
     stageNum: 4,
     icon: '💬',
-    shortTitle: 'GĐ 4: Hội Thoại & Dịch',
-    fullTitle: 'Giai Đoạn 4: Hội Thoại & Dịch Thuật',
-    badge: 'Dịch 2 chiều',
-    desc: '60+ câu giao tiếp tình huống, công cụ dịch 2 chiều & 1-chạm tạo flashcard',
+    shortTitle: 'GĐ 4: Hội Thoại & K-Pop',
+    fullTitle: 'Giai Đoạn 4: Hội Thoại, K-Drama, K-Pop & Thử Thách',
+    badge: 'K-Pop, Phim & Uốn lưỡi',
+    desc: 'Lời bài hát K-Pop, câu thoại phim Hàn, nhập vai roleplay, thử thách uốn lưỡi micro & dịch 2 chiều',
   },
 ];
 
@@ -74,6 +75,7 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { theme, toggleTheme } = useTheme();
 
   const currentStageInfo =
     KOREAN_STAGES.find((s) => s.id === koreanStage) || KOREAN_STAGES[0];
@@ -185,6 +187,17 @@ export const Header: React.FC<HeaderProps> = ({
         >
           <Lightbulb size={13} className="advice-pill-icon" />
           <span className="advice-pill-text">Lời Khuyên</span>
+        </button>
+
+        {/* Nút Đổi Giao Diện: 🌸 Hồng Hoa Anh Đào / 🌙 Đêm */}
+        <button
+          type="button"
+          className="header-theme-pill"
+          onClick={toggleTheme}
+          title={theme === 'blossom' ? 'Đang bật tone Hồng Pastel (Bấm để đổi sang Đêm)' : 'Đang bật tone Đêm (Bấm để đổi sang Hồng Pastel)'}
+        >
+          <span style={{ fontSize: 13 }}>{theme === 'blossom' ? '🌸' : '🌙'}</span>
+          <span className="theme-pill-text">{theme === 'blossom' ? 'Hồng Pastel' : 'Đêm'}</span>
         </button>
 
         {/* Nút Streak & Nhiệm Vụ Hàng Ngày */}

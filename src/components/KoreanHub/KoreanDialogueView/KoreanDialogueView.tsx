@@ -12,10 +12,14 @@ import {
   AlertTriangle,
   Eye,
   EyeOff,
+  Music,
+  Zap,
 } from 'lucide-react';
 import { KOREAN_DIALOGUES, speakKorean } from '../../../constants/koreanData';
 import type { KoreanVocabWord } from '../../../types/korean';
 import { RoleplayView } from './RoleplayView/RoleplayView';
+import { KDramaQuotesView } from './KDramaQuotesView/KDramaQuotesView';
+import { TongueTwisterView } from './TongueTwisterView/TongueTwisterView';
 import './KoreanDialogueView.css';
 
 const ROMAN_KEY = 'korean_hide_romanization';
@@ -30,7 +34,9 @@ const CATEGORIES = [
 ];
 
 export const KoreanDialogueView: React.FC = () => {
-  const [subTab, setSubTab] = useState<'dialogue' | 'roleplay' | 'translator'>('dialogue');
+  const [subTab, setSubTab] = useState<
+    'dialogue' | 'roleplay' | 'kdrama' | 'tonguetwister' | 'translator'
+  >('dialogue');
   const [selectedCat, setSelectedCat] = useState('all');
 
   // Romanization Toggle
@@ -165,6 +171,22 @@ export const KoreanDialogueView: React.FC = () => {
           >
             <Sparkles size={14} />
             Nhập Vai Tình Huống 🎭
+          </button>
+          <button
+            type="button"
+            className={`kr-dl-tab-btn ${subTab === 'kdrama' ? 'active' : ''}`}
+            onClick={() => setSubTab('kdrama')}
+          >
+            <Music size={14} />
+            K-Drama & K-Pop 🎵
+          </button>
+          <button
+            type="button"
+            className={`kr-dl-tab-btn ${subTab === 'tonguetwister' ? 'active' : ''}`}
+            onClick={() => setSubTab('tonguetwister')}
+          >
+            <Zap size={14} />
+            Uốn Lưỡi Siêu Tốc 👅
           </button>
           <button
             type="button"
@@ -358,8 +380,14 @@ export const KoreanDialogueView: React.FC = () => {
         </div>
       )}
 
-      {/* 3. CHẾ ĐỘ 3: NHẬP VAI TÌNH HUỐNG THỰC CHIẾN */}
+      {/* 3. CHẾ ĐỘ 2: NHẬP VAI TÌNH HUỐNG THỰC CHIẾN */}
       {subTab === 'roleplay' && <RoleplayView hideRomanization={hideRomanization} />}
+
+      {/* 4. CHẾ ĐỘ 3: GIẢI MÃ LỜI BÀI HÁT K-POP & CÂU THOẠI K-DRAMA */}
+      {subTab === 'kdrama' && <KDramaQuotesView hideRomanization={hideRomanization} />}
+
+      {/* 5. CHẾ ĐỘ 4: THỬ THÁCH UỐN LƯỠI SIÊU TỐC */}
+      {subTab === 'tonguetwister' && <TongueTwisterView hideRomanization={hideRomanization} />}
 
       {/* 4. MODAL XÁC NHẬN LƯU VÀO FLASHCARD [BẢN DỊCH MÁY ⚠️] */}
       {showSaveModal && (

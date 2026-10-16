@@ -44,7 +44,7 @@ export const Footer: React.FC<FooterProps> = ({
           <div className="footer-brand-info">
             <div className="footer-brand-title">
               <strong>TaskFlow Korean</strong>
-              <span className="footer-version-tag">v1.0.16 • TOPIK 1</span>
+              <span className="footer-version-tag">v1.0.17 • TOPIK 1</span>
             </div>
             <p className="footer-brand-desc">
               Hệ thống tự học tiếng Hàn thông minh từ con số 0 dành riêng cho người Việt.
@@ -102,6 +102,9 @@ export const Footer: React.FC<FooterProps> = ({
             <span>Tính Năng Trọng Tâm</span>
           </h4>
           <div className="footer-feature-chips">
+            <span className="footer-chip">🌸 Giao diện tone hồng K-Pastel</span>
+            <span className="footer-chip">🎵 Lời bài hát K-Pop & K-Drama</span>
+            <span className="footer-chip">👅 Thử thách uốn lưỡi (잰말놀이)</span>
             <span className="footer-chip">📅 Lộ trình 30 ngày (240 từ TOPIK 1)</span>
             <span className="footer-chip">⚡ Thuật toán SM-2 Active Recall</span>
             <span className="footer-chip">⌨️ Trình giả lập gõ 2-Set (두벌식)</span>
